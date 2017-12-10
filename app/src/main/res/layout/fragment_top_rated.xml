@@ -1,0 +1,19 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="projects.nyinyihtunlwin.zcar.fragments.TopRatedFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <projects.nyinyihtunlwin.zcar.components.SmartRecyclerView
+        android:id="@+id/rv_top_rated"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <include
+        android:id="@+id/vp_empty_movie"
+        layout="@layout/view_pod_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</FrameLayout>
