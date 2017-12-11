@@ -10,7 +10,7 @@ import projects.nyinyihtunlwin.zcar.fragments.TopRatedFragment;
 import projects.nyinyihtunlwin.zcar.fragments.UpcomingFragment;
 
 /**
- * Created by Dell on 11/7/2017.
+ * Created by Nyi Nyi Htun Lwin on 11/7/2017.
  */
 
 public class SectionsPagerAdapter extends FragmentPagerAdapter {

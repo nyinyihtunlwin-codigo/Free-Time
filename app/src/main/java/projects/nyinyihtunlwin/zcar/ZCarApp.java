@@ -3,7 +3,7 @@ package projects.nyinyihtunlwin.zcar;
 import android.app.Application;
 
 /**
- * Created by Dell on 12/9/2017.
+ * Created by Nyi Nyi Htun Lwin on 12/9/2017.
  */
 
 public class ZCarApp extends Application {

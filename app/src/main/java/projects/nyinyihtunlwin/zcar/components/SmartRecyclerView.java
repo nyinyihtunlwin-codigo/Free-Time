@@ -7,7 +7,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 /**
- * Created by Dell on 12/6/2017.
+ * Created by Nyi Nyi Htun Lwin on 12/6/2017.
  */
 
 public class SmartRecyclerView extends RecyclerView {

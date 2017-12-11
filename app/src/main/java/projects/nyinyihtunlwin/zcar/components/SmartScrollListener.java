@@ -4,7 +4,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 /**
- * Created by Dell on 11/26/2017.
+ * Created by Nyi Nyi Htun Lwin on 11/26/2017.
  */
 
 public class SmartScrollListener extends RecyclerView.OnScrollListener {

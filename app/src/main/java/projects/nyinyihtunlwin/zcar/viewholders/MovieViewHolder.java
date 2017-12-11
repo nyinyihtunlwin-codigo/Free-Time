@@ -13,7 +13,7 @@ import projects.nyinyihtunlwin.zcar.R;
 import projects.nyinyihtunlwin.zcar.data.vo.MovieVO;
 
 /**
- * Created by Dell on 11/7/2017.
+ * Created by Nyi Nyi Htun Lwin on 11/7/2017.
  */
 
 public class MovieViewHolder extends BaseViewHolder<MovieVO> {

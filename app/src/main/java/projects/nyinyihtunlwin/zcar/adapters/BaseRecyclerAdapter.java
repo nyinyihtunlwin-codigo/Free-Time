@@ -9,8 +9,9 @@ import java.util.List;
 
 import projects.nyinyihtunlwin.zcar.viewholders.BaseViewHolder;
 
+
 /**
- * Created by Dell on 12/6/2017.
+ * Created by Nyi Nyi Htun Lwin on 11/7/2017.
  */
 
 public abstract class BaseRecyclerAdapter<T extends BaseViewHolder, W> extends RecyclerView.Adapter<T> {

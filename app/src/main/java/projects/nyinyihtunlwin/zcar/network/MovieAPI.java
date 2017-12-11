@@ -7,7 +7,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
 /**
- * Created by Dell on 12/6/2017.
+ * Created by Nyi Nyi Htun Lwin on 12/6/2017.
  */
 
 public interface MovieAPI {

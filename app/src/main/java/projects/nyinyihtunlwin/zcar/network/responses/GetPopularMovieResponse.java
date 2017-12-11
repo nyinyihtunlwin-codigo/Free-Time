@@ -8,7 +8,7 @@ import java.util.List;
 import projects.nyinyihtunlwin.zcar.data.vo.MovieVO;
 
 /**
- * Created by Dell on 12/6/2017.
+ * Created by Nyi Nyi Htun Lwin on 12/6/2017.
  */
 
 public class GetPopularMovieResponse {

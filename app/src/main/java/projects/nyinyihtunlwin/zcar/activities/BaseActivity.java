@@ -6,10 +6,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 /**
- * Created by Dell on 12/6/2017.
+ * Created by Nyi Nyi Htun Lwin on 11/7/2017.
  */
-
-
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -30,7 +28,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     protected void dismissProgressDialog() {
-        if(mProgressDialog.isShowing())
+        if (mProgressDialog.isShowing())
             mProgressDialog.dismiss();
     }
 }

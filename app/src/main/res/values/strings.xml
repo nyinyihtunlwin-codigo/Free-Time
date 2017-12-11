@@ -20,7 +20,9 @@
     <string name="msg_generic_no_data">No Data To Display</string>
     <string name="action_view_list">List</string>
     <string name="action_movies">Movies</string>
-    <string name="action_movie_series">Movie Series</string>
+    <string name="action_tv_shows">TV Shows</string>
     <string name="action_favorites">Favorites</string>
+    <string name="tab_tv_airing_today">TV AIRING TODAY</string>
+    <string name="tab_tv_on_the_air">TV ON THE AIR</string>
 
 </resources>

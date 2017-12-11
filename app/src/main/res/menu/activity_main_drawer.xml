@@ -10,8 +10,8 @@
             android:title="@string/action_movies" />
         <item
             android:id="@+id/nav_movie_series"
-            android:icon="@drawable/ic_movies_series_black_24dp"
-            android:title="@string/action_movie_series" />
+            android:icon="@drawable/ic_tv_shows_black_24dp"
+            android:title="@string/action_tv_shows" />
         <item
             android:id="@+id/nav_favorites"
             android:icon="@drawable/ic_favorite_24dp"
