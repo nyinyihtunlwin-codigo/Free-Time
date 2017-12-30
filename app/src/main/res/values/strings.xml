@@ -24,5 +24,8 @@
     <string name="action_favorites">Favorites</string>
     <string name="tab_tv_airing_today">TV AIRING TODAY</string>
     <string name="tab_tv_on_the_air">TV ON THE AIR</string>
+    <string name="tv_movie_name">Jumanji:Welcome to the Jungle</string>
+    <string name="tv_released_date">January 1994</string>
+    <string name="tv_movie_genres">(Drama,Horror,Trailer)</string>
 
 </resources>
