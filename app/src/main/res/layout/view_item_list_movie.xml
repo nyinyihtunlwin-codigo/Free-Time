@@ -35,20 +35,21 @@
             android:layout_height="wrap_content"
             android:layout_above="@id/rate_view"
             android:layout_alignParentEnd="true"
-            android:background="@drawable/bg_transparent_left_top_curve">
+            android:background="@drawable/bg_transparent_left_top_curve"
+            android:layout_marginBottom="@dimen/margin_small">
 
             <android.support.v7.widget.AppCompatRatingBar
                 android:id="@+id/rb_movie"
                 style="?android:attr/ratingBarStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/tv_movie_popularity"
                 android:layout_margin="@dimen/margin_medium"
                 android:layout_marginStart="@dimen/margin_medium"
                 android:rating="5" />
         </FrameLayout>
 
         <TextView
+            android:id="@+id/tv_released_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_transparent_right_bottom_curve"

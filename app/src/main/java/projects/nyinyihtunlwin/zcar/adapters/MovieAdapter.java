@@ -21,7 +21,7 @@ public class MovieAdapter extends BaseRecyclerAdapter<MovieViewHolder, MovieVO> 
 
     @Override
     public MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mLayoutInflater.inflate(R.layout.view_item_movie, parent, false);
+        View view = mLayoutInflater.inflate(R.layout.view_item_list_movie, parent, false);
         return new MovieViewHolder(view);
     }
 }
