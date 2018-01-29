@@ -20,7 +20,9 @@ public class MovieModel {
     private static MovieModel objectInstance;
     private int moviePageIndex = 1;
 
+
     private List<MovieVO> mMovies;
+
 
     private MovieModel() {
         EventBus.getDefault().register(this);
@@ -34,8 +36,22 @@ public class MovieModel {
         return objectInstance;
     }
 
-    public void startLoadingPopularMovies() {
-        MovieDataAgentImpl.getObjectInstance().loadPopularMovies(moviePageIndex, AppConstants.ACCESS_TOKEN);
+    public void startLoadingMovies(String movieType) {
+        switch (movieType) {
+            case AppConstants.MOVIE_NOW_ON_CINEMA:
+                MovieDataAgentImpl.getObjectInstance().loadNowOnCinemaMovies(AppConstants.API_KEY, moviePageIndex, "US");
+                break;
+            case AppConstants.MOVIE_UPCOMING:
+                MovieDataAgentImpl.getObjectInstance().loadUpcomingMovies(AppConstants.API_KEY, moviePageIndex, "US");
+                break;
+            case AppConstants.MOVIE_MOST_POPULAR:
+                MovieDataAgentImpl.getObjectInstance().loadPopularMovies(AppConstants.API_KEY, moviePageIndex, "US");
+                break;
+            case AppConstants.MOVIE_TOP_RATED:
+                MovieDataAgentImpl.getObjectInstance().loadTopRatedMovies(AppConstants.API_KEY, moviePageIndex, "US");
+                break;
+        }
+
     }
 
     @Subscribe
@@ -45,13 +61,13 @@ public class MovieModel {
     }
 
     public void loadMoreMovies() {
-        MovieDataAgentImpl.getObjectInstance().loadPopularMovies(moviePageIndex, AppConstants.ACCESS_TOKEN);
+        MovieDataAgentImpl.getObjectInstance().loadTopRatedMovies(AppConstants.API_KEY, moviePageIndex, "US");
     }
 
     public void forceRefreshMovies() {
-        mMovies=new ArrayList<>();
+        mMovies = new ArrayList<>();
         moviePageIndex = 1;
-        startLoadingPopularMovies();
+        startLoadingMovies(AppConstants.MOVIE_MOST_POPULAR);
     }
 
     public List<MovieVO> getMovies() {

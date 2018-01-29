@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -85,9 +86,9 @@ public class NowOnCinemaFragment extends BaseFragment {
 
         rvNowOnCinema.setEmptyView(vpEmptyMovie);
         rvNowOnCinema.setAdapter(adapter);
-        rvNowOnCinema.setLayoutManager(new LinearLayoutManager(container.getContext()));
+        rvNowOnCinema.setLayoutManager(new GridLayoutManager(container.getContext(), 2));
 
-        mSmartScrollListener=new SmartScrollListener(new SmartScrollListener.OnSmartScrollListener() {
+        mSmartScrollListener = new SmartScrollListener(new SmartScrollListener.OnSmartScrollListener() {
             @Override
             public void onListEndReached() {
                 MovieModel.getInstance().loadMoreMovies();
@@ -140,7 +141,6 @@ public class NowOnCinemaFragment extends BaseFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        MovieModel.getInstance().startLoadingPopularMovies();
     }
 
     @Override

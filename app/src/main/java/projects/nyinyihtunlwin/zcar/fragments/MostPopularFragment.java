@@ -3,6 +3,7 @@ package projects.nyinyihtunlwin.zcar.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -73,7 +74,7 @@ public class MostPopularFragment extends BaseFragment {
         adapter = new MovieAdapter(getContext());
         rvMostPopular.setEmptyView(vpEmptyMovie);
         rvMostPopular.setAdapter(adapter);
-        rvMostPopular.setLayoutManager(new LinearLayoutManager(container.getContext()));
+        rvMostPopular.setLayoutManager(new GridLayoutManager(container.getContext(), 2));
         return view;
     }
 

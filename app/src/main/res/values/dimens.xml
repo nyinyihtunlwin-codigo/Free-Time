@@ -37,10 +37,9 @@
     <dimen name="text_big">40sp</dimen>
     <dimen name="text_big_2x">60sp</dimen>
     <dimen name="text_big_3x">80sp</dimen>
-
     <!-- Specific ratios -->
-    <dimen name="movie_icon_width">150dp</dimen>
-    <dimen name="movie_icon_height">225dp</dimen>
+    <dimen name="movie_icon_width">165dp</dimen>
+    <dimen name="movie_icon_height">240dp</dimen>
     <dimen name="card_elevation">2dp</dimen>
     <dimen name="card_radius_small">1dp</dimen>
     <dimen name="text_less_regular">12sp</dimen>

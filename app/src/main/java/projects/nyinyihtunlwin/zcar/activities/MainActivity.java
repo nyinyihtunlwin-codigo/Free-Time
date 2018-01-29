@@ -1,5 +1,6 @@
 package projects.nyinyihtunlwin.zcar.activities;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -14,7 +15,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import projects.nyinyihtunlwin.zcar.R;
 import projects.nyinyihtunlwin.zcar.fragments.MoviesFragment;
@@ -35,9 +38,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

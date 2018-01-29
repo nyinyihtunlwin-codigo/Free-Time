@@ -5,5 +5,12 @@ package projects.nyinyihtunlwin.zcar.network;
  */
 
 public interface MovieDataAgent {
-    void loadPopularMovies(int page, String accessToken);
+
+    void loadPopularMovies(String apiKey, int pageNo, String region);
+
+    void loadNowOnCinemaMovies(String apiKey, int pageNo, String region);
+
+    void loadUpcomingMovies(String apiKey, int pageNo, String region);
+
+    void loadTopRatedMovies(String apiKey, int pageNo, String region);
 }

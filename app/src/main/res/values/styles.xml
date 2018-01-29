@@ -24,7 +24,7 @@
 
     <style name="MyCustomTabLayout" parent="Widget.Design.TabLayout">
         <item name="tabTextAppearance">@style/MyCustomTabText</item>
-        <item name="tabSelectedTextColor">@color/primary_text</item>
+        <item name="tabSelectedTextColor">@color/accent</item>
     </style>
 
     <style name="MyCustomTabText" parent="TextAppearance.AppCompat.Button">

@@ -3,6 +3,7 @@ package projects.nyinyihtunlwin.zcar.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -71,7 +72,7 @@ public class UpcomingFragment extends BaseFragment {
         adapter = new MovieAdapter(getContext());
         rvUpcoming.setEmptyView(vpEmptyMovie);
         rvUpcoming.setAdapter(adapter);
-        rvUpcoming.setLayoutManager(new LinearLayoutManager(container.getContext()));
+        rvUpcoming.setLayoutManager(new GridLayoutManager(container.getContext(),2));
         return view;
     }
 
