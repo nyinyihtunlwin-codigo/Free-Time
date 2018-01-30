@@ -29,5 +29,6 @@
     <string name="tv_movie_genres">(Drama,Horror,Trailer)</string>
 
     <string name="MOVIE_DB_API_KEY">6eb6146f403f23477c11206ed0c76288</string>
+    <string name="action_search">Search</string>
 
 </resources>

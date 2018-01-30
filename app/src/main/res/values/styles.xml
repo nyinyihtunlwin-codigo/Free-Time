@@ -24,7 +24,7 @@
 
     <style name="MyCustomTabLayout" parent="Widget.Design.TabLayout">
         <item name="tabTextAppearance">@style/MyCustomTabText</item>
-        <item name="tabSelectedTextColor">@color/accent</item>
+        <item name="tabSelectedTextColor">@color/white</item>
     </style>
 
     <style name="MyCustomTabText" parent="TextAppearance.AppCompat.Button">
@@ -60,5 +60,4 @@
     </style>
 
     <color name="primary_highlight">#ea5146</color>
-
 </resources>
