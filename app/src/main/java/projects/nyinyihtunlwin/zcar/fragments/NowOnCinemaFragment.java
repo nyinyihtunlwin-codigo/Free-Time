@@ -26,6 +26,7 @@ import projects.nyinyihtunlwin.zcar.components.SmartScrollListener;
 import projects.nyinyihtunlwin.zcar.data.models.MovieModel;
 import projects.nyinyihtunlwin.zcar.data.vo.MovieVO;
 import projects.nyinyihtunlwin.zcar.events.RestApiEvents;
+import projects.nyinyihtunlwin.zcar.utils.AppConstants;
 
 
 public class NowOnCinemaFragment extends BaseFragment {
@@ -91,7 +92,7 @@ public class NowOnCinemaFragment extends BaseFragment {
         mSmartScrollListener = new SmartScrollListener(new SmartScrollListener.OnSmartScrollListener() {
             @Override
             public void onListEndReached() {
-                MovieModel.getInstance().loadMoreMovies();
+                MovieModel.getInstance().loadMoreMovies(AppConstants.MOVIE_NOW_ON_CINEMA);
             }
         });
 
@@ -101,7 +102,7 @@ public class NowOnCinemaFragment extends BaseFragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                MovieModel.getInstance().forceRefreshMovies();
+                MovieModel.getInstance().forceRefreshMovies(AppConstants.MOVIE_NOW_ON_CINEMA);
             }
         });
 
@@ -112,18 +113,21 @@ public class NowOnCinemaFragment extends BaseFragment {
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
-        List<MovieVO> newsList = MovieModel.getInstance().getMovies();
-        if (!newsList.isEmpty()) {
-            adapter.setNewData(newsList);
+        List<MovieVO> movieList = MovieModel.getInstance().getNowOnCinemaMovies();
+        if (!movieList.isEmpty()) {
+            adapter.setNewData(movieList);
         } else {
+            MovieModel.getInstance().startLoadingMovies(AppConstants.MOVIE_NOW_ON_CINEMA);
             swipeRefreshLayout.setRefreshing(true);
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMovieDataLoaded(RestApiEvents.MoviesDataLoadedEvent event) {
-        adapter.appendNewData(event.getLoadedMovies());
-        swipeRefreshLayout.setRefreshing(false);
+        if (event.getMoviesForScreen().equals(AppConstants.MOVIE_NOW_ON_CINEMA)) {
+            adapter.appendNewData(event.getLoadedMovies());
+            swipeRefreshLayout.setRefreshing(false);
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

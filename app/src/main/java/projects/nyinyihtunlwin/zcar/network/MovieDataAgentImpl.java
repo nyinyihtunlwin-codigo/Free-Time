@@ -12,6 +12,7 @@ import projects.nyinyihtunlwin.zcar.network.responses.NowShowingMoviesResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.PopularMoviesResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.TopRatedMoviesResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.UpcomingMoviesResponse;
+import projects.nyinyihtunlwin.zcar.utils.AppConstants;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -59,7 +60,7 @@ public class MovieDataAgentImpl implements MovieDataAgent {
                 PopularMoviesResponse getPopularMovieResponse = response.body();
                 if (getPopularMovieResponse != null
                         && getPopularMovieResponse.getMovies().size() > 0) {
-                    RestApiEvents.MoviesDataLoadedEvent moviesDataLoadedEvent = new RestApiEvents.MoviesDataLoadedEvent(getPopularMovieResponse.getPage(), getPopularMovieResponse.getMovies());
+                    RestApiEvents.MoviesDataLoadedEvent moviesDataLoadedEvent = new RestApiEvents.MoviesDataLoadedEvent(getPopularMovieResponse.getPage(), getPopularMovieResponse.getMovies(), AppConstants.MOVIE_MOST_POPULAR);
                     EventBus.getDefault().post(moviesDataLoadedEvent);
                 }
             }
@@ -75,7 +76,7 @@ public class MovieDataAgentImpl implements MovieDataAgent {
                 NowShowingMoviesResponse getNowShowingMoviesResponse = response.body();
                 if (getNowShowingMoviesResponse != null
                         && getNowShowingMoviesResponse.getMovies().size() > 0) {
-                    RestApiEvents.MoviesDataLoadedEvent moviesDataLoadedEvent = new RestApiEvents.MoviesDataLoadedEvent(getNowShowingMoviesResponse.getPage(), getNowShowingMoviesResponse.getMovies());
+                    RestApiEvents.MoviesDataLoadedEvent moviesDataLoadedEvent = new RestApiEvents.MoviesDataLoadedEvent(getNowShowingMoviesResponse.getPage(), getNowShowingMoviesResponse.getMovies(), AppConstants.MOVIE_NOW_ON_CINEMA);
                     EventBus.getDefault().post(moviesDataLoadedEvent);
                 }
             }
@@ -91,7 +92,7 @@ public class MovieDataAgentImpl implements MovieDataAgent {
                 UpcomingMoviesResponse getUpcomingMoviesResponse = response.body();
                 if (getUpcomingMoviesResponse != null
                         && getUpcomingMoviesResponse.getMovies().size() > 0) {
-                    RestApiEvents.MoviesDataLoadedEvent moviesDataLoadedEvent = new RestApiEvents.MoviesDataLoadedEvent(getUpcomingMoviesResponse.getPage(), getUpcomingMoviesResponse.getMovies());
+                    RestApiEvents.MoviesDataLoadedEvent moviesDataLoadedEvent = new RestApiEvents.MoviesDataLoadedEvent(getUpcomingMoviesResponse.getPage(), getUpcomingMoviesResponse.getMovies(), AppConstants.MOVIE_UPCOMING);
                     EventBus.getDefault().post(moviesDataLoadedEvent);
                 }
             }
@@ -107,7 +108,7 @@ public class MovieDataAgentImpl implements MovieDataAgent {
                 TopRatedMoviesResponse getTopRatedMoviesResponse = response.body();
                 if (getTopRatedMoviesResponse != null
                         && getTopRatedMoviesResponse.getMovies().size() > 0) {
-                    RestApiEvents.MoviesDataLoadedEvent moviesDataLoadedEvent = new RestApiEvents.MoviesDataLoadedEvent(getTopRatedMoviesResponse.getPage(), getTopRatedMoviesResponse.getMovies());
+                    RestApiEvents.MoviesDataLoadedEvent moviesDataLoadedEvent = new RestApiEvents.MoviesDataLoadedEvent(getTopRatedMoviesResponse.getPage(), getTopRatedMoviesResponse.getMovies(), AppConstants.MOVIE_TOP_RATED);
                     EventBus.getDefault().post(moviesDataLoadedEvent);
                 }
             }

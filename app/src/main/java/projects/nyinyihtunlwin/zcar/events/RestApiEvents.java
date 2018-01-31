@@ -25,10 +25,12 @@ public class RestApiEvents {
     public static class MoviesDataLoadedEvent {
         private int loadedPageIndex;
         private List<MovieVO> loadedMovies;
+        private String moviesForScreen;
 
-        public MoviesDataLoadedEvent(int loadedPageIndex, List<MovieVO> loadedMovies) {
+        public MoviesDataLoadedEvent(int loadedPageIndex, List<MovieVO> loadedMovies, String moviesForScreen) {
             this.loadedPageIndex = loadedPageIndex;
             this.loadedMovies = loadedMovies;
+            this.moviesForScreen = moviesForScreen;
         }
 
         public int getLoadedPageIndex() {
@@ -37,6 +39,10 @@ public class RestApiEvents {
 
         public List<MovieVO> getLoadedMovies() {
             return loadedMovies;
+        }
+
+        public String getMoviesForScreen() {
+            return moviesForScreen;
         }
     }
 }
