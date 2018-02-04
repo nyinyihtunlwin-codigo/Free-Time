@@ -19,6 +19,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <provider
+            android:name=".persistence.MovieProvider"
+            android:authorities="projects.nyinyihtunlwin.zcar"
+            android:exported="false"
+            android:syncable="true" />
     </application>
 
 </manifest>

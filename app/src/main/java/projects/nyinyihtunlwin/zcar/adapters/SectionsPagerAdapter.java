@@ -25,16 +25,16 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                fragment = NowOnCinemaFragment.newInstance("", "");
+                fragment = new NowOnCinemaFragment();
                 break;
             case 1:
-                fragment = UpcomingFragment.newInstance("", "");
+                fragment = new UpcomingFragment();
                 break;
             case 2:
-                fragment = MostPopularFragment.newInstance("", "");
+                fragment = new MostPopularFragment();
                 break;
             case 3:
-                fragment= TopRatedFragment.newInstance("","");
+                fragment = new TopRatedFragment();
                 break;
         }
         return fragment;

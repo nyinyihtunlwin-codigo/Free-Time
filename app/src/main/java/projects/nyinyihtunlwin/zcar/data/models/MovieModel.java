@@ -1,14 +1,20 @@
 package projects.nyinyihtunlwin.zcar.data.models;
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.util.Log;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import projects.nyinyihtunlwin.zcar.ZCarApp;
 import projects.nyinyihtunlwin.zcar.data.vo.MovieVO;
 import projects.nyinyihtunlwin.zcar.events.RestApiEvents;
 import projects.nyinyihtunlwin.zcar.network.MovieDataAgentImpl;
+import projects.nyinyihtunlwin.zcar.persistence.MovieContract;
 import projects.nyinyihtunlwin.zcar.utils.AppConstants;
 
 /**
@@ -42,38 +48,49 @@ public class MovieModel {
         return objectInstance;
     }
 
-    public void startLoadingMovies(String movieType) {
-        loadMovies(movieType);
+    public void startLoadingMovies(Context context,String movieType) {
+        loadMovies(context,movieType);
     }
 
     @Subscribe
-    public void onMoviesDataLoaded(RestApiEvents.MoviesDataLoadedEvent event) {
-        switch (event.getMoviesForScreen()) {
-            case AppConstants.MOVIE_NOW_ON_CINEMA:
-                mNowOnCinemaMovies.addAll(event.getLoadedMovies());
-                mNowOnCinemaPageIndex = event.getLoadedPageIndex() + 1;
-                break;
-            case AppConstants.MOVIE_MOST_POPULAR:
-                mMostPopularMovies.addAll(event.getLoadedMovies());
-                mMostPopularPageIndex = event.getLoadedPageIndex() + 1;
-                break;
-            case AppConstants.MOVIE_UPCOMING:
-                mUpcomingMovies.addAll(event.getLoadedMovies());
-                mUpcomingPageIndex = event.getLoadedPageIndex() + 1;
-                break;
-            case AppConstants.MOVIE_TOP_RATED:
-                mTopRatedMovies.addAll(event.getLoadedMovies());
-                mTopRatedPageIndex = event.getLoadedPageIndex() + 1;
-                break;
+    public void onNowOnCinemaMoviesLoaded(RestApiEvents.NowOnCinemaMoviesDataLoadedEvent event) {
+        mNowOnCinemaMovies.addAll(event.getLoadedMovies());
+        mNowOnCinemaPageIndex = event.getLoadedPageIndex() + 1;
+
+        ContentValues[] movieCVS = new ContentValues[event.getLoadedMovies().size()];
+        for (int index = 0; index < movieCVS.length; index++) {
+            movieCVS[index] = event.getLoadedMovies().get(index).parseToContentValues();
         }
+
+        int insertedRowCount = event.getContext().getContentResolver().bulkInsert(MovieContract.MovieEntry.CONTENT_URI, movieCVS);
+        Log.d(ZCarApp.LOG_TAG, "Inserted row : " + insertedRowCount);
     }
 
-    public void loadMoreMovies(String movieType) {
-        loadMovies(movieType);
+    @Subscribe
+    public void onPopularMoviesLoaded(RestApiEvents.PoputlarMoviesDataLoadedEvent event) {
+        mMostPopularMovies.addAll(event.getLoadedMovies());
+        mMostPopularPageIndex = event.getLoadedPageIndex() + 1;
+    }
+
+    @Subscribe
+    public void onUpcomingMoviesLoaded(RestApiEvents.UpcomingMoviesDataLoadedEvent event) {
+        mUpcomingMovies.addAll(event.getLoadedMovies());
+        mUpcomingPageIndex = event.getLoadedPageIndex() + 1;
+    }
+
+    @Subscribe
+    public void onTopRatedMoviesLoaded(RestApiEvents.TopRatedMoviesDataLoadedEvent event) {
+        mTopRatedMovies.addAll(event.getLoadedMovies());
+        mTopRatedPageIndex = event.getLoadedPageIndex() + 1;
     }
 
 
-    public void forceRefreshMovies(String movieType) {
+    public void loadMoreMovies(Context context, String movieType) {
+        loadMovies(context, movieType);
+    }
+
+
+    public void forceRefreshMovies(Context context, String movieType) {
         switch (movieType) {
             case AppConstants.MOVIE_NOW_ON_CINEMA:
                 mNowOnCinemaMovies = new ArrayList<>();
@@ -92,7 +109,7 @@ public class MovieModel {
                 mTopRatedPageIndex = 1;
                 break;
         }
-        loadMovies(movieType);
+        loadMovies(context, movieType);
     }
 
 
@@ -112,19 +129,19 @@ public class MovieModel {
         return mTopRatedMovies;
     }
 
-    private void loadMovies(String movieType) {
+    private void loadMovies(Context context, String movieType) {
         switch (movieType) {
             case AppConstants.MOVIE_NOW_ON_CINEMA:
-                MovieDataAgentImpl.getObjectInstance().loadNowOnCinemaMovies(AppConstants.API_KEY, mNowOnCinemaPageIndex, "US");
+                MovieDataAgentImpl.getObjectInstance().loadNowOnCinemaMovies(AppConstants.API_KEY, mNowOnCinemaPageIndex, "US", context);
                 break;
             case AppConstants.MOVIE_UPCOMING:
-                MovieDataAgentImpl.getObjectInstance().loadUpcomingMovies(AppConstants.API_KEY, mUpcomingPageIndex, "US");
+                MovieDataAgentImpl.getObjectInstance().loadUpcomingMovies(AppConstants.API_KEY, mUpcomingPageIndex, "US", context);
                 break;
             case AppConstants.MOVIE_MOST_POPULAR:
-                MovieDataAgentImpl.getObjectInstance().loadPopularMovies(AppConstants.API_KEY, mMostPopularPageIndex, "US");
+                MovieDataAgentImpl.getObjectInstance().loadPopularMovies(AppConstants.API_KEY, mMostPopularPageIndex, "US", context);
                 break;
             case AppConstants.MOVIE_TOP_RATED:
-                MovieDataAgentImpl.getObjectInstance().loadTopRatedMovies(AppConstants.API_KEY, mTopRatedPageIndex, "US");
+                MovieDataAgentImpl.getObjectInstance().loadTopRatedMovies(AppConstants.API_KEY, mTopRatedPageIndex, "US", context);
                 break;
         }
     }

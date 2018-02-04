@@ -30,14 +30,7 @@ import projects.nyinyihtunlwin.zcar.utils.AppConstants;
 
 
 public class UpcomingFragment extends BaseFragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     @BindView(R.id.rv_upcoming)
     SmartRecyclerView rvUpcoming;
@@ -52,32 +45,9 @@ public class UpcomingFragment extends BaseFragment {
 
     private SmartScrollListener mSmartScrollListener;
 
-    public UpcomingFragment() {
-        // Required empty public constructor
-    }
-
-    public static UpcomingFragment newInstance(String param1, String param2) {
-        UpcomingFragment fragment = new UpcomingFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_upcoming, container, false);
         ButterKnife.bind(this, view);
         rvUpcoming.setHasFixedSize(true);
@@ -89,7 +59,7 @@ public class UpcomingFragment extends BaseFragment {
         mSmartScrollListener = new SmartScrollListener(new SmartScrollListener.OnSmartScrollListener() {
             @Override
             public void onListEndReached() {
-                MovieModel.getInstance().loadMoreMovies(AppConstants.MOVIE_UPCOMING);
+                MovieModel.getInstance().loadMoreMovies(getActivity().getApplicationContext(), AppConstants.MOVIE_UPCOMING);
             }
         });
 
@@ -99,7 +69,7 @@ public class UpcomingFragment extends BaseFragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                MovieModel.getInstance().forceRefreshMovies(AppConstants.MOVIE_UPCOMING);
+                MovieModel.getInstance().forceRefreshMovies(getActivity().getApplicationContext(),AppConstants.MOVIE_UPCOMING);
             }
         });
 
@@ -114,17 +84,15 @@ public class UpcomingFragment extends BaseFragment {
         if (!movieList.isEmpty()) {
             adapter.setNewData(movieList);
         } else {
-            MovieModel.getInstance().startLoadingMovies(AppConstants.MOVIE_UPCOMING);
+            MovieModel.getInstance().startLoadingMovies(getActivity().getApplicationContext(), AppConstants.MOVIE_UPCOMING);
             swipeRefreshLayout.setRefreshing(true);
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMovieDataLoaded(RestApiEvents.MoviesDataLoadedEvent event) {
-        if (event.getMoviesForScreen().equals(AppConstants.MOVIE_UPCOMING)) {
-            adapter.appendNewData(event.getLoadedMovies());
-            swipeRefreshLayout.setRefreshing(false);
-        }
+    public void onMovieDataLoaded(RestApiEvents.UpcomingMoviesDataLoadedEvent event) {
+        adapter.appendNewData(event.getLoadedMovies());
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

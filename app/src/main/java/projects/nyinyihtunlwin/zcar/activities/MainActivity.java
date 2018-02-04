@@ -92,9 +92,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         int id = item.getItemId();
 
         if (id == R.id.nav_movies) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.container, MoviesFragment.newInstance("", "")).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, new MoviesFragment()).commit();
         } else if (id == R.id.nav_movie_series) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.container, TVShowsFragment.newInstance("", "")).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, new TVShowsFragment()).commit();
         } else if (id == R.id.nav_setting) {
 
         }

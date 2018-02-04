@@ -10,6 +10,8 @@ import projects.nyinyihtunlwin.zcar.utils.AppConstants;
  */
 
 public class ZCarApp extends Application {
+    public static final String LOG_TAG = "Z-CAR";
+
     @Override
     public void onCreate() {
         super.onCreate();

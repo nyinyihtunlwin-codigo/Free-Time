@@ -1,5 +1,7 @@
 package projects.nyinyihtunlwin.zcar.events;
 
+import android.content.Context;
+
 import java.util.List;
 
 import projects.nyinyihtunlwin.zcar.data.vo.MovieVO;
@@ -25,12 +27,12 @@ public class RestApiEvents {
     public static class MoviesDataLoadedEvent {
         private int loadedPageIndex;
         private List<MovieVO> loadedMovies;
-        private String moviesForScreen;
+        private Context context;
 
-        public MoviesDataLoadedEvent(int loadedPageIndex, List<MovieVO> loadedMovies, String moviesForScreen) {
+        public MoviesDataLoadedEvent(int loadedPageIndex, List<MovieVO> loadedMovies,Context context) {
             this.loadedPageIndex = loadedPageIndex;
             this.loadedMovies = loadedMovies;
-            this.moviesForScreen = moviesForScreen;
+            this.context=context;
         }
 
         public int getLoadedPageIndex() {
@@ -41,8 +43,32 @@ public class RestApiEvents {
             return loadedMovies;
         }
 
-        public String getMoviesForScreen() {
-            return moviesForScreen;
+        public Context getContext() {
+            return context;
+        }
+    }
+
+    public static class UpcomingMoviesDataLoadedEvent extends MoviesDataLoadedEvent {
+        public UpcomingMoviesDataLoadedEvent(int loadedPageIndex, List<MovieVO> loadedMovies,Context context) {
+            super(loadedPageIndex, loadedMovies,context);
+        }
+    }
+
+    public static class PoputlarMoviesDataLoadedEvent extends MoviesDataLoadedEvent {
+        public PoputlarMoviesDataLoadedEvent(int loadedPageIndex, List<MovieVO> loadedMovies,Context context) {
+            super(loadedPageIndex, loadedMovies,context);
+        }
+    }
+
+    public static class NowOnCinemaMoviesDataLoadedEvent extends MoviesDataLoadedEvent {
+        public NowOnCinemaMoviesDataLoadedEvent(int loadedPageIndex, List<MovieVO> loadedMovies,Context context) {
+            super(loadedPageIndex, loadedMovies,context);
+        }
+    }
+
+    public static class TopRatedMoviesDataLoadedEvent extends MoviesDataLoadedEvent {
+        public TopRatedMoviesDataLoadedEvent(int loadedPageIndex, List<MovieVO> loadedMovies,Context context) {
+            super(loadedPageIndex, loadedMovies,context);
         }
     }
 }

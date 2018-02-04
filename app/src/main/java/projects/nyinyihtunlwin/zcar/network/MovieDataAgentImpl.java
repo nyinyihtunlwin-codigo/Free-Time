@@ -1,5 +1,7 @@
 package projects.nyinyihtunlwin.zcar.network;
 
+import android.content.Context;
+
 import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
@@ -52,7 +54,7 @@ public class MovieDataAgentImpl implements MovieDataAgent {
     }
 
     @Override
-    public void loadPopularMovies(String apiKey, int pageNo, String region) {
+    public void loadPopularMovies(String apiKey, int pageNo, String region, final Context context) {
         Call<PopularMoviesResponse> loadPopularMoviesCall = movieAPI.loadPopularMovies(apiKey, pageNo, "US");
         loadPopularMoviesCall.enqueue(new MovieCallback<PopularMoviesResponse>() {
             @Override
@@ -60,7 +62,7 @@ public class MovieDataAgentImpl implements MovieDataAgent {
                 PopularMoviesResponse getPopularMovieResponse = response.body();
                 if (getPopularMovieResponse != null
                         && getPopularMovieResponse.getMovies().size() > 0) {
-                    RestApiEvents.MoviesDataLoadedEvent moviesDataLoadedEvent = new RestApiEvents.MoviesDataLoadedEvent(getPopularMovieResponse.getPage(), getPopularMovieResponse.getMovies(), AppConstants.MOVIE_MOST_POPULAR);
+                    RestApiEvents.PoputlarMoviesDataLoadedEvent moviesDataLoadedEvent = new RestApiEvents.PoputlarMoviesDataLoadedEvent(getPopularMovieResponse.getPage(), getPopularMovieResponse.getMovies(), context);
                     EventBus.getDefault().post(moviesDataLoadedEvent);
                 }
             }
@@ -68,7 +70,7 @@ public class MovieDataAgentImpl implements MovieDataAgent {
     }
 
     @Override
-    public void loadNowOnCinemaMovies(String apiKey, int pageNo, String region) {
+    public void loadNowOnCinemaMovies(String apiKey, int pageNo, String region, final Context context) {
         Call<NowShowingMoviesResponse> loadNowShowingMoviesCall = movieAPI.loadNowShowingMovies(apiKey, pageNo, "US");
         loadNowShowingMoviesCall.enqueue(new MovieCallback<NowShowingMoviesResponse>() {
             @Override
@@ -76,7 +78,7 @@ public class MovieDataAgentImpl implements MovieDataAgent {
                 NowShowingMoviesResponse getNowShowingMoviesResponse = response.body();
                 if (getNowShowingMoviesResponse != null
                         && getNowShowingMoviesResponse.getMovies().size() > 0) {
-                    RestApiEvents.MoviesDataLoadedEvent moviesDataLoadedEvent = new RestApiEvents.MoviesDataLoadedEvent(getNowShowingMoviesResponse.getPage(), getNowShowingMoviesResponse.getMovies(), AppConstants.MOVIE_NOW_ON_CINEMA);
+                    RestApiEvents.NowOnCinemaMoviesDataLoadedEvent moviesDataLoadedEvent = new RestApiEvents.NowOnCinemaMoviesDataLoadedEvent(getNowShowingMoviesResponse.getPage(), getNowShowingMoviesResponse.getMovies(), context);
                     EventBus.getDefault().post(moviesDataLoadedEvent);
                 }
             }
@@ -84,7 +86,7 @@ public class MovieDataAgentImpl implements MovieDataAgent {
     }
 
     @Override
-    public void loadUpcomingMovies(String apiKey, int pageNo, String region) {
+    public void loadUpcomingMovies(String apiKey, int pageNo, String region, final Context context) {
         Call<UpcomingMoviesResponse> loadUpcomingMoviesCall = movieAPI.loadUpcomingMovies(apiKey, pageNo, "US");
         loadUpcomingMoviesCall.enqueue(new MovieCallback<UpcomingMoviesResponse>() {
             @Override
@@ -92,7 +94,7 @@ public class MovieDataAgentImpl implements MovieDataAgent {
                 UpcomingMoviesResponse getUpcomingMoviesResponse = response.body();
                 if (getUpcomingMoviesResponse != null
                         && getUpcomingMoviesResponse.getMovies().size() > 0) {
-                    RestApiEvents.MoviesDataLoadedEvent moviesDataLoadedEvent = new RestApiEvents.MoviesDataLoadedEvent(getUpcomingMoviesResponse.getPage(), getUpcomingMoviesResponse.getMovies(), AppConstants.MOVIE_UPCOMING);
+                    RestApiEvents.UpcomingMoviesDataLoadedEvent moviesDataLoadedEvent = new RestApiEvents.UpcomingMoviesDataLoadedEvent(getUpcomingMoviesResponse.getPage(), getUpcomingMoviesResponse.getMovies(), context);
                     EventBus.getDefault().post(moviesDataLoadedEvent);
                 }
             }
@@ -100,7 +102,7 @@ public class MovieDataAgentImpl implements MovieDataAgent {
     }
 
     @Override
-    public void loadTopRatedMovies(String apiKey, int pageNo, String region) {
+    public void loadTopRatedMovies(String apiKey, int pageNo, String region, final Context context) {
         Call<TopRatedMoviesResponse> loadTopRatedMoviesCall = movieAPI.loadTopRatedMovies(apiKey, pageNo, "US");
         loadTopRatedMoviesCall.enqueue(new MovieCallback<TopRatedMoviesResponse>() {
             @Override
@@ -108,7 +110,7 @@ public class MovieDataAgentImpl implements MovieDataAgent {
                 TopRatedMoviesResponse getTopRatedMoviesResponse = response.body();
                 if (getTopRatedMoviesResponse != null
                         && getTopRatedMoviesResponse.getMovies().size() > 0) {
-                    RestApiEvents.MoviesDataLoadedEvent moviesDataLoadedEvent = new RestApiEvents.MoviesDataLoadedEvent(getTopRatedMoviesResponse.getPage(), getTopRatedMoviesResponse.getMovies(), AppConstants.MOVIE_TOP_RATED);
+                    RestApiEvents.TopRatedMoviesDataLoadedEvent moviesDataLoadedEvent = new RestApiEvents.TopRatedMoviesDataLoadedEvent(getTopRatedMoviesResponse.getPage(), getTopRatedMoviesResponse.getMovies(), context);
                     EventBus.getDefault().post(moviesDataLoadedEvent);
                 }
             }
