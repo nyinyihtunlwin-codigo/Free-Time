@@ -82,37 +82,7 @@ public class NowOnCinemaFragment extends BaseFragment {
             }
         });
 
-        getActivity().getSupportLoaderManager().initLoader(MOVIE_NOW_ON_CINEMA_LOADER_ID, null, this);
-
         return view;
-    }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(getActivity().getApplicationContext(),
-                MovieContract.MovieEntry.CONTENT_URI,
-                null,
-                null,
-                null,
-                null);
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        if (data != null && data.moveToFirst()) {
-            List<MovieVO> movieList = new ArrayList<>();
-            do {
-                MovieVO movieVO = MovieVO.parseFromCursor(data);
-                movieList.add(movieVO);
-            } while (data.moveToNext());
-        //    adapter.appendNewData(movieList);
-         //   swipeRefreshLayout.setRefreshing(false);
-        }
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-
     }
 
     @Override

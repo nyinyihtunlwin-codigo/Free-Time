@@ -22,7 +22,7 @@ public class MovieDBHelper extends SQLiteOpenHelper {
             MovieContract.MovieEntry.COLUMN_POPULARITY + " REAL, " +
             MovieContract.MovieEntry.COLUMN_POSTER_PATH + " TEXT NOT NULL, " +
             MovieContract.MovieEntry.COLUMN_ORIGINAL_LANGUAGE + " TEXT NOT NULL, " +
-            MovieContract.MovieEntry.COLUMN_BACKDROP_PATH + " TEXT NOT NULL, " +
+            MovieContract.MovieEntry.COLUMN_BACKDROP_PATH + " TEXT, " +
             MovieContract.MovieEntry.COLUMN_ADULT + " INTEGER DEFAULT 0, " +
             MovieContract.MovieEntry.COLUMN_OVERVIEW + " TEXT NOT NULL, " +
             MovieContract.MovieEntry.COLUMN_RELEASE_DATE + " TEXT NOT NULL, " +
