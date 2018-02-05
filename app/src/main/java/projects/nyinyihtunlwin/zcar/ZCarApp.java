@@ -15,6 +15,6 @@ public class ZCarApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        MovieModel.getInstance().startLoadingMovieGenres();
+        MovieModel.getInstance().startLoadingMovieGenres(getApplicationContext());
     }
 }

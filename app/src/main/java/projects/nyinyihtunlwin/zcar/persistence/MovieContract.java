@@ -8,7 +8,6 @@ import android.provider.BaseColumns;
 import projects.nyinyihtunlwin.zcar.ZCarApp;
 
 
-
 public class MovieContract {
     public static final String CONTENT_AUTHORITY = ZCarApp.class.getPackage().getName();
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
@@ -16,6 +15,7 @@ public class MovieContract {
     public static final String PATH_MOVIES = "movies";
     public static final String PATH_GENRE = "genre";
     public static final String PATH_MOVIE_GENRE = "movie_genre";
+    public static final String PATH_MOVIE_IN_SCREEN = "movie_screen";
 
     public static final class MovieEntry implements BaseColumns {
         public static final Uri CONTENT_URI =
@@ -58,6 +58,26 @@ public class MovieContract {
         }
     }
 
+    public static final class MovieInScreenEntry implements BaseColumns {
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIE_IN_SCREEN).build();
+
+        public static final String DIR_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_MOVIE_IN_SCREEN;
+
+        public static final String ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_MOVIE_IN_SCREEN;
+
+        public static final String TABLE_NAME = "movie_in_screen";
+
+        public static final String COLUMN_MOVIE_ID = "movie_id";
+        public static final String COLUMN_SCREEN = "screen";
+
+        public static Uri buildMovieUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+    }
+
     public static final class GenreEntry implements BaseColumns {
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_GENRE).build();
@@ -71,6 +91,7 @@ public class MovieContract {
         public static final String TABLE_NAME = "genre";
 
         public static final String COLUMN_GENRE_ID = "genre_id";
+        public static final String COLUMN_GENRE_NAME = " genre_name";
 
         public static Uri buildMovieUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);

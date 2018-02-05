@@ -31,6 +31,7 @@ public class MovieDBHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_GENRE_TABLE = "CREATE TABLE " + MovieContract.GenreEntry.TABLE_NAME + " (" +
             MovieContract.GenreEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             MovieContract.GenreEntry.COLUMN_GENRE_ID + " VARCHAR(256), " +
+            MovieContract.GenreEntry.COLUMN_GENRE_NAME + " VARCHAR(256), " +
             " UNIQUE (" + MovieContract.GenreEntry.COLUMN_GENRE_ID + ") ON CONFLICT REPLACE" +
             " );";
 
@@ -40,6 +41,14 @@ public class MovieDBHelper extends SQLiteOpenHelper {
             MovieContract.MovieGenreEntry.COLUMN_GENRE_ID + " VARCHAR(256), " +
             " UNIQUE (" + MovieContract.MovieGenreEntry.COLUMN_MOVIE_ID + ", " +
             MovieContract.MovieGenreEntry.COLUMN_GENRE_ID
+            + ") ON CONFLICT REPLACE" +
+            ");";
+    private static final String SQL_CREATE_MOVIE_IN_SCREEN_TABLE = "CREATE TABLE " + MovieContract.MovieInScreenEntry.TABLE_NAME + " (" +
+            MovieContract.MovieInScreenEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            MovieContract.MovieInScreenEntry.COLUMN_MOVIE_ID + " VARCHAR(256), " +
+            MovieContract.MovieInScreenEntry.COLUMN_SCREEN + " VARCHAR(256), " +
+            " UNIQUE (" + MovieContract.MovieInScreenEntry.COLUMN_MOVIE_ID + ", " +
+            MovieContract.MovieInScreenEntry.COLUMN_SCREEN
             + ") ON CONFLICT REPLACE" +
             ");";
 
@@ -52,6 +61,7 @@ public class MovieDBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(SQL_CREATE_MOVIE_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_GENRE_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_MOVIE_GENRE_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_MOVIE_IN_SCREEN_TABLE);
     }
 
     @Override
@@ -60,6 +70,7 @@ public class MovieDBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + MovieContract.MovieGenreEntry.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + MovieContract.GenreEntry.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + MovieContract.MovieEntry.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + MovieContract.MovieInScreenEntry.TABLE_NAME);
 
         onCreate(sqLiteDatabase);
     }

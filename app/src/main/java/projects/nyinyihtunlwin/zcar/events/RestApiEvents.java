@@ -1,5 +1,6 @@
 package projects.nyinyihtunlwin.zcar.events;
 
+import android.content.ContentValues;
 import android.content.Context;
 
 import java.util.List;
@@ -75,13 +76,19 @@ public class RestApiEvents {
 
     public static class MovieGenresDataLoadedEvent {
         private List<GenreVO> genres;
+        private Context context;
 
-        public MovieGenresDataLoadedEvent(List<GenreVO> genres) {
+        public MovieGenresDataLoadedEvent(List<GenreVO> genres, Context context) {
             this.genres = genres;
+            this.context = context;
         }
 
         public List<GenreVO> getGenres() {
             return genres;
+        }
+
+        public Context getContext() {
+            return context;
         }
     }
 }

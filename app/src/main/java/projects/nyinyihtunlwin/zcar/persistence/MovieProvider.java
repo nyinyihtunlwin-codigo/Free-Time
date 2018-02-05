@@ -17,6 +17,7 @@ public class MovieProvider extends ContentProvider {
     public static final int MOVIE = 100;
     public static final int GENRE = 200;
     public static final int MOVIE_GENRE = 300;
+    public static final int MOVIE_IN_SCREEN = 400;
 
 
     private MovieDBHelper mDbHelper;
@@ -30,6 +31,8 @@ public class MovieProvider extends ContentProvider {
         uriMatcher.addURI(MovieContract.CONTENT_AUTHORITY, MovieContract.PATH_MOVIES, MOVIE);
         uriMatcher.addURI(MovieContract.CONTENT_AUTHORITY, MovieContract.PATH_GENRE, GENRE);
         uriMatcher.addURI(MovieContract.CONTENT_AUTHORITY, MovieContract.PATH_MOVIE_GENRE, MOVIE_GENRE);
+        uriMatcher.addURI(MovieContract.CONTENT_AUTHORITY, MovieContract.PATH_MOVIE_IN_SCREEN, MOVIE_IN_SCREEN);
+
 
         return uriMatcher;
     }
@@ -42,6 +45,8 @@ public class MovieProvider extends ContentProvider {
                 return MovieContract.GenreEntry.TABLE_NAME;
             case MOVIE_GENRE:
                 return MovieContract.MovieGenreEntry.TABLE_NAME;
+            case MOVIE_IN_SCREEN:
+                return MovieContract.MovieInScreenEntry.TABLE_NAME;
         }
         return null;
     }
@@ -54,6 +59,8 @@ public class MovieProvider extends ContentProvider {
                 return MovieContract.GenreEntry.CONTENT_URI;
             case MOVIE_GENRE:
                 return MovieContract.MovieGenreEntry.CONTENT_URI;
+            case MOVIE_IN_SCREEN:
+                return MovieContract.MovieInScreenEntry.CONTENT_URI;
         }
         return null;
     }
@@ -90,6 +97,8 @@ public class MovieProvider extends ContentProvider {
                 return MovieContract.GenreEntry.DIR_TYPE;
             case MOVIE_GENRE:
                 return MovieContract.MovieGenreEntry.DIR_TYPE;
+            case MOVIE_IN_SCREEN:
+                return MovieContract.MovieInScreenEntry.DIR_TYPE;
         }
         return null;
     }

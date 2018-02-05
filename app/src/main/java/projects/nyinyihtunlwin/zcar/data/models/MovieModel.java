@@ -51,8 +51,8 @@ public class MovieModel {
         return objectInstance;
     }
 
-    public void startLoadingMovieGenres() {
-        MovieDataAgentImpl.getObjectInstance().loadMovieGenres(AppConstants.API_KEY);
+    public void startLoadingMovieGenres(Context context) {
+        MovieDataAgentImpl.getObjectInstance().loadMovieGenres(AppConstants.API_KEY,context);
     }
 
     public void startLoadingMovies(Context context, String movieType) {
@@ -63,38 +63,76 @@ public class MovieModel {
     public void onMovieGenresLoaded(RestApiEvents.MovieGenresDataLoadedEvent event) {
         mMovieGenres.addAll(event.getGenres());
         Log.e(ZCarApp.LOG_TAG, String.valueOf(mMovieGenres.size()));
+        ContentValues[] genreCVs = new ContentValues[event.getGenres().size()];
+        for (int index = 0; index < genreCVs.length; index++) {
+            GenreVO genreVO = event.getGenres().get(index);
+            genreCVs[index] = genreVO.parseToContentValues();
+        }
+        int insertedRowCount = event.getContext().getContentResolver().bulkInsert(MovieContract.GenreEntry.CONTENT_URI, genreCVs);
+        Log.d(ZCarApp.LOG_TAG, "Inserted genres : " + insertedRowCount);
     }
 
     @Subscribe
     public void onNowOnCinemaMoviesLoaded(RestApiEvents.NowOnCinemaMoviesDataLoadedEvent event) {
         mNowOnCinemaMovies.addAll(event.getLoadedMovies());
         mNowOnCinemaPageIndex = event.getLoadedPageIndex() + 1;
-
-        ContentValues[] movieCVS = new ContentValues[event.getLoadedMovies().size()];
-        for (int index = 0; index < movieCVS.length; index++) {
-            movieCVS[index] = event.getLoadedMovies().get(index).parseToContentValues();
-        }
-
-        int insertedRowCount = event.getContext().getContentResolver().bulkInsert(MovieContract.MovieEntry.CONTENT_URI, movieCVS);
-        Log.d(ZCarApp.LOG_TAG, "Inserted row : " + insertedRowCount);
+        saveDataForOfflineMode(event, AppConstants.MOVIE_NOW_ON_CINEMA);
     }
 
     @Subscribe
     public void onPopularMoviesLoaded(RestApiEvents.PoputlarMoviesDataLoadedEvent event) {
         mMostPopularMovies.addAll(event.getLoadedMovies());
         mMostPopularPageIndex = event.getLoadedPageIndex() + 1;
+        saveDataForOfflineMode(event, AppConstants.MOVIE_MOST_POPULAR);
     }
 
     @Subscribe
     public void onUpcomingMoviesLoaded(RestApiEvents.UpcomingMoviesDataLoadedEvent event) {
         mUpcomingMovies.addAll(event.getLoadedMovies());
         mUpcomingPageIndex = event.getLoadedPageIndex() + 1;
+        saveDataForOfflineMode(event, AppConstants.MOVIE_UPCOMING);
     }
 
     @Subscribe
     public void onTopRatedMoviesLoaded(RestApiEvents.TopRatedMoviesDataLoadedEvent event) {
         mTopRatedMovies.addAll(event.getLoadedMovies());
         mTopRatedPageIndex = event.getLoadedPageIndex() + 1;
+        saveDataForOfflineMode(event, AppConstants.MOVIE_TOP_RATED);
+    }
+
+    private void saveDataForOfflineMode(RestApiEvents.MoviesDataLoadedEvent event, String screenName) {
+        ContentValues[] movieCVS = new ContentValues[event.getLoadedMovies().size()];
+        List<ContentValues> genreCVList = new ArrayList<>();
+        List<ContentValues> movieInScreenCVList = new ArrayList<>();
+
+        for (int index = 0; index < movieCVS.length; index++) {
+            MovieVO movieVO = event.getLoadedMovies().get(index);
+            movieCVS[index] = movieVO.parseToContentValues();
+
+            for (int genreId : movieVO.getGenreIds()) {
+                ContentValues genreIdsInMovieCV = new ContentValues();
+                genreIdsInMovieCV.put(MovieContract.MovieGenreEntry.COLUMN_MOVIE_ID, movieVO.getId());
+                genreIdsInMovieCV.put(MovieContract.MovieGenreEntry.COLUMN_GENRE_ID, genreId);
+                genreCVList.add(genreIdsInMovieCV);
+            }
+
+            ContentValues movieInScreenCV = new ContentValues();
+            movieInScreenCV.put(MovieContract.MovieInScreenEntry.COLUMN_MOVIE_ID, movieVO.getId());
+            movieInScreenCV.put(MovieContract.MovieInScreenEntry.COLUMN_SCREEN, screenName);
+            movieInScreenCVList.add(movieInScreenCV);
+
+        }
+
+        int insertedMovieGenre = event.getContext().getContentResolver().bulkInsert(MovieContract.MovieGenreEntry.CONTENT_URI,
+                genreCVList.toArray(new ContentValues[0]));
+        Log.d(ZCarApp.LOG_TAG, "Inserted Genres In Movies :" + insertedMovieGenre);
+
+        int insertedMovieInScreen = event.getContext().getContentResolver().bulkInsert(MovieContract.MovieInScreenEntry.CONTENT_URI,
+                movieInScreenCVList.toArray(new ContentValues[0]));
+        Log.d(ZCarApp.LOG_TAG, "Inserted Movies In Screen :" + insertedMovieInScreen);
+
+        int insertedRowCount = event.getContext().getContentResolver().bulkInsert(MovieContract.MovieEntry.CONTENT_URI, movieCVS);
+        Log.d(ZCarApp.LOG_TAG, "Inserted row : " + insertedRowCount);
     }
 
 

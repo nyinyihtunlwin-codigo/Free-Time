@@ -118,7 +118,7 @@ public class MovieDataAgentImpl implements MovieDataAgent {
     }
 
     @Override
-    public void loadMovieGenres(String apiKey) {
+    public void loadMovieGenres(String apiKey, final Context context) {
         Call<MovieGenresResponse> loadMovieGenres = movieAPI.loadMovieGenres(apiKey);
         loadMovieGenres.enqueue(new MovieCallback<MovieGenresResponse>() {
             @Override
@@ -126,7 +126,7 @@ public class MovieDataAgentImpl implements MovieDataAgent {
                 MovieGenresResponse getMovieGenresResponse = response.body();
                 if (getMovieGenresResponse != null
                         && getMovieGenresResponse.getGenres().size() > 0) {
-                    RestApiEvents.MovieGenresDataLoadedEvent movieGenresDataLoadedEvent = new RestApiEvents.MovieGenresDataLoadedEvent(getMovieGenresResponse.getGenres());
+                    RestApiEvents.MovieGenresDataLoadedEvent movieGenresDataLoadedEvent = new RestApiEvents.MovieGenresDataLoadedEvent(getMovieGenresResponse.getGenres(), context);
                     EventBus.getDefault().post(movieGenresDataLoadedEvent);
                 }
             }
