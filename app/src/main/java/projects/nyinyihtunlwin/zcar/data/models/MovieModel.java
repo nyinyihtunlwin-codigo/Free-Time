@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import projects.nyinyihtunlwin.zcar.ZCarApp;
+import projects.nyinyihtunlwin.zcar.data.vo.GenreVO;
 import projects.nyinyihtunlwin.zcar.data.vo.MovieVO;
 import projects.nyinyihtunlwin.zcar.events.RestApiEvents;
 import projects.nyinyihtunlwin.zcar.network.MovieDataAgentImpl;
@@ -31,6 +32,7 @@ public class MovieModel {
 
 
     private List<MovieVO> mNowOnCinemaMovies, mMostPopularMovies, mUpcomingMovies, mTopRatedMovies;
+    private List<GenreVO> mMovieGenres;
 
 
     private MovieModel() {
@@ -39,6 +41,7 @@ public class MovieModel {
         mMostPopularMovies = new ArrayList<>();
         mUpcomingMovies = new ArrayList<>();
         mTopRatedMovies = new ArrayList<>();
+        mMovieGenres = new ArrayList<>();
     }
 
     public static MovieModel getInstance() {
@@ -48,8 +51,18 @@ public class MovieModel {
         return objectInstance;
     }
 
-    public void startLoadingMovies(Context context,String movieType) {
-        loadMovies(context,movieType);
+    public void startLoadingMovieGenres() {
+        MovieDataAgentImpl.getObjectInstance().loadMovieGenres(AppConstants.API_KEY);
+    }
+
+    public void startLoadingMovies(Context context, String movieType) {
+        loadMovies(context, movieType);
+    }
+
+    @Subscribe
+    public void onMovieGenresLoaded(RestApiEvents.MovieGenresDataLoadedEvent event) {
+        mMovieGenres.addAll(event.getGenres());
+        Log.e(ZCarApp.LOG_TAG, String.valueOf(mMovieGenres.size()));
     }
 
     @Subscribe

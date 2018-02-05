@@ -1,4 +1,4 @@
-package projects.nyinyihtunlwin.zcar.fragments;
+package projects.nyinyihtunlwin.zcar.fragments.movies;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -26,6 +26,7 @@ import projects.nyinyihtunlwin.zcar.components.SmartScrollListener;
 import projects.nyinyihtunlwin.zcar.data.models.MovieModel;
 import projects.nyinyihtunlwin.zcar.data.vo.MovieVO;
 import projects.nyinyihtunlwin.zcar.events.RestApiEvents;
+import projects.nyinyihtunlwin.zcar.fragments.BaseFragment;
 import projects.nyinyihtunlwin.zcar.utils.AppConstants;
 
 

@@ -1,16 +1,17 @@
-package projects.nyinyihtunlwin.zcar.network.responses;
+package projects.nyinyihtunlwin.zcar.network.responses.movies;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
 import projects.nyinyihtunlwin.zcar.data.vo.MovieVO;
+import projects.nyinyihtunlwin.zcar.network.responses.BaseResponse;
 
 /**
  * Created by hitanshu on 27/7/17.
  */
 
-public class PopularMoviesResponse extends BaseResponse{
+public class PopularMoviesResponse extends BaseResponse {
 
     @SerializedName("page")
     private Integer page;

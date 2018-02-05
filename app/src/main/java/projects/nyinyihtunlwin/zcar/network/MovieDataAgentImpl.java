@@ -10,11 +10,11 @@ import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import projects.nyinyihtunlwin.zcar.events.RestApiEvents;
-import projects.nyinyihtunlwin.zcar.network.responses.NowShowingMoviesResponse;
-import projects.nyinyihtunlwin.zcar.network.responses.PopularMoviesResponse;
-import projects.nyinyihtunlwin.zcar.network.responses.TopRatedMoviesResponse;
-import projects.nyinyihtunlwin.zcar.network.responses.UpcomingMoviesResponse;
-import projects.nyinyihtunlwin.zcar.utils.AppConstants;
+import projects.nyinyihtunlwin.zcar.network.responses.movies.MovieGenresResponse;
+import projects.nyinyihtunlwin.zcar.network.responses.movies.NowShowingMoviesResponse;
+import projects.nyinyihtunlwin.zcar.network.responses.movies.PopularMoviesResponse;
+import projects.nyinyihtunlwin.zcar.network.responses.movies.TopRatedMoviesResponse;
+import projects.nyinyihtunlwin.zcar.network.responses.movies.UpcomingMoviesResponse;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -112,6 +112,22 @@ public class MovieDataAgentImpl implements MovieDataAgent {
                         && getTopRatedMoviesResponse.getMovies().size() > 0) {
                     RestApiEvents.TopRatedMoviesDataLoadedEvent moviesDataLoadedEvent = new RestApiEvents.TopRatedMoviesDataLoadedEvent(getTopRatedMoviesResponse.getPage(), getTopRatedMoviesResponse.getMovies(), context);
                     EventBus.getDefault().post(moviesDataLoadedEvent);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void loadMovieGenres(String apiKey) {
+        Call<MovieGenresResponse> loadMovieGenres = movieAPI.loadMovieGenres(apiKey);
+        loadMovieGenres.enqueue(new MovieCallback<MovieGenresResponse>() {
+            @Override
+            public void onResponse(Call<MovieGenresResponse> call, Response<MovieGenresResponse> response) {
+                MovieGenresResponse getMovieGenresResponse = response.body();
+                if (getMovieGenresResponse != null
+                        && getMovieGenresResponse.getGenres().size() > 0) {
+                    RestApiEvents.MovieGenresDataLoadedEvent movieGenresDataLoadedEvent = new RestApiEvents.MovieGenresDataLoadedEvent(getMovieGenresResponse.getGenres());
+                    EventBus.getDefault().post(movieGenresDataLoadedEvent);
                 }
             }
         });

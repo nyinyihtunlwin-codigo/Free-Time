@@ -4,6 +4,7 @@ import android.content.Context;
 
 import java.util.List;
 
+import projects.nyinyihtunlwin.zcar.data.vo.GenreVO;
 import projects.nyinyihtunlwin.zcar.data.vo.MovieVO;
 
 /**
@@ -29,10 +30,10 @@ public class RestApiEvents {
         private List<MovieVO> loadedMovies;
         private Context context;
 
-        public MoviesDataLoadedEvent(int loadedPageIndex, List<MovieVO> loadedMovies,Context context) {
+        public MoviesDataLoadedEvent(int loadedPageIndex, List<MovieVO> loadedMovies, Context context) {
             this.loadedPageIndex = loadedPageIndex;
             this.loadedMovies = loadedMovies;
-            this.context=context;
+            this.context = context;
         }
 
         public int getLoadedPageIndex() {
@@ -49,26 +50,38 @@ public class RestApiEvents {
     }
 
     public static class UpcomingMoviesDataLoadedEvent extends MoviesDataLoadedEvent {
-        public UpcomingMoviesDataLoadedEvent(int loadedPageIndex, List<MovieVO> loadedMovies,Context context) {
-            super(loadedPageIndex, loadedMovies,context);
+        public UpcomingMoviesDataLoadedEvent(int loadedPageIndex, List<MovieVO> loadedMovies, Context context) {
+            super(loadedPageIndex, loadedMovies, context);
         }
     }
 
     public static class PoputlarMoviesDataLoadedEvent extends MoviesDataLoadedEvent {
-        public PoputlarMoviesDataLoadedEvent(int loadedPageIndex, List<MovieVO> loadedMovies,Context context) {
-            super(loadedPageIndex, loadedMovies,context);
+        public PoputlarMoviesDataLoadedEvent(int loadedPageIndex, List<MovieVO> loadedMovies, Context context) {
+            super(loadedPageIndex, loadedMovies, context);
         }
     }
 
     public static class NowOnCinemaMoviesDataLoadedEvent extends MoviesDataLoadedEvent {
-        public NowOnCinemaMoviesDataLoadedEvent(int loadedPageIndex, List<MovieVO> loadedMovies,Context context) {
-            super(loadedPageIndex, loadedMovies,context);
+        public NowOnCinemaMoviesDataLoadedEvent(int loadedPageIndex, List<MovieVO> loadedMovies, Context context) {
+            super(loadedPageIndex, loadedMovies, context);
         }
     }
 
     public static class TopRatedMoviesDataLoadedEvent extends MoviesDataLoadedEvent {
-        public TopRatedMoviesDataLoadedEvent(int loadedPageIndex, List<MovieVO> loadedMovies,Context context) {
-            super(loadedPageIndex, loadedMovies,context);
+        public TopRatedMoviesDataLoadedEvent(int loadedPageIndex, List<MovieVO> loadedMovies, Context context) {
+            super(loadedPageIndex, loadedMovies, context);
+        }
+    }
+
+    public static class MovieGenresDataLoadedEvent {
+        private List<GenreVO> genres;
+
+        public MovieGenresDataLoadedEvent(List<GenreVO> genres) {
+            this.genres = genres;
+        }
+
+        public List<GenreVO> getGenres() {
+            return genres;
         }
     }
 }

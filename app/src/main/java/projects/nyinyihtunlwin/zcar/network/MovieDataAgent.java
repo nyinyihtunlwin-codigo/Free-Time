@@ -15,4 +15,6 @@ public interface MovieDataAgent {
     void loadUpcomingMovies(String apiKey, int pageNo, String region,Context context);
 
     void loadTopRatedMovies(String apiKey, int pageNo, String region,Context context);
+
+    void loadMovieGenres(String apiKey);
 }

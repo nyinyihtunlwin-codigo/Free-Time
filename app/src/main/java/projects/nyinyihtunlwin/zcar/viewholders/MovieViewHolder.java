@@ -1,11 +1,7 @@
 package projects.nyinyihtunlwin.zcar.viewholders;
 
-import android.support.v7.widget.AppCompatRatingBar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
-
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -44,7 +40,7 @@ public class MovieViewHolder extends BaseViewHolder<MovieVO> {
 
     @Override
     public void setData(MovieVO mData) {
-     //   tvMovieName.setText(mData.getTitle());
+        //   tvMovieName.setText(mData.getTitle());
         //  tvRate.setText(mData.getVoteAverage() + "");
         RequestOptions requestOptions = new RequestOptions()
                 .placeholder(R.drawable.movie_placeholder)
@@ -52,8 +48,8 @@ public class MovieViewHolder extends BaseViewHolder<MovieVO> {
         Glide.with(itemView.getRootView().getContext()).load("https://image.tmdb.org/t/p/original" + mData.getPosterPath()).apply(requestOptions).into(ivMovie);
 //        Log.e("path", mData.getPosterPath());
         float popularity = mData.getPopularity() / 200;
-     //   tvReleasedDate.setText(mData.getReleasedDate());
-     //   rbMovie.setRating(popularity);
+        //   tvReleasedDate.setText(mData.getReleasedDate());
+        //   rbMovie.setRating(popularity);
     }
 
     @Override

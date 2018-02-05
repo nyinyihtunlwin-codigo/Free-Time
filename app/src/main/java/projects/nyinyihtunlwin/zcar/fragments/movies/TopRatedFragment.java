@@ -1,4 +1,4 @@
-package projects.nyinyihtunlwin.zcar.fragments;
+package projects.nyinyihtunlwin.zcar.fragments.movies;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -25,15 +25,16 @@ import projects.nyinyihtunlwin.zcar.components.SmartScrollListener;
 import projects.nyinyihtunlwin.zcar.data.models.MovieModel;
 import projects.nyinyihtunlwin.zcar.data.vo.MovieVO;
 import projects.nyinyihtunlwin.zcar.events.RestApiEvents;
+import projects.nyinyihtunlwin.zcar.fragments.BaseFragment;
 import projects.nyinyihtunlwin.zcar.utils.AppConstants;
 
 
-public class MostPopularFragment extends BaseFragment {
+public class TopRatedFragment extends BaseFragment {
 
-    @BindView(R.id.rv_most_popular)
-    SmartRecyclerView rvMostPopular;
+    @BindView(R.id.rv_top_rated)
+    SmartRecyclerView rvTopRated;
 
-    MovieAdapter adapter;
+    private MovieAdapter adapter;
 
     @BindView(R.id.vp_empty_movie)
     EmptyViewPod vpEmptyMovie;
@@ -46,57 +47,56 @@ public class MostPopularFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_most_popular, container, false);
+        View view = inflater.inflate(R.layout.fragment_top_rated, container, false);
         ButterKnife.bind(this, view);
-
-        rvMostPopular.setHasFixedSize(true);
+        rvTopRated.setHasFixedSize(true);
         adapter = new MovieAdapter(getContext());
-        rvMostPopular.setEmptyView(vpEmptyMovie);
-        rvMostPopular.setAdapter(adapter);
-        rvMostPopular.setLayoutManager(new GridLayoutManager(container.getContext(), 2));
+        rvTopRated.setEmptyView(vpEmptyMovie);
+        rvTopRated.setAdapter(adapter);
+        rvTopRated.setLayoutManager(new GridLayoutManager(container.getContext(), 2));
+
 
         mSmartScrollListener = new SmartScrollListener(new SmartScrollListener.OnSmartScrollListener() {
             @Override
             public void onListEndReached() {
-                MovieModel.getInstance().loadMoreMovies(getActivity().getApplicationContext(),AppConstants.MOVIE_MOST_POPULAR);
+                MovieModel.getInstance().loadMoreMovies(getActivity().getApplicationContext(),AppConstants.MOVIE_TOP_RATED);
             }
         });
 
-        rvMostPopular.addOnScrollListener(mSmartScrollListener);
+        rvTopRated.addOnScrollListener(mSmartScrollListener);
 
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                MovieModel.getInstance().forceRefreshMovies(getActivity().getApplicationContext(),AppConstants.MOVIE_MOST_POPULAR);
+                MovieModel.getInstance().forceRefreshMovies(getActivity().getApplicationContext(),AppConstants.MOVIE_TOP_RATED);
             }
         });
         return view;
     }
 
-
     @Override
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
-        List<MovieVO> movieList = MovieModel.getInstance().getMostPopularMovies();
+        List<MovieVO> movieList = MovieModel.getInstance().getTopRatedMovies();
         if (!movieList.isEmpty()) {
             adapter.setNewData(movieList);
         } else {
-            MovieModel.getInstance().startLoadingMovies(getActivity().getApplicationContext(),AppConstants.MOVIE_MOST_POPULAR);
+            MovieModel.getInstance().startLoadingMovies(getActivity().getApplicationContext(),AppConstants.MOVIE_TOP_RATED);
             swipeRefreshLayout.setRefreshing(true);
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMovieDataLoaded(RestApiEvents.PoputlarMoviesDataLoadedEvent event) {
-        adapter.appendNewData(event.getLoadedMovies());
-        swipeRefreshLayout.setRefreshing(false);
+    public void onMovieDataLoaded(RestApiEvents.TopRatedMoviesDataLoadedEvent event) {
+            adapter.appendNewData(event.getLoadedMovies());
+            swipeRefreshLayout.setRefreshing(false);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onErrorInvokingAPI(RestApiEvents.ErrorInvokingAPIEvent event) {
-        Snackbar.make(rvMostPopular, event.getErrorMsg(), Snackbar.LENGTH_INDEFINITE).show();
+        Snackbar.make(rvTopRated, event.getErrorMsg(), Snackbar.LENGTH_INDEFINITE).show();
         swipeRefreshLayout.setRefreshing(false);
     }
 
@@ -105,7 +105,6 @@ public class MostPopularFragment extends BaseFragment {
         EventBus.getDefault().unregister(this);
         super.onStop();
     }
-
 
     @Override
     public void onAttach(Context context) {

@@ -4,10 +4,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import projects.nyinyihtunlwin.zcar.fragments.MostPopularFragment;
-import projects.nyinyihtunlwin.zcar.fragments.NowOnCinemaFragment;
-import projects.nyinyihtunlwin.zcar.fragments.TopRatedFragment;
-import projects.nyinyihtunlwin.zcar.fragments.UpcomingFragment;
+import projects.nyinyihtunlwin.zcar.fragments.movies.MostPopularFragment;
+import projects.nyinyihtunlwin.zcar.fragments.movies.NowOnCinemaFragment;
+import projects.nyinyihtunlwin.zcar.fragments.movies.TopRatedFragment;
+import projects.nyinyihtunlwin.zcar.fragments.movies.UpcomingFragment;
 
 /**
  * Created by Nyi Nyi Htun Lwin on 11/7/2017.

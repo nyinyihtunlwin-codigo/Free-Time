@@ -1,9 +1,10 @@
 package projects.nyinyihtunlwin.zcar.network;
 
-import projects.nyinyihtunlwin.zcar.network.responses.NowShowingMoviesResponse;
-import projects.nyinyihtunlwin.zcar.network.responses.PopularMoviesResponse;
-import projects.nyinyihtunlwin.zcar.network.responses.TopRatedMoviesResponse;
-import projects.nyinyihtunlwin.zcar.network.responses.UpcomingMoviesResponse;
+import projects.nyinyihtunlwin.zcar.network.responses.movies.MovieGenresResponse;
+import projects.nyinyihtunlwin.zcar.network.responses.movies.NowShowingMoviesResponse;
+import projects.nyinyihtunlwin.zcar.network.responses.movies.PopularMoviesResponse;
+import projects.nyinyihtunlwin.zcar.network.responses.movies.TopRatedMoviesResponse;
+import projects.nyinyihtunlwin.zcar.network.responses.movies.UpcomingMoviesResponse;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -13,6 +14,8 @@ import retrofit2.http.Query;
  */
 
 public interface MovieAPI {
+
+    // for movies
 
     @GET("movie/now_playing")
     Call<NowShowingMoviesResponse> loadNowShowingMovies(@Query("api_key") String apiKey, @Query("page") Integer page, @Query("region") String region);
@@ -25,4 +28,7 @@ public interface MovieAPI {
 
     @GET("movie/top_rated")
     Call<TopRatedMoviesResponse> loadTopRatedMovies(@Query("api_key") String apiKey, @Query("page") Integer page, @Query("region") String region);
+
+    @GET("genre/movie/list")
+    Call<MovieGenresResponse> loadMovieGenres(@Query("api_key") String apiKey);
 }

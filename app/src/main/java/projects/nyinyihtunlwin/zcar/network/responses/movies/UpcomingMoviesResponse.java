@@ -1,31 +1,36 @@
-package projects.nyinyihtunlwin.zcar.network.responses;
+package projects.nyinyihtunlwin.zcar.network.responses.movies;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
 import projects.nyinyihtunlwin.zcar.data.vo.MovieVO;
+import projects.nyinyihtunlwin.zcar.network.responses.BaseResponse;
 
 /**
- * Created by hitanshu on 31/7/17.
+ * Created by hitanshu on 28/7/17.
  */
 
-public class TopRatedMoviesResponse extends BaseResponse{
+public class UpcomingMoviesResponse extends BaseResponse {
 
+    @SerializedName("results")
+    private List<MovieVO> movies;
     @SerializedName("page")
     private Integer page;
     @SerializedName("total_results")
     private Integer totalResults;
     @SerializedName("total_pages")
     private Integer totalPages;
-    @SerializedName("results")
-    private List<MovieVO> movies;
 
-    public TopRatedMoviesResponse(Integer page, Integer totalResults, Integer totalPages, List<MovieVO> movies) {
+    public UpcomingMoviesResponse(List<MovieVO> movies, Integer page, Integer totalResults, Integer totalPages) {
+        this.movies = movies;
         this.page = page;
         this.totalResults = totalResults;
         this.totalPages = totalPages;
-        this.movies = movies;
+    }
+
+    public List<MovieVO> getMovies() {
+        return movies;
     }
 
     public Integer getPage() {
@@ -38,9 +43,5 @@ public class TopRatedMoviesResponse extends BaseResponse{
 
     public Integer getTotalPages() {
         return totalPages;
-    }
-
-    public List<MovieVO> getMovies() {
-        return movies;
     }
 }
