@@ -82,7 +82,37 @@ public class NowOnCinemaFragment extends BaseFragment {
             }
         });
 
+        getActivity().getSupportLoaderManager().initLoader(MOVIE_NOW_ON_CINEMA_LOADER_ID, null, this);
+
         return view;
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(getActivity().getApplicationContext(),
+                MovieContract.MovieEntry.CONTENT_URI,
+                null,
+                MovieContract.MovieInScreenEntry.COLUMN_SCREEN+"=?",
+                new String[]{AppConstants.MOVIE_NOW_ON_CINEMA},
+                null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        if (data != null && data.moveToFirst()) {
+            List<MovieVO> movieList = new ArrayList<>();
+            do {
+                MovieVO newsVO = MovieVO.parseFromCursor(getActivity().getApplicationContext(),data);
+                movieList.add(newsVO);
+            } while (data.moveToNext());
+            adapter.appendNewData(movieList);
+            swipeRefreshLayout.setRefreshing(false);
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
     }
 
     @Override
@@ -100,8 +130,8 @@ public class NowOnCinemaFragment extends BaseFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMovieDataLoaded(RestApiEvents.NowOnCinemaMoviesDataLoadedEvent event) {
-        adapter.appendNewData(event.getLoadedMovies());
-        swipeRefreshLayout.setRefreshing(false);
+      /*  adapter.appendNewData(event.getLoadedMovies());
+        swipeRefreshLayout.setRefreshing(false);*/
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

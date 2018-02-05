@@ -1,11 +1,13 @@
 package projects.nyinyihtunlwin.zcar.data.vo;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import projects.nyinyihtunlwin.zcar.persistence.MovieContract;
 
@@ -33,7 +35,7 @@ public class MovieVO {
     @SerializedName("original_title")
     private String originalTitle;
     @SerializedName("genre_ids")
-    private ArrayList<Integer> genreIds;
+    private List<Integer> genreIds;
     @SerializedName("backdrop_path")
     private String backDropPath;
     @SerializedName("adult")
@@ -79,7 +81,7 @@ public class MovieVO {
         return originalTitle;
     }
 
-    public ArrayList<Integer> getGenreIds() {
+    public List<Integer> getGenreIds() {
         return genreIds;
     }
 
@@ -118,7 +120,7 @@ public class MovieVO {
         return contentValues;
     }
 
-    public static MovieVO parseFromCursor(Cursor cursor) {
+    public static MovieVO parseFromCursor(Context context, Cursor cursor) {
         MovieVO movie = new MovieVO();
         movie.id = cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_MOVIE_ID));
         movie.voteCount = cursor.getInt(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_VOTE_COUNT));
@@ -133,6 +135,28 @@ public class MovieVO {
         movie.adult = cursor.getInt(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_ADULT)) > 0;
         movie.overview = cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_OVERVIEW));
         movie.releasedDate = cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_RELEASE_DATE));
+        movie.genreIds = loadGenresInMovie(context, movie.id);
         return movie;
+    }
+
+    private static List<Integer> loadGenresInMovie(Context context, String movieId) {
+        Cursor genresInMovieCursor = context.getContentResolver().query(MovieContract.MovieGenreEntry.CONTENT_URI,
+                null,
+                MovieContract.MovieGenreEntry.COLUMN_MOVIE_ID + " = ?", new String[]{movieId},
+                null);
+
+        if (genresInMovieCursor != null && genresInMovieCursor.moveToFirst()) {
+            List<Integer> genresInMovies = new ArrayList<>();
+            do {
+                genresInMovies.add(
+                        genresInMovieCursor.getInt(
+                                genresInMovieCursor.getColumnIndex(MovieContract.MovieGenreEntry.COLUMN_GENRE_ID)
+                        )
+                );
+            } while (genresInMovieCursor.moveToNext());
+            genresInMovieCursor.close();
+            return genresInMovies;
+        }
+        return null;
     }
 }
