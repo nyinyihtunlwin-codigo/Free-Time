@@ -1,8 +1,11 @@
 package projects.nyinyihtunlwin.zcar.fragments.movies;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
@@ -13,6 +16,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -26,10 +30,14 @@ import projects.nyinyihtunlwin.zcar.data.models.MovieModel;
 import projects.nyinyihtunlwin.zcar.data.vo.MovieVO;
 import projects.nyinyihtunlwin.zcar.events.RestApiEvents;
 import projects.nyinyihtunlwin.zcar.fragments.BaseFragment;
+import projects.nyinyihtunlwin.zcar.persistence.MovieContract;
 import projects.nyinyihtunlwin.zcar.utils.AppConstants;
 
 
 public class NowOnCinemaFragment extends BaseFragment {
+
+    private static final int MOVIE_NOW_ON_CINEMA_LOADER_ID = 1001;
+
     @BindView(R.id.rv_now_on_cinema)
     SmartRecyclerView rvNowOnCinema;
 
@@ -60,7 +68,7 @@ public class NowOnCinemaFragment extends BaseFragment {
         mSmartScrollListener = new SmartScrollListener(new SmartScrollListener.OnSmartScrollListener() {
             @Override
             public void onListEndReached() {
-                MovieModel.getInstance().loadMoreMovies(getActivity().getApplicationContext(),AppConstants.MOVIE_NOW_ON_CINEMA);
+                MovieModel.getInstance().loadMoreMovies(getActivity().getApplicationContext(), AppConstants.MOVIE_NOW_ON_CINEMA);
             }
         });
 
@@ -70,11 +78,41 @@ public class NowOnCinemaFragment extends BaseFragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                MovieModel.getInstance().forceRefreshMovies(getActivity().getApplicationContext(),AppConstants.MOVIE_NOW_ON_CINEMA);
+                MovieModel.getInstance().forceRefreshMovies(getActivity().getApplicationContext(), AppConstants.MOVIE_NOW_ON_CINEMA);
             }
         });
 
+        getActivity().getSupportLoaderManager().initLoader(MOVIE_NOW_ON_CINEMA_LOADER_ID, null, this);
+
         return view;
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(getActivity().getApplicationContext(),
+                MovieContract.MovieEntry.CONTENT_URI,
+                null,
+                null,
+                null,
+                null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        if (data != null && data.moveToFirst()) {
+            List<MovieVO> movieList = new ArrayList<>();
+            do {
+                MovieVO movieVO = MovieVO.parseFromCursor(data);
+                movieList.add(movieVO);
+            } while (data.moveToNext());
+        //    adapter.appendNewData(movieList);
+         //   swipeRefreshLayout.setRefreshing(false);
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
     }
 
     @Override
@@ -85,7 +123,7 @@ public class NowOnCinemaFragment extends BaseFragment {
         if (!movieList.isEmpty()) {
             adapter.setNewData(movieList);
         } else {
-            MovieModel.getInstance().startLoadingMovies(getActivity().getApplicationContext(),AppConstants.MOVIE_NOW_ON_CINEMA);
+            MovieModel.getInstance().startLoadingMovies(getActivity().getApplicationContext(), AppConstants.MOVIE_NOW_ON_CINEMA);
             swipeRefreshLayout.setRefreshing(true);
         }
     }
