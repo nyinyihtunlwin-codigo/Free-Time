@@ -50,7 +50,7 @@ public class TopRatedFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_top_rated, container, false);
         ButterKnife.bind(this, view);
         rvTopRated.setHasFixedSize(true);
-        adapter = new MovieAdapter(getContext());
+        adapter = new MovieAdapter(getContext(),this);
         rvTopRated.setEmptyView(vpEmptyMovie);
         rvTopRated.setAdapter(adapter);
         rvTopRated.setLayoutManager(new GridLayoutManager(container.getContext(), 2));

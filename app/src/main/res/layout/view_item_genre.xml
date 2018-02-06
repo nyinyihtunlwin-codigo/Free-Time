@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tv_genre_name"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_round_accent_border"
+    android:gravity="center"
+    android:padding="@dimen/margin_medium"
+    android:layout_marginEnd="@dimen/margin_small"
+    android:text="Adventure"
+    android:textSize="@dimen/text_small"
+    android:textColor="@color/icons" />

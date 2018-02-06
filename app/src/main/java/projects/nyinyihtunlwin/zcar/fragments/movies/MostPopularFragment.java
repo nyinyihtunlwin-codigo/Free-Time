@@ -29,7 +29,7 @@ import projects.nyinyihtunlwin.zcar.fragments.BaseFragment;
 import projects.nyinyihtunlwin.zcar.utils.AppConstants;
 
 
-public class MostPopularFragment extends BaseFragment {
+public class MostPopularFragment extends BaseFragment{
 
     @BindView(R.id.rv_most_popular)
     SmartRecyclerView rvMostPopular;
@@ -51,7 +51,7 @@ public class MostPopularFragment extends BaseFragment {
         ButterKnife.bind(this, view);
 
         rvMostPopular.setHasFixedSize(true);
-        adapter = new MovieAdapter(getContext());
+        adapter = new MovieAdapter(getContext(),this);
         rvMostPopular.setEmptyView(vpEmptyMovie);
         rvMostPopular.setAdapter(adapter);
         rvMostPopular.setLayoutManager(new GridLayoutManager(container.getContext(), 2));

@@ -1,6 +1,7 @@
 package projects.nyinyihtunlwin.zcar.fragments.movies;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -11,6 +12,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -22,19 +24,21 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import projects.nyinyihtunlwin.zcar.R;
+import projects.nyinyihtunlwin.zcar.activities.MovieDetailsActivity;
 import projects.nyinyihtunlwin.zcar.adapters.MovieAdapter;
 import projects.nyinyihtunlwin.zcar.components.EmptyViewPod;
 import projects.nyinyihtunlwin.zcar.components.SmartRecyclerView;
 import projects.nyinyihtunlwin.zcar.components.SmartScrollListener;
 import projects.nyinyihtunlwin.zcar.data.models.MovieModel;
 import projects.nyinyihtunlwin.zcar.data.vo.MovieVO;
+import projects.nyinyihtunlwin.zcar.delegates.MovieItemDelegate;
 import projects.nyinyihtunlwin.zcar.events.RestApiEvents;
 import projects.nyinyihtunlwin.zcar.fragments.BaseFragment;
 import projects.nyinyihtunlwin.zcar.persistence.MovieContract;
 import projects.nyinyihtunlwin.zcar.utils.AppConstants;
 
 
-public class NowOnCinemaFragment extends BaseFragment {
+public class NowOnCinemaFragment extends BaseFragment implements MovieItemDelegate {
 
     private static final int MOVIE_NOW_ON_CINEMA_LOADER_ID = 1001;
 
@@ -59,7 +63,7 @@ public class NowOnCinemaFragment extends BaseFragment {
 
         rvNowOnCinema.setHasFixedSize(true);
 
-        adapter = new MovieAdapter(getContext());
+        adapter = new MovieAdapter(getContext(), this);
 
         rvNowOnCinema.setEmptyView(vpEmptyMovie);
         rvNowOnCinema.setAdapter(adapter);
@@ -92,7 +96,7 @@ public class NowOnCinemaFragment extends BaseFragment {
         return new CursorLoader(getActivity().getApplicationContext(),
                 MovieContract.MovieEntry.CONTENT_URI,
                 null,
-                MovieContract.MovieInScreenEntry.COLUMN_SCREEN+"=?",
+                MovieContract.MovieInScreenEntry.COLUMN_SCREEN + "=?",
                 new String[]{AppConstants.MOVIE_NOW_ON_CINEMA},
                 null);
     }
@@ -102,7 +106,7 @@ public class NowOnCinemaFragment extends BaseFragment {
         if (data != null && data.moveToFirst()) {
             List<MovieVO> movieList = new ArrayList<>();
             do {
-                MovieVO newsVO = MovieVO.parseFromCursor(getActivity().getApplicationContext(),data);
+                MovieVO newsVO = MovieVO.parseFromCursor(getActivity().getApplicationContext(), data);
                 movieList.add(newsVO);
             } while (data.moveToNext());
             adapter.appendNewData(movieList);
@@ -154,5 +158,11 @@ public class NowOnCinemaFragment extends BaseFragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    @Override
+    public void onClickMovie(String movieId) {
+        Intent intent = MovieDetailsActivity.newIntent(getActivity().getApplicationContext(), movieId);
+        startActivity(intent);
     }
 }

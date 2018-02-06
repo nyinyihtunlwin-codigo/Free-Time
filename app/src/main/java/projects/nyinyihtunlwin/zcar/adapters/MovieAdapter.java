@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 
 import projects.nyinyihtunlwin.zcar.R;
 import projects.nyinyihtunlwin.zcar.data.vo.MovieVO;
+import projects.nyinyihtunlwin.zcar.delegates.MovieItemDelegate;
 import projects.nyinyihtunlwin.zcar.viewholders.MovieViewHolder;
 
 
@@ -15,13 +16,16 @@ import projects.nyinyihtunlwin.zcar.viewholders.MovieViewHolder;
 
 public class MovieAdapter extends BaseRecyclerAdapter<MovieViewHolder, MovieVO> {
 
-    public MovieAdapter(Context context) {
+    private MovieItemDelegate mMovieItemDelegate;
+
+    public MovieAdapter(Context context, MovieItemDelegate movieItemDelegate) {
         super(context);
+        this.mMovieItemDelegate = movieItemDelegate;
     }
 
     @Override
     public MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mLayoutInflater.inflate(R.layout.view_item_grid_movie, parent, false);
-        return new MovieViewHolder(view);
+        return new MovieViewHolder(view,mMovieItemDelegate);
     }
 }

@@ -52,7 +52,7 @@ public class UpcomingFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_upcoming, container, false);
         ButterKnife.bind(this, view);
         rvUpcoming.setHasFixedSize(true);
-        adapter = new MovieAdapter(getContext());
+        adapter = new MovieAdapter(getContext(), this);
         rvUpcoming.setEmptyView(vpEmptyMovie);
         rvUpcoming.setAdapter(adapter);
         rvUpcoming.setLayoutManager(new GridLayoutManager(container.getContext(), 2));
@@ -70,7 +70,7 @@ public class UpcomingFragment extends BaseFragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                MovieModel.getInstance().forceRefreshMovies(getActivity().getApplicationContext(),AppConstants.MOVIE_UPCOMING);
+                MovieModel.getInstance().forceRefreshMovies(getActivity().getApplicationContext(), AppConstants.MOVIE_UPCOMING);
             }
         });
 
