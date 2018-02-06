@@ -20,7 +20,7 @@
             android:layout_height="@dimen/movie_icon_height"
             android:layout_centerHorizontal="true"
             android:scaleType="centerCrop"
-            android:src="@drawable/beauty_and_the_beast" />
+            android:src="@drawable/movie_placeholder" />
 
         <ImageView
             android:layout_width="wrap_content"
