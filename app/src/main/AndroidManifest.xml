@@ -28,6 +28,7 @@
             android:syncable="true" />
 
         <activity
+            android:label="@string/movie_name"
             android:name=".activities.MovieDetailsActivity"
             android:theme="@style/AppTheme.NoActionBar">
 

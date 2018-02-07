@@ -1,9 +1,12 @@
 package projects.nyinyihtunlwin.zcar.activities;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -15,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -67,6 +71,9 @@ public class MovieDetailsActivity extends BaseActivity implements View.OnClickLi
     @BindView(R.id.rv_movie_trailers)
     RecyclerView rvTrailers;
 
+    @BindView(R.id.tv_title_movie_name)
+    TextView tvTitleMovieName;
+
     private String currentMovieId;
     private List<Integer> currentGenreIds;
 
@@ -106,6 +113,27 @@ public class MovieDetailsActivity extends BaseActivity implements View.OnClickLi
         ivBack.setOnClickListener(this);
 
         getSupportLoaderManager().initLoader(MOVIE_DETAILS_LOADER_ID, null, this);
+
+        final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar_layout);
+        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar_layout);
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = true;
+            int scrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    tvTitleMovieName.setVisibility(View.VISIBLE);
+                    isShow = true;
+                } else if (isShow) {
+                    tvTitleMovieName.setVisibility(View.GONE);
+                    isShow = false;
+                }
+            }
+        });
     }
 
 
@@ -168,6 +196,7 @@ public class MovieDetailsActivity extends BaseActivity implements View.OnClickLi
 
     private void bindData(MovieVO movieVO) {
         getSupportLoaderManager().initLoader(MOVIE_GENRES_LOADER_ID, null, this);
+        tvTitleMovieName.setText(movieVO.getTitle());
         tvMovieName.setText(movieVO.getOriginalTitle());
         tvReleasedDate.setText(movieVO.getReleasedDate());
         tvRate.setText(movieVO.getVoteAverage() + "/10");
