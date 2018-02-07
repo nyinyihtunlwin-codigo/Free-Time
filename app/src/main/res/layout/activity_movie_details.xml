@@ -35,20 +35,25 @@
                     android:layout_height="@dimen/movie_icon_height_2"
                     android:layout_alignParentBottom="true"
                     android:layout_marginStart="@dimen/margin_medium"
-                    android:src="@drawable/movie_logo_placeholder" />
+                    android:src="@drawable/movie_placeholder" />
 
                 <TextView
+                    android:id="@+id/tv_movie_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="60dp"
-                    android:layout_marginStart="@dimen/margin_medium"
+                    android:layout_marginBottom="80dp"
                     android:layout_toEndOf="@id/iv_movie_logo"
+                    android:background="@android:drawable/screen_background_dark_transparent"
+                    android:paddingBottom="@dimen/margin_small"
+                    android:paddingStart="@dimen/margin_medium"
+                    android:paddingTop="@dimen/margin_small"
                     android:text="@string/movie_name"
                     android:textColor="@color/white"
                     android:textSize="@dimen/text_regular_2x" />
 
                 <TextView
+                    android:id="@+id/tv_released_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
@@ -154,23 +159,8 @@
                 android:layout_marginStart="@dimen/margin_medium"
                 android:layout_marginTop="@dimen/margin_medium_2"
                 android:text="@string/btn_movie_overview"
-                android:textColor="@color/icons"
+                android:textColor="@color/accent"
                 android:textSize="@dimen/text_regular_2x" />
-
-            <View
-                android:id="@+id/view"
-                android:layout_width="110dp"
-                android:layout_height="1dp"
-                android:layout_below="@id/tv_overview_title"
-                android:layout_marginStart="@dimen/margin_medium"
-                android:background="@color/accent" />
-            <View
-                android:layout_width="110dp"
-                android:layout_height="1dp"
-                android:layout_below="@id/view"
-                android:layout_marginTop="@dimen/margin_small"
-                android:layout_marginStart="@dimen/margin_medium"
-                android:background="@color/accent" />
 
             <TextView
                 android:id="@+id/tv_overview"
@@ -192,15 +182,8 @@
                 android:layout_marginStart="@dimen/margin_medium"
                 android:layout_marginTop="@dimen/margin_medium_2"
                 android:text="@string/trailers"
-                android:textColor="@color/icons"
+                android:textColor="@color/accent"
                 android:textSize="@dimen/text_regular_2x" />
-            <View
-                android:id="@+id/view_trailer"
-                android:layout_width="50dp"
-                android:layout_height="1dp"
-                android:layout_below="@id/tv_trailers"
-                android:layout_marginStart="@dimen/margin_medium"
-                android:background="@color/accent" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_movie_trailers"

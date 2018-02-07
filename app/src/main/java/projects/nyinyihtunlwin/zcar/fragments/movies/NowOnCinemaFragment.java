@@ -94,7 +94,7 @@ public class NowOnCinemaFragment extends BaseFragment implements MovieItemDelega
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(getActivity().getApplicationContext(),
-                MovieContract.MovieEntry.CONTENT_URI,
+                MovieContract.MovieInScreenEntry.CONTENT_URI,
                 null,
                 MovieContract.MovieInScreenEntry.COLUMN_SCREEN + "=?",
                 new String[]{AppConstants.MOVIE_NOW_ON_CINEMA},

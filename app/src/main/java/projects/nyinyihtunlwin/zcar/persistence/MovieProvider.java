@@ -29,11 +29,11 @@ public class MovieProvider extends ContentProvider {
     static {
         sMovieWithMovieInScreen_IJ = new SQLiteQueryBuilder();
         sMovieWithMovieInScreen_IJ.setTables(
-                MovieContract.MovieEntry.TABLE_NAME + " INNER JOIN " +
-                        MovieContract.MovieInScreenEntry.TABLE_NAME +
+                MovieContract.MovieInScreenEntry.TABLE_NAME + " INNER JOIN " +
+                        MovieContract.MovieEntry.TABLE_NAME +
                         " ON " +
-                        MovieContract.MovieEntry.TABLE_NAME + "." + MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = " +
-                        MovieContract.MovieInScreenEntry.TABLE_NAME + "." + MovieContract.MovieInScreenEntry.COLUMN_MOVIE_ID
+                        MovieContract.MovieInScreenEntry.TABLE_NAME + "." + MovieContract.MovieInScreenEntry.COLUMN_MOVIE_ID + " = " +
+                        MovieContract.MovieEntry.TABLE_NAME + "." + MovieContract.MovieEntry.COLUMN_MOVIE_ID
         );
     }
 
@@ -89,7 +89,7 @@ public class MovieProvider extends ContentProvider {
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
         Cursor queryCursor;
         switch (sUriMatcher.match(uri)) {
-            case MOVIE:
+            case MOVIE_IN_SCREEN:
                 queryCursor = sMovieWithMovieInScreen_IJ.query(mDbHelper.getReadableDatabase(),
                         projection,
                         selection,
