@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,11 +19,15 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import projects.nyinyihtunlwin.zcar.R;
 import projects.nyinyihtunlwin.zcar.adapters.GenreAdapter;
 import projects.nyinyihtunlwin.zcar.adapters.TrailersAdapter;
+import projects.nyinyihtunlwin.zcar.data.vo.GenreVO;
 import projects.nyinyihtunlwin.zcar.data.vo.MovieVO;
 import projects.nyinyihtunlwin.zcar.persistence.MovieContract;
 import projects.nyinyihtunlwin.zcar.utils.AppConstants;
@@ -30,7 +35,9 @@ import projects.nyinyihtunlwin.zcar.utils.AppConstants;
 public class MovieDetailsActivity extends BaseActivity implements View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String KEY_MOVIE_ID = "movie_id";
+
     public static final int MOVIE_DETAILS_LOADER_ID = 1000001;
+    public static final int MOVIE_GENRES_LOADER_ID = 1000002;
 
 
     @BindView(R.id.iv_back)
@@ -54,10 +61,14 @@ public class MovieDetailsActivity extends BaseActivity implements View.OnClickLi
     @BindView(R.id.tv_rate)
     TextView tvRate;
 
+    @BindView(R.id.tv_overview)
+    TextView tvOverview;
+
     @BindView(R.id.rv_movie_trailers)
     RecyclerView rvTrailers;
 
     private String currentMovieId;
+    private List<Integer> currentGenreIds;
 
 
     private GenreAdapter mGenreAdapter;
@@ -80,6 +91,7 @@ public class MovieDetailsActivity extends BaseActivity implements View.OnClickLi
         if (getIntent().getStringExtra(KEY_MOVIE_ID) != null) {
             currentMovieId = getIntent().getStringExtra(KEY_MOVIE_ID);
         }
+        currentGenreIds = new ArrayList<>();
 
         mGenreAdapter = new GenreAdapter(getApplicationContext());
         rvGenre.setAdapter(mGenreAdapter);
@@ -108,26 +120,58 @@ public class MovieDetailsActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(getApplicationContext(),
-                MovieContract.MovieEntry.CONTENT_URI,
-                null,
-                MovieContract.MovieEntry.COLUMN_MOVIE_ID + "=?",
-                new String[]{currentMovieId},
-                null);
+        CursorLoader cursorLoader = null;
+        switch (id) {
+            case MOVIE_DETAILS_LOADER_ID:
+                cursorLoader = new CursorLoader(getApplicationContext(),
+                        MovieContract.MovieEntry.CONTENT_URI,
+                        null,
+                        MovieContract.MovieEntry.COLUMN_MOVIE_ID + "=?",
+                        new String[]{currentMovieId},
+                        null);
+                break;
+            case MOVIE_GENRES_LOADER_ID:
+                cursorLoader = new CursorLoader(getApplicationContext(),
+                        MovieContract.MovieGenreEntry.CONTENT_URI,
+                        null,
+                        MovieContract.MovieGenreEntry.COLUMN_MOVIE_ID + "=?",
+                        new String[]{String.valueOf(currentMovieId)},
+                        null);
+                break;
+        }
+        return cursorLoader;
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data != null && data.moveToFirst()) {
-            MovieVO movieVO = MovieVO.parseFromCursor(getApplicationContext(), data);
-            bindData(movieVO);
+            switch (loader.getId()) {
+                case MOVIE_DETAILS_LOADER_ID:
+                    MovieVO movieVO = MovieVO.parseFromCursor(getApplicationContext(), data);
+                    bindData(movieVO);
+                    break;
+                case MOVIE_GENRES_LOADER_ID:
+                    List<GenreVO> genreList = new ArrayList<>();
+                    do {
+                        GenreVO genreVO = GenreVO.parseFromCursor(data);
+                        genreList.add(genreVO);
+                    } while (data.moveToNext());
+                    bindGenres(genreList);
+                    break;
+            }
         }
     }
 
+    private void bindGenres(List<GenreVO> genreList) {
+        mGenreAdapter.appendNewData(genreList);
+    }
+
     private void bindData(MovieVO movieVO) {
+        getSupportLoaderManager().initLoader(MOVIE_GENRES_LOADER_ID, null, this);
         tvMovieName.setText(movieVO.getOriginalTitle());
         tvReleasedDate.setText(movieVO.getReleasedDate());
         tvRate.setText(movieVO.getVoteAverage() + "/10");
+        tvOverview.setText(movieVO.getOverview());
         RequestOptions requestOptions = new RequestOptions()
                 .placeholder(R.drawable.movie_placeholder)
                 .centerCrop();

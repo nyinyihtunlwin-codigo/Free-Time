@@ -24,7 +24,7 @@ public class MovieProvider extends ContentProvider {
     private MovieDBHelper mDbHelper;
 
     public static final UriMatcher sUriMatcher = buildUriMatcher();
-    private static final SQLiteQueryBuilder sMovieWithMovieInScreen_IJ;
+    private static final SQLiteQueryBuilder sMovieWithMovieInScreen_IJ, sMovieGenreWithGenre_IJ;
 
     static {
         sMovieWithMovieInScreen_IJ = new SQLiteQueryBuilder();
@@ -34,6 +34,14 @@ public class MovieProvider extends ContentProvider {
                         " ON " +
                         MovieContract.MovieInScreenEntry.TABLE_NAME + "." + MovieContract.MovieInScreenEntry.COLUMN_MOVIE_ID + " = " +
                         MovieContract.MovieEntry.TABLE_NAME + "." + MovieContract.MovieEntry.COLUMN_MOVIE_ID
+        );
+        sMovieGenreWithGenre_IJ = new SQLiteQueryBuilder();
+        sMovieGenreWithGenre_IJ.setTables(
+                MovieContract.MovieGenreEntry.TABLE_NAME + " INNER JOIN " +
+                        MovieContract.GenreEntry.TABLE_NAME +
+                        " ON " +
+                        MovieContract.MovieGenreEntry.TABLE_NAME + "." + MovieContract.MovieGenreEntry.COLUMN_GENRE_ID + " = " +
+                        MovieContract.GenreEntry.TABLE_NAME + "." + MovieContract.GenreEntry.COLUMN_GENRE_ID
         );
     }
 
@@ -91,6 +99,15 @@ public class MovieProvider extends ContentProvider {
         switch (sUriMatcher.match(uri)) {
             case MOVIE_IN_SCREEN:
                 queryCursor = sMovieWithMovieInScreen_IJ.query(mDbHelper.getReadableDatabase(),
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
+                break;
+            case MOVIE_GENRE:
+                queryCursor = sMovieGenreWithGenre_IJ.query(mDbHelper.getReadableDatabase(),
                         projection,
                         selection,
                         selectionArgs,

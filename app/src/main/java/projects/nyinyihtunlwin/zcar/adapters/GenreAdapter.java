@@ -23,14 +23,4 @@ public class GenreAdapter extends BaseRecyclerAdapter<GenreViewHolder, GenreVO> 
         View view = mLayoutInflater.inflate(R.layout.view_item_genre, parent, false);
         return new GenreViewHolder(view);
     }
-
-    @Override
-    public void onBindViewHolder(GenreViewHolder holder, int position) {
-
-    }
-
-    @Override
-    public int getItemCount() {
-        return 5;
-    }
 }

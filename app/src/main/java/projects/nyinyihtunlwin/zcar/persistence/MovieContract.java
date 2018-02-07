@@ -91,7 +91,7 @@ public class MovieContract {
         public static final String TABLE_NAME = "genre";
 
         public static final String COLUMN_GENRE_ID = "genre_id";
-        public static final String COLUMN_GENRE_NAME = " genre_name";
+        public static final String COLUMN_GENRE_NAME = "genre_name";
 
         public static Uri buildMovieUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);

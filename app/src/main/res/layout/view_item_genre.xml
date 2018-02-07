@@ -14,6 +14,7 @@
         android:textSize="@dimen/text_regular" />
 
     <TextView
+        android:id="@+id/tv_genre_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
