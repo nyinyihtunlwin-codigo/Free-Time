@@ -4,23 +4,26 @@
     android:background="@color/screen_back"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="280dp"
+    <RelativeLayout
+        android:layout_width="270dp"
         android:layout_height="150dp"
         android:background="@drawable/side_nav_bar"
         android:orientation="horizontal">
+
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="Nyi Nyi Htun Lwin"
-            android:textColor="#fff"
-            android:textSize="18sp" />
-    </LinearLayout>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="@dimen/margin_small"
+            android:text="@string/version"
+            android:textColor="@color/icons"
+            android:textSize="@dimen/text_smaller" />
+    </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/myRecycler"
-        android:layout_width="280dp"
+        android:id="@+id/rv_drawer"
+        android:layout_width="270dp"
         android:layout_height="0dp"
         android:layout_weight="1" />
 </LinearLayout>

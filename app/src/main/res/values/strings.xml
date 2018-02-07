@@ -143,5 +143,6 @@
     <string name="movie_genre_palceholder">Romance</string>
     <string name="drawer_open">Drawer Opened</string>
     <string name="drawer_close">Drawer Closed</string>
+    <string name="version">Version 1.0</string>
 
 </resources>

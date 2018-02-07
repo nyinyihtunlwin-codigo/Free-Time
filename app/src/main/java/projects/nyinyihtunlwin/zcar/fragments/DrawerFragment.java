@@ -5,13 +5,17 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import projects.nyinyihtunlwin.zcar.R;
+import projects.nyinyihtunlwin.zcar.adapters.DrawerMenuItemAdapter;
 
 /**
  * Created by Dell on 2/7/2018.
@@ -20,17 +24,24 @@ import projects.nyinyihtunlwin.zcar.R;
 public class DrawerFragment extends Fragment {
 
     private DrawerLayout dLayout;
+
+
     private ActionBarDrawerToggle toggle;
-    private RecyclerView recyclerView;
 
+    @BindView(R.id.rv_drawer)
+    RecyclerView rvDrawerMenu;
 
-    public DrawerFragment() {
-
-    }
+    DrawerMenuItemAdapter mDrawerMenuItemAdapter;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_drawer, container, false);
-        recyclerView = (RecyclerView) v.findViewById(R.id.myRecycler);
+        ButterKnife.bind(this, v);
+
+        mDrawerMenuItemAdapter = new DrawerMenuItemAdapter(getContext());
+        rvDrawerMenu.setAdapter(mDrawerMenuItemAdapter);
+        rvDrawerMenu.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvDrawerMenu.setHasFixedSize(true);
+
         return v;
     }
 
