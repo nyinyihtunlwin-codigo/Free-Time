@@ -141,5 +141,7 @@
     <string name="movie_overview_placeholder">Extensions are a powerful feature that Swift shares with Objective-C. An extension allows you to add functionality to any class, structure, or enumeration, including those in the standard Swift library or the system frameworks. The syntax of an extension definition is similar to that of classes and structures. The extension is introduced by the keyword extension followed by the name of the extended type and then the extensions themselves. You can add computed (but not stored) properties, methods, initializers, nested types, and protocol conformance to the extended type.</string>
     <string name="trailers">Trailers</string>
     <string name="movie_genre_palceholder">Romance</string>
+    <string name="drawer_open">Drawer Opened</string>
+    <string name="drawer_close">Drawer Closed</string>
 
 </resources>
