@@ -1,6 +1,8 @@
 package projects.nyinyihtunlwin.zcar.network;
 
 import projects.nyinyihtunlwin.zcar.data.vo.MovieVO;
+import projects.nyinyihtunlwin.zcar.network.responses.movies.GetMovieCreditsResponse;
+import projects.nyinyihtunlwin.zcar.network.responses.movies.GetMovieReviewsResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.GetMovieTrailersResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.MovieGenresResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.NowShowingMoviesResponse;
@@ -40,5 +42,11 @@ public interface MovieAPI {
 
     @GET("movie/{id}/videos")
     Call<GetMovieTrailersResponse> loadMovieTrailers(@Path("id") Integer movieId, @Query("api_key") String apiKey);
+
+    @GET("movie/{movie_id}/reviews")
+    Call<GetMovieReviewsResponse> loadMovieReviews(@Path("movie_id") Integer movieId, @Query("api_key") String apiKey);
+
+    @GET("movie/{id}/credits")
+    Call<GetMovieCreditsResponse> loadMovieCredits(@Path("id") Integer movieId, @Query("api_key") String apiKey);
 
 }

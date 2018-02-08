@@ -12,6 +12,8 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import projects.nyinyihtunlwin.zcar.data.vo.MovieVO;
 import projects.nyinyihtunlwin.zcar.events.RestApiEvents;
+import projects.nyinyihtunlwin.zcar.network.responses.movies.GetMovieCreditsResponse;
+import projects.nyinyihtunlwin.zcar.network.responses.movies.GetMovieReviewsResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.GetMovieTrailersResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.MovieGenresResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.NowShowingMoviesResponse;
@@ -169,7 +171,37 @@ public class MovieDataAgentImpl implements MovieDataAgent {
                 if (getMovieTrailersResponse != null
                         && getMovieTrailersResponse.getVideos().size() > 0) {
                     EventBus.getDefault().post(new RestApiEvents.MovieTrailersDataLoadedEvent(getMovieTrailersResponse.getVideos()));
-                    Log.e("Trailers:",getMovieTrailersResponse.getVideos().size()+"");
+                    Log.e("Trailers:", getMovieTrailersResponse.getVideos().size() + "");
+                }
+            }
+        });
+    }
+
+    @Override
+    public void loadMovieReviews(int movieId, String apiKey) {
+        Call<GetMovieReviewsResponse> loadMovieReviewsResponse = movieAPI.loadMovieReviews(movieId, apiKey);
+        loadMovieReviewsResponse.enqueue(new MovieCallback<GetMovieReviewsResponse>() {
+            @Override
+            public void onResponse(Call<GetMovieReviewsResponse> call, Response<GetMovieReviewsResponse> response) {
+                GetMovieReviewsResponse getMovieReviewsResponse = response.body();
+                if (getMovieReviewsResponse != null
+                        && getMovieReviewsResponse.getReviews().size() > 0) {
+                    EventBus.getDefault().post(new RestApiEvents.MovieReviewsDataLoadedEvent(getMovieReviewsResponse.getReviews()));
+                }
+            }
+        });
+    }
+
+    @Override
+    public void loadMovieCredits(int movieId, String apiKey) {
+        Call<GetMovieCreditsResponse> loadMovieCreditsResponse = movieAPI.loadMovieCredits(movieId, apiKey);
+        loadMovieCreditsResponse.enqueue(new MovieCallback<GetMovieCreditsResponse>() {
+            @Override
+            public void onResponse(Call<GetMovieCreditsResponse> call, Response<GetMovieCreditsResponse> response) {
+                GetMovieCreditsResponse getMovieCreditsResponse = response.body();
+                if (getMovieCreditsResponse != null
+                        && getMovieCreditsResponse.getCasts().size() > 0) {
+                    EventBus.getDefault().post(new RestApiEvents.MovieCreditsDataLoadedEvent(getMovieCreditsResponse.getCasts()));
                 }
             }
         });

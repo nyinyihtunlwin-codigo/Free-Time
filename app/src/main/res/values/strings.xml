@@ -132,7 +132,7 @@
     <string name="drama">Drama</string>
     <string name="crime">Crime</string>
     <string name="movie_time">2 hrs 22 mins</string>
-    <string name="reviews"><u>Reviews</u></string>
+    <string name="reviews">Reviews</string>
     <string name="trailer_title">Official Trailer</string>
     <string name="trailer_type">Trailer</string>
     <string name="movie_detail_title">Fear can hold you prisoner. Hope can set you free.</string>
@@ -144,5 +144,7 @@
     <string name="drawer_open">Drawer Opened</string>
     <string name="drawer_close">Drawer Closed</string>
     <string name="version">Version 1.0</string>
+    <string name="cast_name">Dakota Johnson Dakota Johnson Dakota</string>
+    <string name="cast">Cast</string>
 
 </resources>

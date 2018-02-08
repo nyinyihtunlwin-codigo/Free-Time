@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="170dp"
+    android:layout_height="200dp"
+    android:layout_marginStart="2dp"
+    android:layout_marginTop="@dimen/margin_medium"
+    card_view:cardBackgroundColor="@color/screen_back"
+    card_view:cardCornerRadius="@dimen/card_radius_small"
+    card_view:cardElevation="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/margin_medium"
+        android:orientation="vertical">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_cast"
+            android:layout_width="80dp"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            card_view:civ_border_width="1dp"
+            card_view:civ_border_color="@color/icons"
+            android:layout_weight=".7"
+            android:src="@drawable/it" />
+
+        <TextView
+            android:id="@+id/tv_cast_name"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.3"
+            android:gravity="center"
+            android:text="@string/cast_name"
+            android:textColor="@color/icons"
+            android:textSize="@dimen/text_regular_2x"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

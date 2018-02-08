@@ -10,15 +10,19 @@ public interface MovieDataAgent {
 
     void loadPopularMovies(String apiKey, int pageNo, String region, Context context);
 
-    void loadNowOnCinemaMovies(String apiKey, int pageNo, String region,Context context);
+    void loadNowOnCinemaMovies(String apiKey, int pageNo, String region, Context context);
 
-    void loadUpcomingMovies(String apiKey, int pageNo, String region,Context context);
+    void loadUpcomingMovies(String apiKey, int pageNo, String region, Context context);
 
-    void loadTopRatedMovies(String apiKey, int pageNo, String region,Context context);
+    void loadTopRatedMovies(String apiKey, int pageNo, String region, Context context);
 
-    void loadMovieGenres(String apiKey,Context context);
+    void loadMovieGenres(String apiKey, Context context);
 
-    void loadMovieDetails(int movieId,String apiKey);
+    void loadMovieDetails(int movieId, String apiKey);
 
-    void loadMovieTrailers(int movieId,String apiKey);
+    void loadMovieTrailers(int movieId, String apiKey);
+
+    void loadMovieReviews(int movieId, String apiKey);
+
+    void loadMovieCredits(int movieId,String apiKey);
 }

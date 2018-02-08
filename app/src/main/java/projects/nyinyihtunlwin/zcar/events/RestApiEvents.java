@@ -5,8 +5,10 @@ import android.content.Context;
 
 import java.util.List;
 
+import projects.nyinyihtunlwin.zcar.data.vo.CastVO;
 import projects.nyinyihtunlwin.zcar.data.vo.GenreVO;
 import projects.nyinyihtunlwin.zcar.data.vo.MovieVO;
+import projects.nyinyihtunlwin.zcar.data.vo.ReviewVO;
 import projects.nyinyihtunlwin.zcar.data.vo.TrailerVO;
 
 /**
@@ -114,6 +116,30 @@ public class RestApiEvents {
 
         public List<TrailerVO> getmTrailers() {
             return mTrailers;
+        }
+    }
+
+    public static class MovieReviewsDataLoadedEvent {
+        private List<ReviewVO> mReviews;
+
+        public MovieReviewsDataLoadedEvent(List<ReviewVO> mReviews) {
+            this.mReviews = mReviews;
+        }
+
+        public List<ReviewVO> getReviews() {
+            return mReviews;
+        }
+    }
+
+    public static class MovieCreditsDataLoadedEvent {
+        private List<CastVO> movieCasts;
+
+        public MovieCreditsDataLoadedEvent(List<CastVO> movieCasts) {
+            this.movieCasts = movieCasts;
+        }
+
+        public List<CastVO> getMovieCasts() {
+            return movieCasts;
         }
     }
 }

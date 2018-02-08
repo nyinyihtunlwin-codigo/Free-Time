@@ -3,9 +3,11 @@ package projects.nyinyihtunlwin.zcar.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -19,10 +21,12 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.gson.annotations.SerializedName;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,12 +34,15 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import projects.nyinyihtunlwin.zcar.R;
+import projects.nyinyihtunlwin.zcar.adapters.CastAdapter;
 import projects.nyinyihtunlwin.zcar.adapters.GenreAdapter;
 import projects.nyinyihtunlwin.zcar.adapters.TrailersAdapter;
 import projects.nyinyihtunlwin.zcar.data.models.MovieModel;
 import projects.nyinyihtunlwin.zcar.data.vo.GenreVO;
 import projects.nyinyihtunlwin.zcar.data.vo.MovieVO;
+import projects.nyinyihtunlwin.zcar.data.vo.ReviewVO;
 import projects.nyinyihtunlwin.zcar.events.RestApiEvents;
+import projects.nyinyihtunlwin.zcar.network.MovieDataAgent;
 import projects.nyinyihtunlwin.zcar.persistence.MovieContract;
 import projects.nyinyihtunlwin.zcar.utils.AppConstants;
 
@@ -89,12 +96,25 @@ public class MovieDetailsActivity extends BaseActivity implements View.OnClickLi
     @BindView(R.id.avi)
     AVLoadingIndicatorView loadingView;
 
+    @BindView(R.id.tv_reviews)
+    TextView tvReviews;
+
+    @BindView(R.id.ll_reviews)
+    LinearLayout llReviews;
+
+    @BindView(R.id.rv_movie_casts)
+    RecyclerView rvMovieCasts;
+
+    @BindView(R.id.tv_casts)
+    TextView tvCasts;
+
     private String currentMovieId;
     private List<Integer> currentGenreIds;
 
 
     private GenreAdapter mGenreAdapter;
     private TrailersAdapter mTrailersAdapter;
+    private CastAdapter mCastAdapter;
 
     public static Intent newIntent(Context context, String movieId) {
         Intent intent = new Intent(context, MovieDetailsActivity.class);
@@ -116,6 +136,8 @@ public class MovieDetailsActivity extends BaseActivity implements View.OnClickLi
             currentMovieId = getIntent().getStringExtra(KEY_MOVIE_ID);
             MovieModel.getInstance().startLoadingMovieDetails(currentMovieId);
             MovieModel.getInstance().startLoadingMovieTrailers(currentMovieId);
+            MovieModel.getInstance().startLoadingMovieReviews(currentMovieId);
+            MovieModel.getInstance().startLoadingMovieCredits(currentMovieId);
         }
         currentGenreIds = new ArrayList<>();
 
@@ -128,6 +150,11 @@ public class MovieDetailsActivity extends BaseActivity implements View.OnClickLi
         rvTrailers.setAdapter(mTrailersAdapter);
         rvTrailers.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         rvTrailers.setHasFixedSize(true);
+
+        mCastAdapter = new CastAdapter(getApplicationContext());
+        rvMovieCasts.setAdapter(mCastAdapter);
+        rvMovieCasts.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        rvMovieCasts.setHasFixedSize(true);
 
         ivBack.setOnClickListener(this);
 
@@ -245,10 +272,12 @@ public class MovieDetailsActivity extends BaseActivity implements View.OnClickLi
             llTime.setVisibility(View.VISIBLE);
             int hour = event.getmMovie().getRuntime() / 60;
             int min = event.getmMovie().getRevenue() % 60;
-            if (min != 0) {
-                tvTime.setText(hour + " hr " + min + " mins");
-            } else {
+            tvTime.setText(hour + " hr " + min + " mins");
+            if (min == 0) {
                 tvTime.setText(hour + " hr ");
+            }
+            if (hour == 0) {
+                tvTime.setText(min + " mins");
             }
         } else {
             llTime.setVisibility(View.GONE);
@@ -259,6 +288,47 @@ public class MovieDetailsActivity extends BaseActivity implements View.OnClickLi
     public void onMovieTrailersLoaded(RestApiEvents.MovieTrailersDataLoadedEvent event) {
         tvTrailers.setVisibility(View.VISIBLE);
         mTrailersAdapter.setNewData(event.getmTrailers());
+    }
+
+    @Subscribe
+    public void onMovieCastsDataLoaded(RestApiEvents.MovieCreditsDataLoadedEvent event) {
+        tvCasts.setVisibility(View.VISIBLE);
+        mCastAdapter.setNewData(event.getMovieCasts());
+    }
+
+    @Subscribe
+    public void onMovieReviewsDataLoaded(RestApiEvents.MovieReviewsDataLoadedEvent event) {
+        loadingView.setVisibility(View.GONE);
+        tvReviews.setVisibility(View.VISIBLE);
+        for (ReviewVO reviewVO : event.getReviews()) {
+            LinearLayout linearlayout = new LinearLayout(this);
+            linearlayout.setOrientation(LinearLayout.VERTICAL);
+            LinearLayout.LayoutParams layoutParamsParent = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams layoutParamsViews = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            layoutParamsParent.setMargins(0, 38, 0, 0);
+            linearlayout.setLayoutParams(layoutParamsParent);
+
+            TextView tvContent = new TextView(this);
+            TextView tvAuthor = new TextView(this);
+            tvContent.setTextSize(14);
+            tvAuthor.setTextSize(18);
+            tvAuthor.setTypeface(Typeface.createFromAsset(getAssets(), "berylium_rg_it.ttf"));
+            tvContent.setTextColor(getResources().getColor(R.color.icons));
+            tvAuthor.setTextColor(getResources().getColor(R.color.icons));
+
+            tvContent.setText(reviewVO.getContent());
+            tvAuthor.setText(reviewVO.getAuthor());
+
+            tvContent.setLayoutParams(layoutParamsViews);
+            tvAuthor.setLayoutParams(layoutParamsViews);
+            linearlayout.addView(tvContent);
+            linearlayout.addView(tvAuthor);
+            llReviews.addView(linearlayout);
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onErrorInvokingAPI(RestApiEvents.ErrorInvokingAPIEvent event) {
         loadingView.setVisibility(View.GONE);
     }
 
