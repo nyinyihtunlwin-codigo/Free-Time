@@ -51,8 +51,16 @@ public class MovieModel {
         return objectInstance;
     }
 
+    public void startLoadingMovieDetails(String movieId) {
+        MovieDataAgentImpl.getObjectInstance().loadMovieDetails(Integer.parseInt(movieId), AppConstants.API_KEY);
+    }
+
+    public void startLoadingMovieTrailers(String movieId) {
+        MovieDataAgentImpl.getObjectInstance().loadMovieTrailers(Integer.parseInt(movieId), AppConstants.API_KEY);
+    }
+
     public void startLoadingMovieGenres(Context context) {
-        MovieDataAgentImpl.getObjectInstance().loadMovieGenres(AppConstants.API_KEY,context);
+        MovieDataAgentImpl.getObjectInstance().loadMovieGenres(AppConstants.API_KEY, context);
     }
 
     public void startLoadingMovies(Context context, String movieType) {

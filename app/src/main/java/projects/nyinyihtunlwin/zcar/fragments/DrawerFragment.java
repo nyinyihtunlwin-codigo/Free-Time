@@ -8,20 +8,32 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import projects.nyinyihtunlwin.zcar.R;
 import projects.nyinyihtunlwin.zcar.adapters.DrawerMenuItemAdapter;
+import projects.nyinyihtunlwin.zcar.data.vo.DrawerMenuItemVO;
+import projects.nyinyihtunlwin.zcar.delegates.DrawerMenuItemDelegate;
+import projects.nyinyihtunlwin.zcar.events.TapDrawerMenuItemEvent;
 
 /**
  * Created by Dell on 2/7/2018.
  */
 
-public class DrawerFragment extends Fragment {
+public class DrawerFragment extends Fragment implements DrawerMenuItemDelegate{
 
     private DrawerLayout dLayout;
 
@@ -37,10 +49,15 @@ public class DrawerFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_drawer, container, false);
         ButterKnife.bind(this, v);
 
-        mDrawerMenuItemAdapter = new DrawerMenuItemAdapter(getContext());
+        List<DrawerMenuItemVO> menuItemList = new ArrayList<>();
+        menuItemList.add(new DrawerMenuItemVO(R.drawable.ic_movies, "Movies"));
+        menuItemList.add(new DrawerMenuItemVO(R.drawable.ic_live_tv_24dp, "TV Series"));
+
+        mDrawerMenuItemAdapter = new DrawerMenuItemAdapter(getContext(),this);
         rvDrawerMenu.setAdapter(mDrawerMenuItemAdapter);
         rvDrawerMenu.setLayoutManager(new LinearLayoutManager(getContext()));
         rvDrawerMenu.setHasFixedSize(true);
+        mDrawerMenuItemAdapter.setNewData(menuItemList);
 
         return v;
     }
@@ -68,5 +85,10 @@ public class DrawerFragment extends Fragment {
         };
         dLayout.setDrawerListener(toggle);
         toggle.syncState();
+    }
+
+    @Override
+    public void clickDrawerMenuItem(DrawerMenuItemVO drawerMenuItemVO) {
+        Log.e("clickedddd","Yes");
     }
 }

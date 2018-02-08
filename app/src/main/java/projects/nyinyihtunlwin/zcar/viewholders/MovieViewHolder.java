@@ -11,6 +11,7 @@ import butterknife.ButterKnife;
 import projects.nyinyihtunlwin.zcar.R;
 import projects.nyinyihtunlwin.zcar.data.vo.MovieVO;
 import projects.nyinyihtunlwin.zcar.delegates.MovieItemDelegate;
+import projects.nyinyihtunlwin.zcar.utils.AppConstants;
 
 /**
  * Created by Nyi Nyi Htun Lwin on 11/7/2017.
@@ -37,7 +38,7 @@ public class MovieViewHolder extends BaseViewHolder<MovieVO> {
         RequestOptions requestOptions = new RequestOptions()
                 .placeholder(R.drawable.movie_placeholder)
                 .centerCrop();
-        Glide.with(itemView.getRootView().getContext()).load("https://image.tmdb.org/t/p/original" + mData.getPosterPath()).apply(requestOptions).into(ivMovie);
+        Glide.with(itemView.getRootView().getContext()).load(AppConstants.IMAGE_LOADING_BASE_URL + mData.getPosterPath()).apply(requestOptions).into(ivMovie);
     }
 
     @Override

@@ -22,14 +22,4 @@ public class TrailersAdapter extends BaseRecyclerAdapter<TrailersViewHolder, Tra
         View view = mLayoutInflater.inflate(R.layout.view_item_movie_trailer, parent, false);
         return new TrailersViewHolder(view);
     }
-
-    @Override
-    public void onBindViewHolder(TrailersViewHolder holder, int position) {
-
-    }
-
-    @Override
-    public int getItemCount() {
-        return 8;
-    }
 }

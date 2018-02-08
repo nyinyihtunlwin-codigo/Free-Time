@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 
 import projects.nyinyihtunlwin.zcar.R;
 import projects.nyinyihtunlwin.zcar.data.vo.DrawerMenuItemVO;
+import projects.nyinyihtunlwin.zcar.delegates.DrawerMenuItemDelegate;
 import projects.nyinyihtunlwin.zcar.viewholders.DrawerMenuItemViewHolder;
 
 /**
@@ -14,23 +15,17 @@ import projects.nyinyihtunlwin.zcar.viewholders.DrawerMenuItemViewHolder;
 
 public class DrawerMenuItemAdapter extends BaseRecyclerAdapter<DrawerMenuItemViewHolder, DrawerMenuItemVO> {
 
-    public DrawerMenuItemAdapter(Context context) {
+    private DrawerMenuItemDelegate mDrawerMenuItemDelegate;
+
+    public DrawerMenuItemAdapter(Context context,DrawerMenuItemDelegate drawerMenuItemDelegate) {
         super(context);
+        this.mDrawerMenuItemDelegate=drawerMenuItemDelegate;
     }
 
     @Override
     public DrawerMenuItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mLayoutInflater.inflate(R.layout.view_item_drawer_menu, parent, false);
-        return new DrawerMenuItemViewHolder(view);
+        return new DrawerMenuItemViewHolder(view,mDrawerMenuItemDelegate);
     }
 
-    @Override
-    public void onBindViewHolder(DrawerMenuItemViewHolder holder, int position) {
-
-    }
-
-    @Override
-    public int getItemCount() {
-        return 2;
-    }
 }

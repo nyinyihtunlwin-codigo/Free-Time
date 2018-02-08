@@ -16,6 +16,7 @@ import projects.nyinyihtunlwin.zcar.persistence.MovieContract;
  */
 
 public class MovieVO {
+
     @SerializedName("vote_count")
     private int voteCount;
     @SerializedName("id")
@@ -44,6 +45,23 @@ public class MovieVO {
     private String overview;
     @SerializedName("release_date")
     private String releasedDate;
+
+
+    @SerializedName("budget")
+    private Integer budget;
+    @SerializedName("homepage")
+    private String homepage;
+    @SerializedName("imdb_id")
+    private String imdbId;
+    @SerializedName("revenue")
+    private Integer revenue;
+    @SerializedName("runtime")
+    private Integer runtime;
+    @SerializedName("status")
+    private String status;
+    @SerializedName("tagline")
+    private String tagline;
+
 
     public int getVoteCount() {
         return voteCount;
@@ -99,6 +117,34 @@ public class MovieVO {
 
     public String getReleasedDate() {
         return releasedDate;
+    }
+
+    public Integer getBudget() {
+        return budget;
+    }
+
+    public String getHomepage() {
+        return homepage;
+    }
+
+    public String getImdbId() {
+        return imdbId;
+    }
+
+    public Integer getRevenue() {
+        return revenue;
+    }
+
+    public Integer getRuntime() {
+        return runtime;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public String getTagline() {
+        return tagline;
     }
 
     public ContentValues parseToContentValues() {

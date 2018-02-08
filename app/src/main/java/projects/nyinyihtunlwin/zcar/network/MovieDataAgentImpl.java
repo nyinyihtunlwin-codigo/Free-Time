@@ -1,6 +1,7 @@
 package projects.nyinyihtunlwin.zcar.network;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.google.gson.Gson;
 
@@ -9,13 +10,16 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
+import projects.nyinyihtunlwin.zcar.data.vo.MovieVO;
 import projects.nyinyihtunlwin.zcar.events.RestApiEvents;
+import projects.nyinyihtunlwin.zcar.network.responses.movies.GetMovieTrailersResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.MovieGenresResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.NowShowingMoviesResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.PopularMoviesResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.TopRatedMoviesResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.UpcomingMoviesResponse;
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -128,6 +132,44 @@ public class MovieDataAgentImpl implements MovieDataAgent {
                         && getMovieGenresResponse.getGenres().size() > 0) {
                     RestApiEvents.MovieGenresDataLoadedEvent movieGenresDataLoadedEvent = new RestApiEvents.MovieGenresDataLoadedEvent(getMovieGenresResponse.getGenres(), context);
                     EventBus.getDefault().post(movieGenresDataLoadedEvent);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void loadMovieDetails(int movieId, String apiKey) {
+        Call<MovieVO> loadMovieDetails = movieAPI.loadMovieDetails(movieId, apiKey);
+        loadMovieDetails.enqueue(new Callback<MovieVO>() {
+            @Override
+            public void onResponse(Call<MovieVO> call, Response<MovieVO> response) {
+                MovieVO movieDetailsResponse = response.body();
+                if (movieDetailsResponse != null) {
+                    EventBus.getDefault().post(new RestApiEvents.MovieDetailsDataLoadedEvent(movieDetailsResponse));
+                    Log.e("details", "Runtime" + movieDetailsResponse.getRuntime());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MovieVO> call, Throwable t) {
+                RestApiEvents.ErrorInvokingAPIEvent errorEvent
+                        = new RestApiEvents.ErrorInvokingAPIEvent(t.getMessage());
+                EventBus.getDefault().post(errorEvent);
+            }
+        });
+    }
+
+    @Override
+    public void loadMovieTrailers(int movieId, String apiKey) {
+        Call<GetMovieTrailersResponse> loadMovieTrailersResponse = movieAPI.loadMovieTrailers(movieId, apiKey);
+        loadMovieTrailersResponse.enqueue(new MovieCallback<GetMovieTrailersResponse>() {
+            @Override
+            public void onResponse(Call<GetMovieTrailersResponse> call, Response<GetMovieTrailersResponse> response) {
+                GetMovieTrailersResponse getMovieTrailersResponse = response.body();
+                if (getMovieTrailersResponse != null
+                        && getMovieTrailersResponse.getVideos().size() > 0) {
+                    EventBus.getDefault().post(new RestApiEvents.MovieTrailersDataLoadedEvent(getMovieTrailersResponse.getVideos()));
+                    Log.e("Trailers:",getMovieTrailersResponse.getVideos().size()+"");
                 }
             }
         });

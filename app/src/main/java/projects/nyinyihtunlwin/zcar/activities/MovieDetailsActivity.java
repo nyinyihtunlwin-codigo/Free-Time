@@ -1,6 +1,5 @@
 package projects.nyinyihtunlwin.zcar.activities;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -10,18 +9,20 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.wang.avi.AVLoadingIndicatorView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +32,10 @@ import butterknife.ButterKnife;
 import projects.nyinyihtunlwin.zcar.R;
 import projects.nyinyihtunlwin.zcar.adapters.GenreAdapter;
 import projects.nyinyihtunlwin.zcar.adapters.TrailersAdapter;
+import projects.nyinyihtunlwin.zcar.data.models.MovieModel;
 import projects.nyinyihtunlwin.zcar.data.vo.GenreVO;
 import projects.nyinyihtunlwin.zcar.data.vo.MovieVO;
+import projects.nyinyihtunlwin.zcar.events.RestApiEvents;
 import projects.nyinyihtunlwin.zcar.persistence.MovieContract;
 import projects.nyinyihtunlwin.zcar.utils.AppConstants;
 
@@ -74,6 +77,18 @@ public class MovieDetailsActivity extends BaseActivity implements View.OnClickLi
     @BindView(R.id.tv_title_movie_name)
     TextView tvTitleMovieName;
 
+    @BindView(R.id.ll_time)
+    LinearLayout llTime;
+
+    @BindView(R.id.tv_time)
+    TextView tvTime;
+
+    @BindView(R.id.tv_trailers)
+    TextView tvTrailers;
+
+    @BindView(R.id.avi)
+    AVLoadingIndicatorView loadingView;
+
     private String currentMovieId;
     private List<Integer> currentGenreIds;
 
@@ -95,8 +110,12 @@ public class MovieDetailsActivity extends BaseActivity implements View.OnClickLi
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        loadingView.setVisibility(View.VISIBLE);
+
         if (getIntent().getStringExtra(KEY_MOVIE_ID) != null) {
             currentMovieId = getIntent().getStringExtra(KEY_MOVIE_ID);
+            MovieModel.getInstance().startLoadingMovieDetails(currentMovieId);
+            MovieModel.getInstance().startLoadingMovieTrailers(currentMovieId);
         }
         currentGenreIds = new ArrayList<>();
 
@@ -191,7 +210,7 @@ public class MovieDetailsActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void bindGenres(List<GenreVO> genreList) {
-        mGenreAdapter.appendNewData(genreList);
+        mGenreAdapter.setNewData(genreList);
     }
 
     private void bindData(MovieVO movieVO) {
@@ -204,13 +223,48 @@ public class MovieDetailsActivity extends BaseActivity implements View.OnClickLi
         RequestOptions requestOptions = new RequestOptions()
                 .placeholder(R.drawable.movie_placeholder)
                 .centerCrop();
-        Glide.with(getApplicationContext()).load("https://image.tmdb.org/t/p/original" + movieVO.getBackDropPath()).apply(requestOptions).into(ivMovieBack);
-        Glide.with(getApplicationContext()).load("https://image.tmdb.org/t/p/original" + movieVO.getPosterPath()).apply(requestOptions).into(ivMovieLogo);
+        Glide.with(getApplicationContext()).load(AppConstants.IMAGE_LOADING_BASE_URL + movieVO.getBackDropPath()).apply(requestOptions).into(ivMovieBack);
+        Glide.with(getApplicationContext()).load(AppConstants.IMAGE_LOADING_BASE_URL + movieVO.getPosterPath()).apply(requestOptions).into(ivMovieLogo);
 
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Subscribe
+    public void onMovieDetailsLoaded(RestApiEvents.MovieDetailsDataLoadedEvent event) {
+        if (event.getmMovie().getRuntime() != null) {
+            llTime.setVisibility(View.VISIBLE);
+            int hour = event.getmMovie().getRuntime() / 60;
+            int min = event.getmMovie().getRevenue() % 60;
+            if (min != 0) {
+                tvTime.setText(hour + " hr " + min + " mins");
+            } else {
+                tvTime.setText(hour + " hr ");
+            }
+        } else {
+            llTime.setVisibility(View.GONE);
+        }
+    }
+
+    @Subscribe
+    public void onMovieTrailersLoaded(RestApiEvents.MovieTrailersDataLoadedEvent event) {
+        tvTrailers.setVisibility(View.VISIBLE);
+        mTrailersAdapter.setNewData(event.getmTrailers());
+        loadingView.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 }

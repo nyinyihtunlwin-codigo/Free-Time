@@ -7,6 +7,7 @@ import java.util.List;
 
 import projects.nyinyihtunlwin.zcar.data.vo.GenreVO;
 import projects.nyinyihtunlwin.zcar.data.vo.MovieVO;
+import projects.nyinyihtunlwin.zcar.data.vo.TrailerVO;
 
 /**
  * Created by Nyi Nyi Htun Lwin on 12/7/2017.
@@ -89,6 +90,30 @@ public class RestApiEvents {
 
         public Context getContext() {
             return context;
+        }
+    }
+
+    public static class MovieDetailsDataLoadedEvent {
+        private MovieVO mMovie;
+
+        public MovieDetailsDataLoadedEvent(MovieVO mMovie) {
+            this.mMovie = mMovie;
+        }
+
+        public MovieVO getmMovie() {
+            return mMovie;
+        }
+    }
+
+    public static class MovieTrailersDataLoadedEvent {
+        private List<TrailerVO> mTrailers;
+
+        public MovieTrailersDataLoadedEvent(List<TrailerVO> trailers) {
+            this.mTrailers = trailers;
+        }
+
+        public List<TrailerVO> getmTrailers() {
+            return mTrailers;
         }
     }
 }
