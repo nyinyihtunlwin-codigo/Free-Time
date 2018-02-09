@@ -4,6 +4,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import projects.nyinyihtunlwin.zcar.events.RestApiEvents;
 import projects.nyinyihtunlwin.zcar.network.responses.BaseResponse;
+import projects.nyinyihtunlwin.zcar.network.responses.movies.GetMovieReviewsResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

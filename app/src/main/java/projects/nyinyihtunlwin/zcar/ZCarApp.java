@@ -4,6 +4,7 @@ import android.app.Application;
 
 import projects.nyinyihtunlwin.zcar.data.models.MovieModel;
 import projects.nyinyihtunlwin.zcar.utils.AppConstants;
+import projects.nyinyihtunlwin.zcar.utils.ConfigUtils;
 
 /**
  * Created by Nyi Nyi Htun Lwin on 12/9/2017.
@@ -15,6 +16,7 @@ public class ZCarApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        ConfigUtils.initConfigUtils(getApplicationContext());
        MovieModel.getInstance().startLoadingMovieGenres(getApplicationContext());
     }
 }

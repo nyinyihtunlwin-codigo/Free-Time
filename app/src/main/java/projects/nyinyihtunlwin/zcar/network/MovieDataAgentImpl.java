@@ -184,9 +184,12 @@ public class MovieDataAgentImpl implements MovieDataAgent {
             @Override
             public void onResponse(Call<GetMovieReviewsResponse> call, Response<GetMovieReviewsResponse> response) {
                 GetMovieReviewsResponse getMovieReviewsResponse = response.body();
-                if (getMovieReviewsResponse != null
-                        && getMovieReviewsResponse.getReviews().size() > 0) {
-                    EventBus.getDefault().post(new RestApiEvents.MovieReviewsDataLoadedEvent(getMovieReviewsResponse.getReviews()));
+                if (getMovieReviewsResponse != null) {
+                    if (getMovieReviewsResponse.getReviews().size() > 0) {
+                        EventBus.getDefault().post(new RestApiEvents.MovieReviewsDataLoadedEvent(getMovieReviewsResponse.getReviews()));
+                    }else {
+                        EventBus.getDefault().post(new RestApiEvents.ErrorInvokingAPIEvent("No reviews for now!"));
+                    }
                 }
             }
         });

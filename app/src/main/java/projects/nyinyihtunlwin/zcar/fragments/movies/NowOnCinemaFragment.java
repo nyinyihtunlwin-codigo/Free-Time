@@ -126,6 +126,7 @@ public class NowOnCinemaFragment extends BaseFragment implements MovieItemDelega
         List<MovieVO> movieList = MovieModel.getInstance().getNowOnCinemaMovies();
         if (!movieList.isEmpty()) {
             adapter.setNewData(movieList);
+            swipeRefreshLayout.setRefreshing(false);
         } else {
             MovieModel.getInstance().startLoadingMovies(getActivity().getApplicationContext(), AppConstants.MOVIE_NOW_ON_CINEMA);
             swipeRefreshLayout.setRefreshing(true);

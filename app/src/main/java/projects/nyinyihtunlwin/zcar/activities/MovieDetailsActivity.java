@@ -279,6 +279,9 @@ public class MovieDetailsActivity extends BaseActivity implements View.OnClickLi
             if (hour == 0) {
                 tvTime.setText(min + " mins");
             }
+            if (hour == 0 && min == 0) {
+                llTime.setVisibility(View.GONE);
+            }
         } else {
             llTime.setVisibility(View.GONE);
         }
@@ -317,7 +320,7 @@ public class MovieDetailsActivity extends BaseActivity implements View.OnClickLi
             tvAuthor.setTextColor(getResources().getColor(R.color.icons));
 
             tvContent.setText(reviewVO.getContent());
-            tvAuthor.setText(reviewVO.getAuthor());
+            tvAuthor.setText("Written by " + reviewVO.getAuthor());
 
             tvContent.setLayoutParams(layoutParamsViews);
             tvAuthor.setLayoutParams(layoutParamsViews);
