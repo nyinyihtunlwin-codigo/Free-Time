@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -14,6 +15,7 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -41,12 +43,13 @@ import projects.nyinyihtunlwin.zcar.data.models.MovieModel;
 import projects.nyinyihtunlwin.zcar.data.vo.GenreVO;
 import projects.nyinyihtunlwin.zcar.data.vo.MovieVO;
 import projects.nyinyihtunlwin.zcar.data.vo.ReviewVO;
+import projects.nyinyihtunlwin.zcar.delegates.MovieDetailsDelegate;
 import projects.nyinyihtunlwin.zcar.events.RestApiEvents;
 import projects.nyinyihtunlwin.zcar.network.MovieDataAgent;
 import projects.nyinyihtunlwin.zcar.persistence.MovieContract;
 import projects.nyinyihtunlwin.zcar.utils.AppConstants;
 
-public class MovieDetailsActivity extends BaseActivity implements View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor> {
+public class MovieDetailsActivity extends BaseActivity implements MovieDetailsDelegate, View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String KEY_MOVIE_ID = "movie_id";
 
@@ -108,6 +111,9 @@ public class MovieDetailsActivity extends BaseActivity implements View.OnClickLi
     @BindView(R.id.tv_casts)
     TextView tvCasts;
 
+    @BindView(R.id.iv_share)
+    ImageView ivShare;
+
     private String currentMovieId;
     private List<Integer> currentGenreIds;
 
@@ -115,6 +121,8 @@ public class MovieDetailsActivity extends BaseActivity implements View.OnClickLi
     private GenreAdapter mGenreAdapter;
     private TrailersAdapter mTrailersAdapter;
     private CastAdapter mCastAdapter;
+
+    private String movieTagline, imdbId, homepage;
 
     public static Intent newIntent(Context context, String movieId) {
         Intent intent = new Intent(context, MovieDetailsActivity.class);
@@ -146,7 +154,7 @@ public class MovieDetailsActivity extends BaseActivity implements View.OnClickLi
         rvGenre.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         rvGenre.setHasFixedSize(true);
 
-        mTrailersAdapter = new TrailersAdapter(getApplicationContext());
+        mTrailersAdapter = new TrailersAdapter(getApplicationContext(), this);
         rvTrailers.setAdapter(mTrailersAdapter);
         rvTrailers.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         rvTrailers.setHasFixedSize(true);
@@ -157,6 +165,7 @@ public class MovieDetailsActivity extends BaseActivity implements View.OnClickLi
         rvMovieCasts.setHasFixedSize(true);
 
         ivBack.setOnClickListener(this);
+        ivShare.setOnClickListener(this);
 
         getSupportLoaderManager().initLoader(MOVIE_DETAILS_LOADER_ID, null, this);
 
@@ -188,6 +197,18 @@ public class MovieDetailsActivity extends BaseActivity implements View.OnClickLi
         switch (view.getId()) {
             case R.id.iv_back:
                 onBackPressed();
+                break;
+            case R.id.iv_share:
+                view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                Intent movieShareIntent = new Intent(Intent.ACTION_SEND);
+                movieShareIntent.setType("text/plain");
+                String extraText = "";
+                extraText += tvTitleMovieName.getText().toString() + "\n";
+                if (movieTagline != null) extraText += movieTagline + "\n";
+                if (imdbId != null) extraText += AppConstants.IMDB_BASE_URL + imdbId + "\n";
+                if (homepage != null) extraText += homepage;
+                movieShareIntent.putExtra(Intent.EXTRA_TEXT, extraText);
+                startActivity(movieShareIntent);
                 break;
         }
     }
@@ -241,6 +262,11 @@ public class MovieDetailsActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void bindData(MovieVO movieVO) {
+
+        movieTagline = movieVO.getTagline();
+        homepage = movieVO.getHomepage();
+        imdbId = movieVO.getImdbId();
+
         getSupportLoaderManager().initLoader(MOVIE_GENRES_LOADER_ID, null, this);
         tvTitleMovieName.setText(movieVO.getTitle());
         tvMovieName.setText(movieVO.getOriginalTitle());
@@ -339,5 +365,11 @@ public class MovieDetailsActivity extends BaseActivity implements View.OnClickLi
     protected void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void onClickTriler(String trailerKey) {
+        Intent youtubeIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(AppConstants.YOUTUBE_WATCH_BASE_URL + trailerKey));
+        startActivity(youtubeIntent);
     }
 }

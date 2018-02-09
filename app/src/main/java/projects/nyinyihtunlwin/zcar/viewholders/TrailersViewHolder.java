@@ -1,5 +1,7 @@
 package projects.nyinyihtunlwin.zcar.viewholders;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,6 +13,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import projects.nyinyihtunlwin.zcar.R;
 import projects.nyinyihtunlwin.zcar.data.vo.TrailerVO;
+import projects.nyinyihtunlwin.zcar.delegates.MovieDetailsDelegate;
 import projects.nyinyihtunlwin.zcar.utils.AppConstants;
 
 /**
@@ -25,13 +28,20 @@ public class TrailersViewHolder extends BaseViewHolder<TrailerVO> {
     @BindView(R.id.tv_trailer_name)
     TextView tvTrailerName;
 
-    public TrailersViewHolder(View itemView) {
+    TrailerVO mData;
+
+    private MovieDetailsDelegate mMovieDetailsDelegate;
+
+    public TrailersViewHolder(View itemView, MovieDetailsDelegate movieDetailsDelegate) {
         super(itemView);
         ButterKnife.bind(this, itemView);
+        this.mMovieDetailsDelegate = movieDetailsDelegate;
     }
 
     @Override
     public void setData(TrailerVO mData) {
+        this.mData = mData;
+
         RequestOptions requestOptions = new RequestOptions()
                 .placeholder(R.drawable.movie_placeholder)
                 .centerCrop();
@@ -46,6 +56,6 @@ public class TrailersViewHolder extends BaseViewHolder<TrailerVO> {
 
     @Override
     public void onClick(View view) {
-
+        mMovieDetailsDelegate.onClickTriler(mData.getKey());
     }
 }

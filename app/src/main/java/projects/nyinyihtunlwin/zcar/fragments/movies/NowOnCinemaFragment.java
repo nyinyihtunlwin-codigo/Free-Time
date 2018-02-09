@@ -34,13 +34,14 @@ import projects.nyinyihtunlwin.zcar.data.vo.MovieVO;
 import projects.nyinyihtunlwin.zcar.delegates.MovieItemDelegate;
 import projects.nyinyihtunlwin.zcar.events.RestApiEvents;
 import projects.nyinyihtunlwin.zcar.fragments.BaseFragment;
+import projects.nyinyihtunlwin.zcar.mvp.presenters.MovieNowOnCinemaPresenter;
+import projects.nyinyihtunlwin.zcar.mvp.views.MovieNowOnCinemaView;
 import projects.nyinyihtunlwin.zcar.persistence.MovieContract;
 import projects.nyinyihtunlwin.zcar.utils.AppConstants;
 
 
-public class NowOnCinemaFragment extends BaseFragment implements MovieItemDelegate {
+public class NowOnCinemaFragment extends BaseFragment implements MovieItemDelegate, MovieNowOnCinemaView {
 
-    private static final int MOVIE_NOW_ON_CINEMA_LOADER_ID = 1001;
 
     @BindView(R.id.rv_now_on_cinema)
     SmartRecyclerView rvNowOnCinema;
@@ -55,13 +56,19 @@ public class NowOnCinemaFragment extends BaseFragment implements MovieItemDelega
     @BindView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout swipeRefreshLayout;
 
+    private MovieNowOnCinemaPresenter mPresenter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_now_on_cinema, container, false);
         ButterKnife.bind(this, view);
 
+        mPresenter = new MovieNowOnCinemaPresenter(getActivity());
+        mPresenter.onCreate(this);
+
         rvNowOnCinema.setHasFixedSize(true);
+
 
         adapter = new MovieAdapter(getContext(), this);
 
@@ -72,7 +79,7 @@ public class NowOnCinemaFragment extends BaseFragment implements MovieItemDelega
         mSmartScrollListener = new SmartScrollListener(new SmartScrollListener.OnSmartScrollListener() {
             @Override
             public void onListEndReached() {
-                MovieModel.getInstance().loadMoreMovies(getActivity().getApplicationContext(), AppConstants.MOVIE_NOW_ON_CINEMA);
+                mPresenter.onMovieListEndReached(getActivity().getApplicationContext());
             }
         });
 
@@ -82,11 +89,11 @@ public class NowOnCinemaFragment extends BaseFragment implements MovieItemDelega
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                MovieModel.getInstance().forceRefreshMovies(getActivity().getApplicationContext(), AppConstants.MOVIE_NOW_ON_CINEMA);
+                mPresenter.onForceRefresh(getActivity().getApplicationContext());
             }
         });
 
-        getActivity().getSupportLoaderManager().initLoader(MOVIE_NOW_ON_CINEMA_LOADER_ID, null, this);
+        getActivity().getSupportLoaderManager().initLoader(AppConstants.MOVIE_NOW_ON_CINEMA_LOADER_ID, null, this);
 
         return view;
     }
@@ -100,18 +107,9 @@ public class NowOnCinemaFragment extends BaseFragment implements MovieItemDelega
                 new String[]{AppConstants.MOVIE_NOW_ON_CINEMA},
                 null);
     }
-
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        if (data != null && data.moveToFirst()) {
-            List<MovieVO> movieList = new ArrayList<>();
-            do {
-                MovieVO newsVO = MovieVO.parseFromCursor(getActivity().getApplicationContext(), data);
-                movieList.add(newsVO);
-            } while (data.moveToNext());
-            adapter.appendNewData(movieList);
-            swipeRefreshLayout.setRefreshing(false);
-        }
+        mPresenter.onDataLoaded(getActivity().getApplicationContext(), data);
     }
 
     @Override
@@ -123,20 +121,7 @@ public class NowOnCinemaFragment extends BaseFragment implements MovieItemDelega
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
-        List<MovieVO> movieList = MovieModel.getInstance().getNowOnCinemaMovies();
-        if (!movieList.isEmpty()) {
-            adapter.setNewData(movieList);
-            swipeRefreshLayout.setRefreshing(false);
-        } else {
-            MovieModel.getInstance().startLoadingMovies(getActivity().getApplicationContext(), AppConstants.MOVIE_NOW_ON_CINEMA);
-            swipeRefreshLayout.setRefreshing(true);
-        }
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMovieDataLoaded(RestApiEvents.NowOnCinemaMoviesDataLoadedEvent event) {
-      /*  adapter.appendNewData(event.getLoadedMovies());
-        swipeRefreshLayout.setRefreshing(false);*/
+        mPresenter.onStart();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -163,6 +148,22 @@ public class NowOnCinemaFragment extends BaseFragment implements MovieItemDelega
 
     @Override
     public void onClickMovie(String movieId) {
+        mPresenter.onTapMovie(movieId);
+    }
+
+    @Override
+    public void displayMoviesList(List<MovieVO> moviesList) {
+        adapter.appendNewData(moviesList);
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void showLoding() {
+        swipeRefreshLayout.setRefreshing(true);
+    }
+
+    @Override
+    public void navigateToMovieDetails(String movieId) {
         Intent intent = MovieDetailsActivity.newIntent(getActivity().getApplicationContext(), movieId);
         startActivity(intent);
     }

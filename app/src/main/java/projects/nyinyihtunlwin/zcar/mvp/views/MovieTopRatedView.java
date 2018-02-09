@@ -8,12 +8,11 @@ import projects.nyinyihtunlwin.zcar.data.vo.MovieVO;
  * Created by Dell on 2/9/2018.
  */
 
-public interface MovieNowOnCinemaView {
+public interface MovieTopRatedView {
 
     void displayMoviesList(List<MovieVO> moviesList);
 
     void showLoding();
 
     void navigateToMovieDetails(String movieId);
-
 }

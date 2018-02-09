@@ -69,6 +69,24 @@ public class MovieModel {
     }
 
     public void startLoadingMovies(Context context, String movieType) {
+        switch (movieType) {
+            case AppConstants.MOVIE_NOW_ON_CINEMA:
+                mNowOnCinemaMovies = new ArrayList<>();
+                ConfigUtils.getObjInstance().saveMovieNowOnCinemaPageIndex(1);
+                break;
+            case AppConstants.MOVIE_MOST_POPULAR:
+                mMostPopularMovies = new ArrayList<>();
+                ConfigUtils.getObjInstance().saveMovieMostPopularPageIndex(1);
+                break;
+            case AppConstants.MOVIE_UPCOMING:
+                mUpcomingMovies = new ArrayList<>();
+                ConfigUtils.getObjInstance().saveUpcomingPageIndex(1);
+                break;
+            case AppConstants.MOVIE_TOP_RATED:
+                mTopRatedMovies = new ArrayList<>();
+                ConfigUtils.getObjInstance().saveMovieTopRatedPageIndex(1);
+                break;
+        }
         loadMovies(context, movieType);
     }
 

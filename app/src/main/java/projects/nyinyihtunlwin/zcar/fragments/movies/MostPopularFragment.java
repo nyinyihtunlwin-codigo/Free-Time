@@ -1,8 +1,12 @@
 package projects.nyinyihtunlwin.zcar.fragments.movies;
 
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
@@ -18,18 +22,23 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import projects.nyinyihtunlwin.zcar.R;
+import projects.nyinyihtunlwin.zcar.activities.MovieDetailsActivity;
 import projects.nyinyihtunlwin.zcar.adapters.MovieAdapter;
 import projects.nyinyihtunlwin.zcar.components.EmptyViewPod;
 import projects.nyinyihtunlwin.zcar.components.SmartRecyclerView;
 import projects.nyinyihtunlwin.zcar.components.SmartScrollListener;
-import projects.nyinyihtunlwin.zcar.data.models.MovieModel;
 import projects.nyinyihtunlwin.zcar.data.vo.MovieVO;
+import projects.nyinyihtunlwin.zcar.delegates.MovieItemDelegate;
 import projects.nyinyihtunlwin.zcar.events.RestApiEvents;
 import projects.nyinyihtunlwin.zcar.fragments.BaseFragment;
+import projects.nyinyihtunlwin.zcar.mvp.presenters.MovieMostPopularPresenter;
+import projects.nyinyihtunlwin.zcar.mvp.views.MovieMostPopularView;
+import projects.nyinyihtunlwin.zcar.persistence.MovieContract;
 import projects.nyinyihtunlwin.zcar.utils.AppConstants;
 
 
-public class MostPopularFragment extends BaseFragment{
+public class MostPopularFragment extends BaseFragment implements MovieItemDelegate, MovieMostPopularView {
+
 
     @BindView(R.id.rv_most_popular)
     SmartRecyclerView rvMostPopular;
@@ -44,14 +53,19 @@ public class MostPopularFragment extends BaseFragment{
 
     private SmartScrollListener mSmartScrollListener;
 
+    private MovieMostPopularPresenter mPresenter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_most_popular, container, false);
         ButterKnife.bind(this, view);
 
+        mPresenter = new MovieMostPopularPresenter(getActivity());
+        mPresenter.onCreate(this);
+
         rvMostPopular.setHasFixedSize(true);
-        adapter = new MovieAdapter(getContext(),this);
+        adapter = new MovieAdapter(getContext(), this);
         rvMostPopular.setEmptyView(vpEmptyMovie);
         rvMostPopular.setAdapter(adapter);
         rvMostPopular.setLayoutManager(new GridLayoutManager(container.getContext(), 2));
@@ -59,7 +73,7 @@ public class MostPopularFragment extends BaseFragment{
         mSmartScrollListener = new SmartScrollListener(new SmartScrollListener.OnSmartScrollListener() {
             @Override
             public void onListEndReached() {
-                MovieModel.getInstance().loadMoreMovies(getActivity().getApplicationContext(),AppConstants.MOVIE_MOST_POPULAR);
+                mPresenter.onMovieListEndReached(getActivity().getApplicationContext());
             }
         });
 
@@ -69,10 +83,33 @@ public class MostPopularFragment extends BaseFragment{
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                MovieModel.getInstance().forceRefreshMovies(getActivity().getApplicationContext(),AppConstants.MOVIE_MOST_POPULAR);
+                mPresenter.onForceRefresh(getActivity().getApplicationContext());
             }
         });
+
+        getActivity().getSupportLoaderManager().initLoader(AppConstants.MOVIE_MOST_POPULAR_LOADER_ID, null, this);
+
         return view;
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(getActivity().getApplicationContext(),
+                MovieContract.MovieInScreenEntry.CONTENT_URI,
+                null,
+                MovieContract.MovieInScreenEntry.COLUMN_SCREEN + "=?",
+                new String[]{AppConstants.MOVIE_MOST_POPULAR},
+                null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mPresenter.onDataLoaded(getActivity().getApplicationContext(), data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
     }
 
 
@@ -80,19 +117,7 @@ public class MostPopularFragment extends BaseFragment{
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
-        List<MovieVO> movieList = MovieModel.getInstance().getMostPopularMovies();
-        if (!movieList.isEmpty()) {
-            adapter.setNewData(movieList);
-        } else {
-            MovieModel.getInstance().startLoadingMovies(getActivity().getApplicationContext(),AppConstants.MOVIE_MOST_POPULAR);
-            swipeRefreshLayout.setRefreshing(true);
-        }
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMovieDataLoaded(RestApiEvents.PoputlarMoviesDataLoadedEvent event) {
-        adapter.appendNewData(event.getLoadedMovies());
-        swipeRefreshLayout.setRefreshing(false);
+        mPresenter.onStart();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -117,4 +142,27 @@ public class MostPopularFragment extends BaseFragment{
     public void onDetach() {
         super.onDetach();
     }
+
+    @Override
+    public void onClickMovie(String movieId) {
+        mPresenter.onTapMovie(movieId);
+    }
+
+    @Override
+    public void displayMoviesList(List<MovieVO> moviesList) {
+        adapter.appendNewData(moviesList);
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void showLoding() {
+        swipeRefreshLayout.setRefreshing(true);
+    }
+
+    @Override
+    public void navigateToMovieDetails(String movieId) {
+        Intent intent = MovieDetailsActivity.newIntent(getActivity().getApplicationContext(), movieId);
+        startActivity(intent);
+    }
+
 }

@@ -8,29 +8,29 @@ import java.util.List;
 
 import projects.nyinyihtunlwin.zcar.data.models.MovieModel;
 import projects.nyinyihtunlwin.zcar.data.vo.MovieVO;
-import projects.nyinyihtunlwin.zcar.mvp.views.MovieNowOnCinemaView;
+import projects.nyinyihtunlwin.zcar.mvp.views.MovieUpcomingView;
 import projects.nyinyihtunlwin.zcar.utils.AppConstants;
 
 /**
  * Created by Dell on 2/9/2018.
  */
 
-public class MovieNowOnCinemaPresenter extends BasePresenter<MovieNowOnCinemaView> {
+public class MovieUpcomingPresenter extends BasePresenter<MovieUpcomingView> {
 
     private Context mContext;
 
-    public MovieNowOnCinemaPresenter(Context context) {
+    public MovieUpcomingPresenter(Context context) {
         this.mContext = context;
     }
 
     @Override
     public void onStart() {
-        List<MovieVO> movieList = MovieModel.getInstance().getNowOnCinemaMovies();
+        List<MovieVO> movieList = MovieModel.getInstance().getUpcomingMovies();
         if (!movieList.isEmpty()) {
             mView.displayMoviesList(movieList);
         } else {
             mView.showLoding();
-            MovieModel.getInstance().startLoadingMovies(mContext, AppConstants.MOVIE_NOW_ON_CINEMA);
+            MovieModel.getInstance().startLoadingMovies(mContext, AppConstants.MOVIE_UPCOMING);
         }
     }
 
@@ -55,10 +55,10 @@ public class MovieNowOnCinemaPresenter extends BasePresenter<MovieNowOnCinemaVie
     }
 
     public void onMovieListEndReached(Context context) {
-        MovieModel.getInstance().loadMoreMovies(context, AppConstants.MOVIE_NOW_ON_CINEMA);
+        MovieModel.getInstance().loadMoreMovies(context, AppConstants.MOVIE_UPCOMING);
     }
 
     public void onForceRefresh(Context context) {
-        MovieModel.getInstance().forceRefreshMovies(context, AppConstants.MOVIE_NOW_ON_CINEMA);
+        MovieModel.getInstance().forceRefreshMovies(context, AppConstants.MOVIE_UPCOMING);
     }
 }
