@@ -28,9 +28,6 @@ public class MovieNowOnCinemaPresenter extends BasePresenter<MovieNowOnCinemaVie
         List<MovieVO> movieList = MovieModel.getInstance().getNowOnCinemaMovies();
         if (!movieList.isEmpty()) {
             mView.displayMoviesList(movieList);
-        } else {
-            mView.showLoding();
-            MovieModel.getInstance().startLoadingMovies(mContext, AppConstants.MOVIE_NOW_ON_CINEMA);
         }
     }
 
@@ -47,6 +44,9 @@ public class MovieNowOnCinemaPresenter extends BasePresenter<MovieNowOnCinemaVie
                 movieList.add(newsVO);
             } while (data.moveToNext());
             mView.displayMoviesList(movieList);
+        }else{
+            mView.showLoding();
+            MovieModel.getInstance().startLoadingMovies(mContext, AppConstants.MOVIE_NOW_ON_CINEMA);
         }
     }
 

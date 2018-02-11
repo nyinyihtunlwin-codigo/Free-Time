@@ -31,7 +31,6 @@ public class MovieModel {
     private List<MovieVO> mNowOnCinemaMovies, mMostPopularMovies, mUpcomingMovies, mTopRatedMovies;
     private List<GenreVO> mMovieGenres;
 
-
     private MovieModel() {
         EventBus.getDefault().register(this);
         mNowOnCinemaMovies = new ArrayList<>();
@@ -164,6 +163,7 @@ public class MovieModel {
 
         int insertedRowCount = event.getContext().getContentResolver().bulkInsert(MovieContract.MovieEntry.CONTENT_URI, movieCVS);
         Log.d(ZCarApp.LOG_TAG, "Inserted row : " + insertedRowCount);
+
     }
 
 

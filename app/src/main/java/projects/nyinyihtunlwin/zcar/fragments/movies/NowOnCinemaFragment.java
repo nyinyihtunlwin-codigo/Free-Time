@@ -105,8 +105,9 @@ public class NowOnCinemaFragment extends BaseFragment implements MovieItemDelega
                 null,
                 MovieContract.MovieInScreenEntry.COLUMN_SCREEN + "=?",
                 new String[]{AppConstants.MOVIE_NOW_ON_CINEMA},
-                null);
+                MovieContract.MovieInScreenEntry.COLUMN_MOVIE_ID + " ASC");
     }
+
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mPresenter.onDataLoaded(getActivity().getApplicationContext(), data);
@@ -153,7 +154,7 @@ public class NowOnCinemaFragment extends BaseFragment implements MovieItemDelega
 
     @Override
     public void displayMoviesList(List<MovieVO> moviesList) {
-        adapter.appendNewData(moviesList);
+        adapter.setNewData(moviesList);
         swipeRefreshLayout.setRefreshing(false);
     }
 

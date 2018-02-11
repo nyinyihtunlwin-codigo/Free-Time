@@ -30,7 +30,7 @@ public class MovieUpcomingPresenter extends BasePresenter<MovieUpcomingView> {
             mView.displayMoviesList(movieList);
         } else {
             mView.showLoding();
-            MovieModel.getInstance().startLoadingMovies(mContext, AppConstants.MOVIE_UPCOMING);
+        //    MovieModel.getInstance().startLoadingMovies(mContext, AppConstants.MOVIE_UPCOMING);
         }
     }
 

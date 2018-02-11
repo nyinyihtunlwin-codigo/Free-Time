@@ -30,7 +30,7 @@ public class MovieTopRatedPresenter extends BasePresenter<MovieTopRatedView> {
             mView.displayMoviesList(movieList);
         } else {
             mView.showLoding();
-            MovieModel.getInstance().startLoadingMovies(mContext, AppConstants.MOVIE_TOP_RATED);
+        //    MovieModel.getInstance().startLoadingMovies(mContext, AppConstants.MOVIE_TOP_RATED);
         }
     }
 

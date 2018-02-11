@@ -30,7 +30,7 @@ public class MovieMostPopularPresenter extends BasePresenter<MovieMostPopularVie
             mView.displayMoviesList(movieList);
         } else {
             mView.showLoding();
-            MovieModel.getInstance().startLoadingMovies(mContext, AppConstants.MOVIE_MOST_POPULAR);
+         //   MovieModel.getInstance().startLoadingMovies(mContext, AppConstants.MOVIE_MOST_POPULAR);
         }
     }
 

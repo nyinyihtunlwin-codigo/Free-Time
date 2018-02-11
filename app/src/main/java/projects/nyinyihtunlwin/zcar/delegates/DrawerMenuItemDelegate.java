@@ -7,5 +7,5 @@ import projects.nyinyihtunlwin.zcar.data.vo.DrawerMenuItemVO;
  */
 
 public interface DrawerMenuItemDelegate {
-    void clickDrawerMenuItem(DrawerMenuItemVO drawerMenuItemVO);
+   void clickDrawerMenuItem(DrawerMenuItemVO drawerMenuItemVO);
 }
