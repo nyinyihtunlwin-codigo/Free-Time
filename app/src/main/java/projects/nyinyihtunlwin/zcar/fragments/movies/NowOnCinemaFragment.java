@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -92,8 +93,13 @@ public class NowOnCinemaFragment extends BaseFragment implements MovieItemDelega
                 mPresenter.onForceRefresh(getActivity().getApplicationContext());
             }
         });
-
-        getActivity().getSupportLoaderManager().initLoader(AppConstants.MOVIE_NOW_ON_CINEMA_LOADER_ID, null, this);
+        showLoding();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getActivity().getSupportLoaderManager().initLoader(AppConstants.MOVIE_NOW_ON_CINEMA_LOADER_ID, null, NowOnCinemaFragment.this);
+            }
+        }, 1000);
 
         return view;
     }
@@ -111,6 +117,7 @@ public class NowOnCinemaFragment extends BaseFragment implements MovieItemDelega
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mPresenter.onDataLoaded(getActivity().getApplicationContext(), data);
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override

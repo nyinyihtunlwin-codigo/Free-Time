@@ -3,8 +3,12 @@ package projects.nyinyihtunlwin.zcar.activities;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -22,10 +26,12 @@ import org.greenrobot.eventbus.Subscribe;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import projects.nyinyihtunlwin.zcar.R;
+import projects.nyinyihtunlwin.zcar.ZCarApp;
 import projects.nyinyihtunlwin.zcar.data.vo.DrawerMenuItemVO;
 import projects.nyinyihtunlwin.zcar.delegates.DrawerMenuItemDelegate;
 import projects.nyinyihtunlwin.zcar.events.TapDrawerMenuItemEvent;
 import projects.nyinyihtunlwin.zcar.fragments.MoviesFragment;
+import projects.nyinyihtunlwin.zcar.fragments.TVShowsFragment;
 import projects.nyinyihtunlwin.zcar.services.CacheManager;
 
 /**
@@ -46,6 +52,12 @@ public class MainActivity extends BaseActivity implements DrawerMenuItemDelegate
     @BindView(R.id.btn_tv_shows)
     LinearLayout btnTvShows;
 
+    @BindView(R.id.tv_current_section)
+    TextView tvCurrentSection;
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
     DrawerLayout drawer;
 
 
@@ -55,7 +67,6 @@ public class MainActivity extends BaseActivity implements DrawerMenuItemDelegate
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this, this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         tvAppTitle.setTypeface(Typeface.createFromAsset(getAssets(), "code_heavy.ttf"));
@@ -93,8 +104,8 @@ public class MainActivity extends BaseActivity implements DrawerMenuItemDelegate
 
         btnMovies.setOnClickListener(this);
         btnTvShows.setOnClickListener(this);
-        
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, new MoviesFragment()).commit();
+
+        setFragment(new MoviesFragment());
 
     }
 
@@ -132,13 +143,25 @@ public class MainActivity extends BaseActivity implements DrawerMenuItemDelegate
     }
 
     @Override
-    public void onClick(View view) {
+    public void onClick(final View view) {
+        drawer.closeDrawer(Gravity.START);
         switch (view.getId()) {
             case R.id.btn_movies:
+                tvCurrentSection.setText("Movies");
+                setFragment(new MoviesFragment());
                 break;
             case R.id.btn_tv_shows:
+                setFragment(new TVShowsFragment());
+                tvCurrentSection.setText("TV Shows");
                 break;
         }
-        drawer.closeDrawer(Gravity.START);
+
+    }
+
+    private void setFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.container, fragment);
+        fragmentTransaction.commit();
     }
 }
