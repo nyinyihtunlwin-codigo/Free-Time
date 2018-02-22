@@ -2,9 +2,8 @@ package projects.nyinyihtunlwin.zcar.network;
 
 import org.greenrobot.eventbus.EventBus;
 
-import projects.nyinyihtunlwin.zcar.events.RestApiEvents;
+import projects.nyinyihtunlwin.zcar.events.MoviesiEvents;
 import projects.nyinyihtunlwin.zcar.network.responses.BaseResponse;
-import projects.nyinyihtunlwin.zcar.network.responses.movies.GetMovieReviewsResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -17,16 +16,16 @@ public abstract class MovieCallback<T extends BaseResponse> implements Callback<
     @Override
     public void onResponse(Call<T> call, Response<T> response) {
         if (response == null) {
-            RestApiEvents.ErrorInvokingAPIEvent errorEvent
-                    = new RestApiEvents.ErrorInvokingAPIEvent("No data could be load for now. Please try again later.");
+            MoviesiEvents.ErrorInvokingAPIEvent errorEvent
+                    = new MoviesiEvents.ErrorInvokingAPIEvent("No data could be load for now. Please try again later.");
             EventBus.getDefault().post(errorEvent);
         }
     }
 
     @Override
     public void onFailure(Call<T> call, Throwable t) {
-        RestApiEvents.ErrorInvokingAPIEvent errorEvent
-                = new RestApiEvents.ErrorInvokingAPIEvent(t.getMessage());
+        MoviesiEvents.ErrorInvokingAPIEvent errorEvent
+                = new MoviesiEvents.ErrorInvokingAPIEvent(t.getMessage());
         EventBus.getDefault().post(errorEvent);
     }
 }

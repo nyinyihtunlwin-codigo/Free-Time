@@ -2,6 +2,7 @@ package projects.nyinyihtunlwin.zcar.fragments.movies;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,13 +14,11 @@ import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -30,10 +29,9 @@ import projects.nyinyihtunlwin.zcar.adapters.MovieAdapter;
 import projects.nyinyihtunlwin.zcar.components.EmptyViewPod;
 import projects.nyinyihtunlwin.zcar.components.SmartRecyclerView;
 import projects.nyinyihtunlwin.zcar.components.SmartScrollListener;
-import projects.nyinyihtunlwin.zcar.data.models.MovieModel;
-import projects.nyinyihtunlwin.zcar.data.vo.MovieVO;
+import projects.nyinyihtunlwin.zcar.data.vo.movies.MovieVO;
 import projects.nyinyihtunlwin.zcar.delegates.MovieItemDelegate;
-import projects.nyinyihtunlwin.zcar.events.RestApiEvents;
+import projects.nyinyihtunlwin.zcar.events.MoviesiEvents;
 import projects.nyinyihtunlwin.zcar.fragments.BaseFragment;
 import projects.nyinyihtunlwin.zcar.mvp.presenters.MovieNowOnCinemaPresenter;
 import projects.nyinyihtunlwin.zcar.mvp.views.MovieNowOnCinemaView;
@@ -105,6 +103,15 @@ public class NowOnCinemaFragment extends BaseFragment implements MovieItemDelega
     }
 
     @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+            super.onConfigurationChanged(newConfig);
+            boolean orientationLand = (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ? true : false);
+            if(orientationLand){
+                rvNowOnCinema.setLayoutManager(new GridLayoutManager(getContext(),3));
+            }
+    }
+
+    @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(getActivity().getApplicationContext(),
                 MovieContract.MovieInScreenEntry.CONTENT_URI,
@@ -133,7 +140,7 @@ public class NowOnCinemaFragment extends BaseFragment implements MovieItemDelega
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onErrorInvokingAPI(RestApiEvents.ErrorInvokingAPIEvent event) {
+    public void onErrorInvokingAPI(MoviesiEvents.ErrorInvokingAPIEvent event) {
         Snackbar.make(rvNowOnCinema, event.getErrorMsg(), Snackbar.LENGTH_INDEFINITE).show();
         swipeRefreshLayout.setRefreshing(false);
     }

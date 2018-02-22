@@ -9,7 +9,7 @@ import com.bumptech.glide.request.RequestOptions;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import projects.nyinyihtunlwin.zcar.R;
-import projects.nyinyihtunlwin.zcar.data.vo.MovieVO;
+import projects.nyinyihtunlwin.zcar.data.vo.movies.MovieVO;
 import projects.nyinyihtunlwin.zcar.delegates.MovieItemDelegate;
 import projects.nyinyihtunlwin.zcar.utils.AppConstants;
 

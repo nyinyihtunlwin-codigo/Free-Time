@@ -1,4 +1,4 @@
-package projects.nyinyihtunlwin.zcar.data.vo;
+package projects.nyinyihtunlwin.zcar.data.vo.movies;
 
 import android.content.ContentValues;
 import android.content.Context;

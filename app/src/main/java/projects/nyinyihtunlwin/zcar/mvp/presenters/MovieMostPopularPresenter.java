@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import projects.nyinyihtunlwin.zcar.data.models.MovieModel;
-import projects.nyinyihtunlwin.zcar.data.vo.MovieVO;
+import projects.nyinyihtunlwin.zcar.data.vo.movies.MovieVO;
 import projects.nyinyihtunlwin.zcar.mvp.views.MovieMostPopularView;
 import projects.nyinyihtunlwin.zcar.utils.AppConstants;
 

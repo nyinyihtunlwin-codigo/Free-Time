@@ -27,10 +27,9 @@ import projects.nyinyihtunlwin.zcar.adapters.MovieAdapter;
 import projects.nyinyihtunlwin.zcar.components.EmptyViewPod;
 import projects.nyinyihtunlwin.zcar.components.SmartRecyclerView;
 import projects.nyinyihtunlwin.zcar.components.SmartScrollListener;
-import projects.nyinyihtunlwin.zcar.data.models.MovieModel;
-import projects.nyinyihtunlwin.zcar.data.vo.MovieVO;
+import projects.nyinyihtunlwin.zcar.data.vo.movies.MovieVO;
 import projects.nyinyihtunlwin.zcar.delegates.MovieItemDelegate;
-import projects.nyinyihtunlwin.zcar.events.RestApiEvents;
+import projects.nyinyihtunlwin.zcar.events.MoviesiEvents;
 import projects.nyinyihtunlwin.zcar.fragments.BaseFragment;
 import projects.nyinyihtunlwin.zcar.mvp.presenters.MovieTopRatedPresenter;
 import projects.nyinyihtunlwin.zcar.mvp.views.MovieTopRatedView;
@@ -122,7 +121,7 @@ public class TopRatedFragment extends BaseFragment implements MovieItemDelegate,
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onErrorInvokingAPI(RestApiEvents.ErrorInvokingAPIEvent event) {
+    public void onErrorInvokingAPI(MoviesiEvents.ErrorInvokingAPIEvent event) {
         Snackbar.make(rvTopRated, event.getErrorMsg(), Snackbar.LENGTH_INDEFINITE).show();
         swipeRefreshLayout.setRefreshing(false);
     }

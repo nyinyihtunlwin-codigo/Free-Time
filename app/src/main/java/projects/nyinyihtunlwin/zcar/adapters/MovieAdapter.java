@@ -5,7 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import projects.nyinyihtunlwin.zcar.R;
-import projects.nyinyihtunlwin.zcar.data.vo.MovieVO;
+import projects.nyinyihtunlwin.zcar.data.vo.movies.MovieVO;
 import projects.nyinyihtunlwin.zcar.delegates.MovieItemDelegate;
 import projects.nyinyihtunlwin.zcar.viewholders.MovieViewHolder;
 

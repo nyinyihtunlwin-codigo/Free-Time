@@ -12,8 +12,8 @@ import java.util.List;
 
 import projects.nyinyihtunlwin.zcar.ZCarApp;
 import projects.nyinyihtunlwin.zcar.data.vo.GenreVO;
-import projects.nyinyihtunlwin.zcar.data.vo.MovieVO;
-import projects.nyinyihtunlwin.zcar.events.RestApiEvents;
+import projects.nyinyihtunlwin.zcar.data.vo.movies.MovieVO;
+import projects.nyinyihtunlwin.zcar.events.MoviesiEvents;
 import projects.nyinyihtunlwin.zcar.network.MovieDataAgentImpl;
 import projects.nyinyihtunlwin.zcar.persistence.MovieContract;
 import projects.nyinyihtunlwin.zcar.utils.AppConstants;
@@ -90,7 +90,7 @@ public class MovieModel {
     }
 
     @Subscribe
-    public void onMovieGenresLoaded(RestApiEvents.MovieGenresDataLoadedEvent event) {
+    public void onMovieGenresLoaded(MoviesiEvents.MovieGenresDataLoadedEvent event) {
         mMovieGenres.addAll(event.getGenres());
         Log.e(ZCarApp.LOG_TAG, String.valueOf(mMovieGenres.size()));
         ContentValues[] genreCVs = new ContentValues[event.getGenres().size()];
@@ -103,34 +103,34 @@ public class MovieModel {
     }
 
     @Subscribe
-    public void onNowOnCinemaMoviesLoaded(RestApiEvents.NowOnCinemaMoviesDataLoadedEvent event) {
+    public void onNowOnCinemaMoviesLoaded(MoviesiEvents.NowOnCinemaMoviesDataLoadedEvent event) {
         mNowOnCinemaMovies.addAll(event.getLoadedMovies());
         ConfigUtils.getObjInstance().saveMovieNowOnCinemaPageIndex(event.getLoadedPageIndex() + 1);
         saveDataForOfflineMode(event, AppConstants.MOVIE_NOW_ON_CINEMA);
     }
 
     @Subscribe
-    public void onPopularMoviesLoaded(RestApiEvents.PoputlarMoviesDataLoadedEvent event) {
+    public void onPopularMoviesLoaded(MoviesiEvents.PoputlarMoviesDataLoadedEvent event) {
         mMostPopularMovies.addAll(event.getLoadedMovies());
         ConfigUtils.getObjInstance().saveMovieMostPopularPageIndex(event.getLoadedPageIndex() + 1);
         saveDataForOfflineMode(event, AppConstants.MOVIE_MOST_POPULAR);
     }
 
     @Subscribe
-    public void onUpcomingMoviesLoaded(RestApiEvents.UpcomingMoviesDataLoadedEvent event) {
+    public void onUpcomingMoviesLoaded(MoviesiEvents.UpcomingMoviesDataLoadedEvent event) {
         mUpcomingMovies.addAll(event.getLoadedMovies());
         ConfigUtils.getObjInstance().saveUpcomingPageIndex(event.getLoadedPageIndex() + 1);
         saveDataForOfflineMode(event, AppConstants.MOVIE_UPCOMING);
     }
 
     @Subscribe
-    public void onTopRatedMoviesLoaded(RestApiEvents.TopRatedMoviesDataLoadedEvent event) {
+    public void onTopRatedMoviesLoaded(MoviesiEvents.TopRatedMoviesDataLoadedEvent event) {
         mTopRatedMovies.addAll(event.getLoadedMovies());
         ConfigUtils.getObjInstance().saveMovieTopRatedPageIndex(event.getLoadedPageIndex() + 1);
         saveDataForOfflineMode(event, AppConstants.MOVIE_TOP_RATED);
     }
 
-    private void saveDataForOfflineMode(RestApiEvents.MoviesDataLoadedEvent event, String screenName) {
+    private void saveDataForOfflineMode(MoviesiEvents.MoviesDataLoadedEvent event, String screenName) {
         ContentValues[] movieCVS = new ContentValues[event.getLoadedMovies().size()];
         List<ContentValues> genreCVList = new ArrayList<>();
         List<ContentValues> movieInScreenCVList = new ArrayList<>();

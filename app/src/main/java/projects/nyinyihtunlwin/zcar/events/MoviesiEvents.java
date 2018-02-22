@@ -1,13 +1,12 @@
 package projects.nyinyihtunlwin.zcar.events;
 
-import android.content.ContentValues;
 import android.content.Context;
 
 import java.util.List;
 
 import projects.nyinyihtunlwin.zcar.data.vo.CastVO;
 import projects.nyinyihtunlwin.zcar.data.vo.GenreVO;
-import projects.nyinyihtunlwin.zcar.data.vo.MovieVO;
+import projects.nyinyihtunlwin.zcar.data.vo.movies.MovieVO;
 import projects.nyinyihtunlwin.zcar.data.vo.ReviewVO;
 import projects.nyinyihtunlwin.zcar.data.vo.TrailerVO;
 
@@ -15,7 +14,7 @@ import projects.nyinyihtunlwin.zcar.data.vo.TrailerVO;
  * Created by Nyi Nyi Htun Lwin on 12/7/2017.
  */
 
-public class RestApiEvents {
+public class MoviesiEvents {
 
     public static class ErrorInvokingAPIEvent {
         private String errorMsg;

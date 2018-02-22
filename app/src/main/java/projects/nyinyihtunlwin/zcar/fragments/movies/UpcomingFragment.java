@@ -9,7 +9,6 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,12 +27,10 @@ import projects.nyinyihtunlwin.zcar.adapters.MovieAdapter;
 import projects.nyinyihtunlwin.zcar.components.EmptyViewPod;
 import projects.nyinyihtunlwin.zcar.components.SmartRecyclerView;
 import projects.nyinyihtunlwin.zcar.components.SmartScrollListener;
-import projects.nyinyihtunlwin.zcar.data.models.MovieModel;
-import projects.nyinyihtunlwin.zcar.data.vo.MovieVO;
+import projects.nyinyihtunlwin.zcar.data.vo.movies.MovieVO;
 import projects.nyinyihtunlwin.zcar.delegates.MovieItemDelegate;
-import projects.nyinyihtunlwin.zcar.events.RestApiEvents;
+import projects.nyinyihtunlwin.zcar.events.MoviesiEvents;
 import projects.nyinyihtunlwin.zcar.fragments.BaseFragment;
-import projects.nyinyihtunlwin.zcar.mvp.presenters.MovieNowOnCinemaPresenter;
 import projects.nyinyihtunlwin.zcar.mvp.presenters.MovieUpcomingPresenter;
 import projects.nyinyihtunlwin.zcar.mvp.views.MovieUpcomingView;
 import projects.nyinyihtunlwin.zcar.persistence.MovieContract;
@@ -123,7 +120,7 @@ public class UpcomingFragment extends BaseFragment implements MovieItemDelegate,
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onErrorInvokingAPI(RestApiEvents.ErrorInvokingAPIEvent event) {
+    public void onErrorInvokingAPI(MoviesiEvents.ErrorInvokingAPIEvent event) {
         Snackbar.make(rvUpcoming, event.getErrorMsg(), Snackbar.LENGTH_INDEFINITE).show();
         swipeRefreshLayout.setRefreshing(false);
     }

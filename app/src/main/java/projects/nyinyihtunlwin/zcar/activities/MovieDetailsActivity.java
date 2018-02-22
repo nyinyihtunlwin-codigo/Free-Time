@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -23,7 +22,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.gson.annotations.SerializedName;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -41,11 +39,10 @@ import projects.nyinyihtunlwin.zcar.adapters.GenreAdapter;
 import projects.nyinyihtunlwin.zcar.adapters.TrailersAdapter;
 import projects.nyinyihtunlwin.zcar.data.models.MovieModel;
 import projects.nyinyihtunlwin.zcar.data.vo.GenreVO;
-import projects.nyinyihtunlwin.zcar.data.vo.MovieVO;
+import projects.nyinyihtunlwin.zcar.data.vo.movies.MovieVO;
 import projects.nyinyihtunlwin.zcar.data.vo.ReviewVO;
 import projects.nyinyihtunlwin.zcar.delegates.MovieDetailsDelegate;
-import projects.nyinyihtunlwin.zcar.events.RestApiEvents;
-import projects.nyinyihtunlwin.zcar.network.MovieDataAgent;
+import projects.nyinyihtunlwin.zcar.events.MoviesiEvents;
 import projects.nyinyihtunlwin.zcar.persistence.MovieContract;
 import projects.nyinyihtunlwin.zcar.utils.AppConstants;
 
@@ -293,7 +290,7 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsDe
     }
 
     @Subscribe
-    public void onMovieDetailsLoaded(RestApiEvents.MovieDetailsDataLoadedEvent event) {
+    public void onMovieDetailsLoaded(MoviesiEvents.MovieDetailsDataLoadedEvent event) {
         if (event.getmMovie().getRuntime() != null) {
             llTime.setVisibility(View.VISIBLE);
             int hour = event.getmMovie().getRuntime() / 60;
@@ -314,19 +311,19 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsDe
     }
 
     @Subscribe
-    public void onMovieTrailersLoaded(RestApiEvents.MovieTrailersDataLoadedEvent event) {
+    public void onMovieTrailersLoaded(MoviesiEvents.MovieTrailersDataLoadedEvent event) {
         tvTrailers.setVisibility(View.VISIBLE);
         mTrailersAdapter.setNewData(event.getmTrailers());
     }
 
     @Subscribe
-    public void onMovieCastsDataLoaded(RestApiEvents.MovieCreditsDataLoadedEvent event) {
+    public void onMovieCastsDataLoaded(MoviesiEvents.MovieCreditsDataLoadedEvent event) {
         tvCasts.setVisibility(View.VISIBLE);
         mCastAdapter.setNewData(event.getMovieCasts());
     }
 
     @Subscribe
-    public void onMovieReviewsDataLoaded(RestApiEvents.MovieReviewsDataLoadedEvent event) {
+    public void onMovieReviewsDataLoaded(MoviesiEvents.MovieReviewsDataLoadedEvent event) {
         loadingView.setVisibility(View.GONE);
         tvReviews.setVisibility(View.VISIBLE);
         for (ReviewVO reviewVO : event.getReviews()) {
@@ -357,7 +354,7 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsDe
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onErrorInvokingAPI(RestApiEvents.ErrorInvokingAPIEvent event) {
+    public void onErrorInvokingAPI(MoviesiEvents.ErrorInvokingAPIEvent event) {
         loadingView.setVisibility(View.GONE);
     }
 

@@ -1,6 +1,6 @@
 package projects.nyinyihtunlwin.zcar.network;
 
-import projects.nyinyihtunlwin.zcar.data.vo.MovieVO;
+import projects.nyinyihtunlwin.zcar.data.vo.movies.MovieVO;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.GetMovieCreditsResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.GetMovieReviewsResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.GetMovieTrailersResponse;
@@ -9,6 +9,10 @@ import projects.nyinyihtunlwin.zcar.network.responses.movies.NowShowingMoviesRes
 import projects.nyinyihtunlwin.zcar.network.responses.movies.PopularMoviesResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.TopRatedMoviesResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.UpcomingMoviesResponse;
+import projects.nyinyihtunlwin.zcar.network.responses.tvshows.TvAiringTodayResponse;
+import projects.nyinyihtunlwin.zcar.network.responses.tvshows.TvMostPopularResponse;
+import projects.nyinyihtunlwin.zcar.network.responses.tvshows.TvOnTheAirResponse;
+import projects.nyinyihtunlwin.zcar.network.responses.tvshows.TvTopRatedResponse;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -48,5 +52,19 @@ public interface MovieAPI {
 
     @GET("movie/{id}/credits")
     Call<GetMovieCreditsResponse> loadMovieCredits(@Path("id") Integer movieId, @Query("api_key") String apiKey);
+
+    // TV Shows
+    @GET("tv/airing_today")
+    Call<TvAiringTodayResponse> loadTvAiringToday(@Query("api_key") String apiKey, @Query("page") Integer page);
+
+    @GET("tv/on_the_air")
+    Call<TvOnTheAirResponse> loadTvOnTheAir(@Query("api_key") String apiKey, @Query("page") Integer page);
+
+    @GET("tv/popular")
+    Call<TvMostPopularResponse> loadTvMostPopular(@Query("api_key") String apiKey, @Query("page") Integer page);
+
+    @GET("tv/top_rated")
+    Call<TvTopRatedResponse> loadTvTopRated(@Query("api_key") String apiKey, @Query("page") Integer page);
+
 
 }
