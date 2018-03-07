@@ -39,6 +39,7 @@ import projects.nyinyihtunlwin.zcar.mvp.presenters.MovieNowOnCinemaPresenter;
 import projects.nyinyihtunlwin.zcar.mvp.views.MovieNowOnCinemaView;
 import projects.nyinyihtunlwin.zcar.persistence.MovieContract;
 import projects.nyinyihtunlwin.zcar.utils.AppConstants;
+import projects.nyinyihtunlwin.zcar.utils.ConfigUtils;
 
 
 public class NowOnCinemaFragment extends BaseFragment implements MovieItemDelegate, MovieNowOnCinemaView {
@@ -101,9 +102,14 @@ public class NowOnCinemaFragment extends BaseFragment implements MovieItemDelega
                 new String[]{AppConstants.MOVIE_NOW_ON_CINEMA},
                 MovieContract.MovieInScreenEntry.COLUMN_MOVIE_ID + " ASC");
         if (cursor != null && cursor.getCount() > 20) {
-            if(cursor.moveToPosition(20)){
-                String string = cursor.getString(cursor.getColumnIndex(MovieContract.MovieInScreenEntry.COLUMN_MOVIE_ID));
-                Log.e(ZCarApp.LOG_TAG, string+" Found");
+            if (cursor.moveToPosition(20)) {
+                String col21 = cursor.getString(cursor.getColumnIndex(MovieContract.MovieInScreenEntry.COLUMN_MOVIE_ID));
+                Log.e(ZCarApp.LOG_TAG, col21 + " Found");
+                int deletedRows = getActivity().getApplicationContext().getContentResolver().delete(MovieContract.MovieInScreenEntry.CONTENT_URI,
+                        MovieContract.MovieInScreenEntry.COLUMN_SCREEN + "=? AND " + MovieContract.MovieInScreenEntry.COLUMN_MOVIE_ID + ">=?",
+                        new String[]{AppConstants.MOVIE_NOW_ON_CINEMA, col21});
+                Log.e(ZCarApp.LOG_TAG, "Deleted Extra Movies : " + String.valueOf(deletedRows));
+                ConfigUtils.getObjInstance().saveMovieNowOnCinemaPageIndex(1);
             }
         }
         Log.e(ZCarApp.LOG_TAG, String.valueOf(cursor.getCount()) + " count");
