@@ -28,9 +28,6 @@ public class MovieUpcomingPresenter extends BasePresenter<MovieUpcomingView> {
         List<MovieVO> movieList = MovieModel.getInstance().getUpcomingMovies();
         if (!movieList.isEmpty()) {
             mView.displayMoviesList(movieList);
-        } else {
-            mView.showLoding();
-        //    MovieModel.getInstance().startLoadingMovies(mContext, AppConstants.MOVIE_UPCOMING);
         }
     }
 
@@ -47,6 +44,9 @@ public class MovieUpcomingPresenter extends BasePresenter<MovieUpcomingView> {
                 movieList.add(newsVO);
             } while (data.moveToNext());
             mView.displayMoviesList(movieList);
+        }else{
+            mView.showLoding();
+            MovieModel.getInstance().startLoadingMovies(mContext, AppConstants.MOVIE_UPCOMING);
         }
     }
 

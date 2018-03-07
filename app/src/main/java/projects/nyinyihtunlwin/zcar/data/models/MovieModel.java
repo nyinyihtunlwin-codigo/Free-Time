@@ -115,6 +115,9 @@ public class MovieModel {
 
     @Subscribe
     public void onPopularMoviesLoaded(MoviesiEvents.PoputlarMoviesDataLoadedEvent event) {
+        if (event.getLoadedPageIndex() == 1) {
+            clearRecentMoviesOnDb(AppConstants.MOVIE_MOST_POPULAR, event);
+        }
         mMostPopularMovies.addAll(event.getLoadedMovies());
         ConfigUtils.getObjInstance().saveMovieMostPopularPageIndex(event.getLoadedPageIndex() + 1);
         saveDataForOfflineMode(event, AppConstants.MOVIE_MOST_POPULAR);
@@ -122,6 +125,9 @@ public class MovieModel {
 
     @Subscribe
     public void onUpcomingMoviesLoaded(MoviesiEvents.UpcomingMoviesDataLoadedEvent event) {
+        if (event.getLoadedPageIndex() == 1) {
+            clearRecentMoviesOnDb(AppConstants.MOVIE_UPCOMING, event);
+        }
         mUpcomingMovies.addAll(event.getLoadedMovies());
         ConfigUtils.getObjInstance().saveUpcomingPageIndex(event.getLoadedPageIndex() + 1);
         saveDataForOfflineMode(event, AppConstants.MOVIE_UPCOMING);
@@ -129,6 +135,9 @@ public class MovieModel {
 
     @Subscribe
     public void onTopRatedMoviesLoaded(MoviesiEvents.TopRatedMoviesDataLoadedEvent event) {
+        if (event.getLoadedPageIndex() == 1) {
+            clearRecentMoviesOnDb(AppConstants.MOVIE_TOP_RATED, event);
+        }
         mTopRatedMovies.addAll(event.getLoadedMovies());
         ConfigUtils.getObjInstance().saveMovieTopRatedPageIndex(event.getLoadedPageIndex() + 1);
         saveDataForOfflineMode(event, AppConstants.MOVIE_TOP_RATED);

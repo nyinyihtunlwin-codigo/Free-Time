@@ -9,6 +9,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import projects.nyinyihtunlwin.zcar.R;
+import projects.nyinyihtunlwin.zcar.ZCarApp;
 import projects.nyinyihtunlwin.zcar.activities.MovieDetailsActivity;
 import projects.nyinyihtunlwin.zcar.adapters.MovieAdapter;
 import projects.nyinyihtunlwin.zcar.components.EmptyViewPod;
@@ -35,6 +37,7 @@ import projects.nyinyihtunlwin.zcar.mvp.presenters.MovieMostPopularPresenter;
 import projects.nyinyihtunlwin.zcar.mvp.views.MovieMostPopularView;
 import projects.nyinyihtunlwin.zcar.persistence.MovieContract;
 import projects.nyinyihtunlwin.zcar.utils.AppConstants;
+import projects.nyinyihtunlwin.zcar.utils.ConfigUtils;
 
 
 public class MostPopularFragment extends BaseFragment implements MovieItemDelegate, MovieMostPopularView {
@@ -87,6 +90,29 @@ public class MostPopularFragment extends BaseFragment implements MovieItemDelega
             }
         });
 
+        // leave only 20 movies for offline mode///////////////////////////////////////////////////
+        Cursor cursor = getActivity().getApplicationContext().getContentResolver().query(MovieContract.MovieInScreenEntry.CONTENT_URI,
+                null,
+                MovieContract.MovieInScreenEntry.COLUMN_SCREEN + "=?",
+                new String[]{AppConstants.MOVIE_MOST_POPULAR},
+                MovieContract.MovieInScreenEntry.COLUMN_MOVIE_ID + " ASC");
+        if (cursor != null && cursor.getCount() > 20) {
+            if (cursor.moveToPosition(20)) {
+                String col21 = cursor.getString(cursor.getColumnIndex(MovieContract.MovieInScreenEntry.COLUMN_MOVIE_ID));
+                Log.e(ZCarApp.LOG_TAG, col21 + " Found");
+                int deletedRows = getActivity().getApplicationContext().getContentResolver().delete(MovieContract.MovieInScreenEntry.CONTENT_URI,
+                        MovieContract.MovieInScreenEntry.COLUMN_SCREEN + "=? AND " + MovieContract.MovieInScreenEntry.COLUMN_MOVIE_ID + ">=?",
+                        new String[]{AppConstants.MOVIE_MOST_POPULAR, col21});
+                Log.e(ZCarApp.LOG_TAG, "Deleted Extra Movies : " + String.valueOf(deletedRows));
+                ConfigUtils.getObjInstance().saveMovieNowOnCinemaPageIndex(1);
+            }
+        }
+        Log.e(ZCarApp.LOG_TAG, String.valueOf(cursor.getCount()) + " count");
+
+        //////////////////////////////////////////////////////////////////////////////////////////
+
+
+        showLoding();
         getActivity().getSupportLoaderManager().initLoader(AppConstants.MOVIE_MOST_POPULAR_LOADER_ID, null, this);
 
         return view;
@@ -99,12 +125,14 @@ public class MostPopularFragment extends BaseFragment implements MovieItemDelega
                 null,
                 MovieContract.MovieInScreenEntry.COLUMN_SCREEN + "=?",
                 new String[]{AppConstants.MOVIE_MOST_POPULAR},
-                null);
+                MovieContract.MovieInScreenEntry.COLUMN_MOVIE_ID + " ASC");
+
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mPresenter.onDataLoaded(getActivity().getApplicationContext(), data);
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -150,7 +178,7 @@ public class MostPopularFragment extends BaseFragment implements MovieItemDelega
 
     @Override
     public void displayMoviesList(List<MovieVO> moviesList) {
-        adapter.appendNewData(moviesList);
+        adapter.setNewData(moviesList);
         swipeRefreshLayout.setRefreshing(false);
     }
 

@@ -28,9 +28,6 @@ public class MovieTopRatedPresenter extends BasePresenter<MovieTopRatedView> {
         List<MovieVO> movieList = MovieModel.getInstance().getTopRatedMovies();
         if (!movieList.isEmpty()) {
             mView.displayMoviesList(movieList);
-        } else {
-            mView.showLoding();
-        //    MovieModel.getInstance().startLoadingMovies(mContext, AppConstants.MOVIE_TOP_RATED);
         }
     }
 
@@ -47,6 +44,9 @@ public class MovieTopRatedPresenter extends BasePresenter<MovieTopRatedView> {
                 movieList.add(newsVO);
             } while (data.moveToNext());
             mView.displayMoviesList(movieList);
+        } else {
+            mView.showLoding();
+            MovieModel.getInstance().startLoadingMovies(mContext, AppConstants.MOVIE_TOP_RATED);
         }
     }
 

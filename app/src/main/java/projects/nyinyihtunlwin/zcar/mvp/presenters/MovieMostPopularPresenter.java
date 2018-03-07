@@ -28,9 +28,6 @@ public class MovieMostPopularPresenter extends BasePresenter<MovieMostPopularVie
         List<MovieVO> movieList = MovieModel.getInstance().getMostPopularMovies();
         if (!movieList.isEmpty()) {
             mView.displayMoviesList(movieList);
-        } else {
-            mView.showLoding();
-         //   MovieModel.getInstance().startLoadingMovies(mContext, AppConstants.MOVIE_MOST_POPULAR);
         }
     }
 
@@ -47,6 +44,9 @@ public class MovieMostPopularPresenter extends BasePresenter<MovieMostPopularVie
                 movieList.add(newsVO);
             } while (data.moveToNext());
             mView.displayMoviesList(movieList);
+        } else {
+            mView.showLoding();
+            MovieModel.getInstance().startLoadingMovies(mContext, AppConstants.MOVIE_MOST_POPULAR);
         }
     }
 
