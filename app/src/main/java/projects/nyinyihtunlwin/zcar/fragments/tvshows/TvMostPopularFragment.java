@@ -19,7 +19,7 @@ public class TvMostPopularFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_most_popular, container, false);
+        View view = inflater.inflate(R.layout.fragment_tv_most_popular, container, false);
         return view;
     }
 }

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import projects.nyinyihtunlwin.zcar.data.vo.movies.MovieVO;
+import projects.nyinyihtunlwin.zcar.data.vo.tvshows.TvShowVO;
 import projects.nyinyihtunlwin.zcar.network.TvShowDataAgentImpl;
 import projects.nyinyihtunlwin.zcar.utils.AppConstants;
 import projects.nyinyihtunlwin.zcar.utils.ConfigUtils;
@@ -20,7 +21,7 @@ public class TvShowModel {
 
     private static TvShowModel objectInstance;
 
-    private List<MovieVO> mAiringTodayTvShows, mOnTheAirTvShows, mMostPopularTvShows, mTopRatedTvShows;
+    private List<TvShowVO> mAiringTodayTvShows, mOnTheAirTvShows, mMostPopularTvShows, mTopRatedTvShows;
 
 
     private TvShowModel() {
@@ -77,19 +78,19 @@ public class TvShowModel {
         }
     }
 
-    public List<MovieVO> getmAiringTodayTvShows() {
+    public List<TvShowVO> getmAiringTodayTvShows() {
         return mAiringTodayTvShows;
     }
 
-    public List<MovieVO> getmOnTheAirTvShows() {
+    public List<TvShowVO> getmOnTheAirTvShows() {
         return mOnTheAirTvShows;
     }
 
-    public List<MovieVO> getmMostPopularTvShows() {
+    public List<TvShowVO> getmMostPopularTvShows() {
         return mMostPopularTvShows;
     }
 
-    public List<MovieVO> getmTopRatedTvShows() {
+    public List<TvShowVO> getmTopRatedTvShows() {
         return mTopRatedTvShows;
     }
 }

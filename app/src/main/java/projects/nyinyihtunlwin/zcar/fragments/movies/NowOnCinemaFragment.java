@@ -11,6 +11,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import projects.nyinyihtunlwin.zcar.R;
+import projects.nyinyihtunlwin.zcar.ZCarApp;
 import projects.nyinyihtunlwin.zcar.activities.MovieDetailsActivity;
 import projects.nyinyihtunlwin.zcar.adapters.MovieAdapter;
 import projects.nyinyihtunlwin.zcar.components.EmptyViewPod;
@@ -91,6 +93,23 @@ public class NowOnCinemaFragment extends BaseFragment implements MovieItemDelega
                 mPresenter.onForceRefresh(getActivity().getApplicationContext());
             }
         });
+
+        // leave only 20 movies for offline mode///////////////////////////////////////////////////
+        Cursor cursor = getActivity().getApplicationContext().getContentResolver().query(MovieContract.MovieInScreenEntry.CONTENT_URI,
+                null,
+                MovieContract.MovieInScreenEntry.COLUMN_SCREEN + "=?",
+                new String[]{AppConstants.MOVIE_NOW_ON_CINEMA},
+                MovieContract.MovieInScreenEntry.COLUMN_MOVIE_ID + " ASC");
+        if (cursor != null && cursor.getCount() > 20) {
+            if(cursor.moveToPosition(20)){
+                String string = cursor.getString(cursor.getColumnIndex(MovieContract.MovieInScreenEntry.COLUMN_MOVIE_ID));
+                Log.e(ZCarApp.LOG_TAG, string+" Found");
+            }
+        }
+        Log.e(ZCarApp.LOG_TAG, String.valueOf(cursor.getCount()) + " count");
+
+        //////////////////////////////////////////////////////////////////////////////////////////
+
         showLoding();
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -104,11 +123,11 @@ public class NowOnCinemaFragment extends BaseFragment implements MovieItemDelega
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-            super.onConfigurationChanged(newConfig);
-            boolean orientationLand = (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ? true : false);
-            if(orientationLand){
-                rvNowOnCinema.setLayoutManager(new GridLayoutManager(getContext(),3));
-            }
+        super.onConfigurationChanged(newConfig);
+        boolean orientationLand = (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ? true : false);
+        if (orientationLand) {
+            rvNowOnCinema.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        }
     }
 
     @Override

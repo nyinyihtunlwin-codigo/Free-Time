@@ -104,10 +104,14 @@ public class MovieModel {
 
     @Subscribe
     public void onNowOnCinemaMoviesLoaded(MoviesiEvents.NowOnCinemaMoviesDataLoadedEvent event) {
+        if (event.getLoadedPageIndex() == 1) {
+            clearRecentMoviesOnDb(AppConstants.MOVIE_NOW_ON_CINEMA, event);
+        }
         mNowOnCinemaMovies.addAll(event.getLoadedMovies());
         ConfigUtils.getObjInstance().saveMovieNowOnCinemaPageIndex(event.getLoadedPageIndex() + 1);
         saveDataForOfflineMode(event, AppConstants.MOVIE_NOW_ON_CINEMA);
     }
+
 
     @Subscribe
     public void onPopularMoviesLoaded(MoviesiEvents.PoputlarMoviesDataLoadedEvent event) {
@@ -128,6 +132,13 @@ public class MovieModel {
         mTopRatedMovies.addAll(event.getLoadedMovies());
         ConfigUtils.getObjInstance().saveMovieTopRatedPageIndex(event.getLoadedPageIndex() + 1);
         saveDataForOfflineMode(event, AppConstants.MOVIE_TOP_RATED);
+    }
+
+    private void clearRecentMoviesOnDb(String screenName, MoviesiEvents.MoviesDataLoadedEvent event) {
+        int deletedRows = event.getContext().getContentResolver().delete(MovieContract.MovieInScreenEntry.CONTENT_URI,
+                MovieContract.MovieInScreenEntry.COLUMN_SCREEN + "=?",
+                new String[]{screenName});
+        Log.e(ZCarApp.LOG_TAG, "Deleted Recent Movies : " + String.valueOf(deletedRows));
     }
 
     private void saveDataForOfflineMode(MoviesiEvents.MoviesDataLoadedEvent event, String screenName) {

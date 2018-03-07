@@ -18,7 +18,7 @@ public class TvTopRatedFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_top_rated, container, false);
+        View view = inflater.inflate(R.layout.fragment_tv_top_rated, container, false);
         return view;
     }
 }
