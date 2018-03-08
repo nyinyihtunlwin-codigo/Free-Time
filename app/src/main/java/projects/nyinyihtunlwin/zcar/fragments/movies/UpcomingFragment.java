@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -76,6 +77,7 @@ public class UpcomingFragment extends BaseFragment implements MovieItemDelegate,
         mSmartScrollListener = new SmartScrollListener(new SmartScrollListener.OnSmartScrollListener() {
             @Override
             public void onListEndReached() {
+                showLoadMore();
                 mPresenter.onMovieListEndReached(getActivity().getApplicationContext());
             }
         });
@@ -90,31 +92,19 @@ public class UpcomingFragment extends BaseFragment implements MovieItemDelegate,
             }
         });
 
-        // leave only 20 movies for offline mode///////////////////////////////////////////////////
-        Cursor cursor = getActivity().getApplicationContext().getContentResolver().query(MovieContract.MovieInScreenEntry.CONTENT_URI,
-                null,
-                MovieContract.MovieInScreenEntry.COLUMN_SCREEN + "=?",
-                new String[]{AppConstants.MOVIE_UPCOMING},
-                MovieContract.MovieInScreenEntry.COLUMN_MOVIE_ID + " ASC");
-        if (cursor != null && cursor.getCount() > 20) {
-            if (cursor.moveToPosition(20)) {
-                String col21 = cursor.getString(cursor.getColumnIndex(MovieContract.MovieInScreenEntry.COLUMN_MOVIE_ID));
-                Log.e(ZCarApp.LOG_TAG, col21 + " Found");
-                int deletedRows = getActivity().getApplicationContext().getContentResolver().delete(MovieContract.MovieInScreenEntry.CONTENT_URI,
-                        MovieContract.MovieInScreenEntry.COLUMN_SCREEN + "=? AND " + MovieContract.MovieInScreenEntry.COLUMN_MOVIE_ID + ">=?",
-                        new String[]{AppConstants.MOVIE_UPCOMING, col21});
-                Log.e(ZCarApp.LOG_TAG, "Deleted Extra Movies : " + String.valueOf(deletedRows));
-                ConfigUtils.getObjInstance().saveUpcomingPageIndex(1);
-            }
-        }
-        Log.e(ZCarApp.LOG_TAG, String.valueOf(cursor.getCount()) + " count");
-
-        //////////////////////////////////////////////////////////////////////////////////////////
-
         showLoding();
         getActivity().getSupportLoaderManager().initLoader(AppConstants.MOVIE_UPCOMING_LOADER_ID, null, this);
 
         return view;
+    }
+
+    private void showLoadMore() {
+        Snackbar snackbar = Snackbar.make(rvUpcoming, "loading movies...", Snackbar.LENGTH_LONG);
+        View view = snackbar.getView();
+        TextView textView = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        textView.setTextColor(getResources().getColor(R.color.accent));
+        snackbar.show();
     }
 
     @Override
@@ -123,8 +113,7 @@ public class UpcomingFragment extends BaseFragment implements MovieItemDelegate,
                 MovieContract.MovieInScreenEntry.CONTENT_URI,
                 null,
                 MovieContract.MovieInScreenEntry.COLUMN_SCREEN + "=?",
-                new String[]{AppConstants.MOVIE_UPCOMING},
-                MovieContract.MovieInScreenEntry.COLUMN_MOVIE_ID + " ASC");
+                new String[]{AppConstants.MOVIE_UPCOMING}, null);
     }
 
     @Override

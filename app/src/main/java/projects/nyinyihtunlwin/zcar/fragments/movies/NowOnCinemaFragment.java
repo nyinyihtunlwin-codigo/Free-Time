@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
@@ -11,15 +14,20 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -38,6 +46,7 @@ import projects.nyinyihtunlwin.zcar.fragments.BaseFragment;
 import projects.nyinyihtunlwin.zcar.mvp.presenters.MovieNowOnCinemaPresenter;
 import projects.nyinyihtunlwin.zcar.mvp.views.MovieNowOnCinemaView;
 import projects.nyinyihtunlwin.zcar.persistence.MovieContract;
+import projects.nyinyihtunlwin.zcar.persistence.MovieDBHelper;
 import projects.nyinyihtunlwin.zcar.utils.AppConstants;
 import projects.nyinyihtunlwin.zcar.utils.ConfigUtils;
 
@@ -81,6 +90,7 @@ public class NowOnCinemaFragment extends BaseFragment implements MovieItemDelega
         mSmartScrollListener = new SmartScrollListener(new SmartScrollListener.OnSmartScrollListener() {
             @Override
             public void onListEndReached() {
+                showLoadMore();
                 mPresenter.onMovieListEndReached(getActivity().getApplicationContext());
             }
         });
@@ -95,27 +105,6 @@ public class NowOnCinemaFragment extends BaseFragment implements MovieItemDelega
             }
         });
 
-        // leave only 20 movies for offline mode///////////////////////////////////////////////////
-        Cursor cursor = getActivity().getApplicationContext().getContentResolver().query(MovieContract.MovieInScreenEntry.CONTENT_URI,
-                null,
-                MovieContract.MovieInScreenEntry.COLUMN_SCREEN + "=?",
-                new String[]{AppConstants.MOVIE_NOW_ON_CINEMA},
-                MovieContract.MovieInScreenEntry.COLUMN_MOVIE_ID + " ASC");
-        if (cursor != null && cursor.getCount() > 20) {
-            if (cursor.moveToPosition(20)) {
-                String col21 = cursor.getString(cursor.getColumnIndex(MovieContract.MovieInScreenEntry.COLUMN_MOVIE_ID));
-                Log.e(ZCarApp.LOG_TAG, col21 + " Found");
-                int deletedRows = getActivity().getApplicationContext().getContentResolver().delete(MovieContract.MovieInScreenEntry.CONTENT_URI,
-                        MovieContract.MovieInScreenEntry.COLUMN_SCREEN + "=? AND " + MovieContract.MovieInScreenEntry.COLUMN_MOVIE_ID + ">=?",
-                        new String[]{AppConstants.MOVIE_NOW_ON_CINEMA, col21});
-                Log.e(ZCarApp.LOG_TAG, "Deleted Extra Movies : " + String.valueOf(deletedRows));
-                ConfigUtils.getObjInstance().saveMovieNowOnCinemaPageIndex(1);
-            }
-        }
-        Log.e(ZCarApp.LOG_TAG, String.valueOf(cursor.getCount()) + " count");
-
-        //////////////////////////////////////////////////////////////////////////////////////////
-
         showLoding();
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -125,6 +114,15 @@ public class NowOnCinemaFragment extends BaseFragment implements MovieItemDelega
         }, 1000);
 
         return view;
+    }
+
+    private void showLoadMore() {
+        Snackbar snackbar = Snackbar.make(rvNowOnCinema, "loading movies...", Snackbar.LENGTH_LONG);
+        View view = snackbar.getView();
+        TextView textView = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        textView.setTextColor(getResources().getColor(R.color.accent));
+        snackbar.show();
     }
 
     @Override
@@ -142,8 +140,7 @@ public class NowOnCinemaFragment extends BaseFragment implements MovieItemDelega
                 MovieContract.MovieInScreenEntry.CONTENT_URI,
                 null,
                 MovieContract.MovieInScreenEntry.COLUMN_SCREEN + "=?",
-                new String[]{AppConstants.MOVIE_NOW_ON_CINEMA},
-                MovieContract.MovieInScreenEntry.COLUMN_MOVIE_ID + " ASC");
+                new String[]{AppConstants.MOVIE_NOW_ON_CINEMA}, null);
     }
 
     @Override

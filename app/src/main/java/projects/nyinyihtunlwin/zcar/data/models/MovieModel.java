@@ -2,6 +2,9 @@ package projects.nyinyihtunlwin.zcar.data.models;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.text.TextUtils;
 import android.util.Log;
 
 import org.greenrobot.eventbus.EventBus;
@@ -16,6 +19,7 @@ import projects.nyinyihtunlwin.zcar.data.vo.movies.MovieVO;
 import projects.nyinyihtunlwin.zcar.events.MoviesiEvents;
 import projects.nyinyihtunlwin.zcar.network.MovieDataAgentImpl;
 import projects.nyinyihtunlwin.zcar.persistence.MovieContract;
+import projects.nyinyihtunlwin.zcar.persistence.MovieDBHelper;
 import projects.nyinyihtunlwin.zcar.utils.AppConstants;
 import projects.nyinyihtunlwin.zcar.utils.ConfigUtils;
 
@@ -87,6 +91,47 @@ public class MovieModel {
                 break;
         }
         loadMovies(context, movieType);
+    }
+
+    public void checkForOfflineCache(Context context, String screenType) {
+        Cursor cursor = context.getContentResolver().query(MovieContract.MovieInScreenEntry.CONTENT_URI,
+                null,
+                MovieContract.MovieInScreenEntry.COLUMN_SCREEN + "=?",
+                new String[]{screenType}, null);
+        if (cursor != null) {
+            if (cursor.getCount() > 0) {
+                if (cursor.getCount() > 20) {
+                    List<String> toDeleteMoviesIds = new ArrayList<>();
+                    for (cursor.moveToPosition(20); !cursor.isAfterLast(); cursor.moveToNext()) {
+                        String col21 = cursor.getString(cursor.getColumnIndex(MovieContract.MovieInScreenEntry.COLUMN_MOVIE_ID));
+                        Log.e(ZCarApp.LOG_TAG, col21 + "YOH");
+                        toDeleteMoviesIds.add(col21);
+                    }
+                    String[] movieIdsToDelete = toDeleteMoviesIds.toArray(new String[0]);
+                    String args = TextUtils.join(", ", movieIdsToDelete);
+                    Log.e(ZCarApp.LOG_TAG, args);
+                    MovieDBHelper dbHelper = new MovieDBHelper(context);
+                    SQLiteDatabase db = dbHelper.getWritableDatabase();
+                    db.execSQL(String.format("DELETE FROM " + MovieContract.MovieInScreenEntry.TABLE_NAME +
+                            " WHERE " + MovieContract.MovieInScreenEntry.COLUMN_MOVIE_ID + " IN (%s);", args));
+                }
+                switch (screenType) {
+                    case AppConstants.MOVIE_NOW_ON_CINEMA:
+                        ConfigUtils.getObjInstance().saveMovieNowOnCinemaPageIndex(2);
+                        break;
+                    case AppConstants.MOVIE_UPCOMING:
+                        ConfigUtils.getObjInstance().saveUpcomingPageIndex(2);
+                        break;
+                    case AppConstants.MOVIE_MOST_POPULAR:
+                        ConfigUtils.getObjInstance().saveMovieMostPopularPageIndex(2);
+                        break;
+                    case AppConstants.MOVIE_TOP_RATED:
+                        ConfigUtils.getObjInstance().saveMovieTopRatedPageIndex(2);
+                        break;
+                }
+            }
+        }
+        //////////////////////////////////////////////////////////////////////////////////////////
     }
 
     @Subscribe

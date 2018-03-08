@@ -205,6 +205,8 @@ public class MovieProvider extends ContentProvider {
         return rowDeleted;
     }
 
+
+
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String selection, @Nullable String[] selectionArgs) {
         final SQLiteDatabase db = mDbHelper.getWritableDatabase();

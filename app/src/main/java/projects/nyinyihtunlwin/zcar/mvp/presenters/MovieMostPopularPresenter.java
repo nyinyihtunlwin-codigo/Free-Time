@@ -25,6 +25,9 @@ public class MovieMostPopularPresenter extends BasePresenter<MovieMostPopularVie
 
     @Override
     public void onStart() {
+        //check offline data storage
+        MovieModel.getInstance().checkForOfflineCache(mContext,AppConstants.MOVIE_MOST_POPULAR);
+
         List<MovieVO> movieList = MovieModel.getInstance().getMostPopularMovies();
         if (!movieList.isEmpty()) {
             mView.displayMoviesList(movieList);
