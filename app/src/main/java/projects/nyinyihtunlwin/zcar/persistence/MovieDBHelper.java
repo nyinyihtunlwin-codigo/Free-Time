@@ -15,12 +15,12 @@ public class MovieDBHelper extends SQLiteOpenHelper {
             MovieContract.MovieEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             MovieContract.MovieEntry.COLUMN_MOVIE_ID + " VARCHAR(256), " +
             MovieContract.MovieEntry.COLUMN_TITLE + " TEXT NOT NULL, " +
-            MovieContract.MovieEntry.COLUMN_ORIGINAL_TITLE + " TEXT NOT NULL, " +
+            MovieContract.MovieEntry.COLUMN_ORIGINAL_TITLE + " TEXT, " +
             MovieContract.MovieEntry.COLUMN_VOTE_COUNT + " INTEGER, " +
             MovieContract.MovieEntry.COLUMN_VIDEO + " INTEGER DEFAULT 0, " +
             MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE + " REAL, " +
             MovieContract.MovieEntry.COLUMN_POPULARITY + " REAL, " +
-            MovieContract.MovieEntry.COLUMN_POSTER_PATH + " TEXT NOT NULL, " +
+            MovieContract.MovieEntry.COLUMN_POSTER_PATH + " TEXT, " +
             MovieContract.MovieEntry.COLUMN_ORIGINAL_LANGUAGE + " TEXT NOT NULL, " +
             MovieContract.MovieEntry.COLUMN_BACKDROP_PATH + " TEXT, " +
             MovieContract.MovieEntry.COLUMN_ADULT + " INTEGER DEFAULT 0, " +

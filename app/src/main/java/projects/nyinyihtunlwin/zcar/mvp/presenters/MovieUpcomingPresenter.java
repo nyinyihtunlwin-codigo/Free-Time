@@ -21,12 +21,13 @@ public class MovieUpcomingPresenter extends BasePresenter<MovieUpcomingView> {
 
     public MovieUpcomingPresenter(Context context) {
         this.mContext = context;
+        //check offline data storage
+        MovieModel.getInstance().checkForOfflineCache(mContext,AppConstants.MOVIE_UPCOMING);
     }
 
     @Override
     public void onStart() {
-        //check offline data storage
-        MovieModel.getInstance().checkForOfflineCache(mContext,AppConstants.MOVIE_UPCOMING);
+
 
         List<MovieVO> movieList = MovieModel.getInstance().getUpcomingMovies();
         if (!movieList.isEmpty()) {

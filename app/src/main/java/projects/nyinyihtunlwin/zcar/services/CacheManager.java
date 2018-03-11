@@ -1,6 +1,7 @@
 package projects.nyinyihtunlwin.zcar.services;
 
 import android.app.IntentService;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.Nullable;
@@ -25,10 +26,11 @@ public class CacheManager extends IntentService {
 
 
     protected void onHandleIntent(@Nullable Intent intent) {
-     //   mDbHelper = new MovieDBHelper(getApplicationContext());
-     //   SQLiteDatabase db = mDbHelper.getWritableDatabase();
-     //   int rowDeleted;
-      //  rowDeleted = db.delete(MovieContract.MovieEntry.TABLE_NAME, null, null);
-      //  Log.e(ZCarApp.LOG_TAG, String.valueOf(rowDeleted));
+
+        //   mDbHelper = new MovieDBHelper(getApplicationContext());
+        //   SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        //   int rowDeleted;
+        //  rowDeleted = db.delete(MovieContract.MovieEntry.TABLE_NAME, null, null);
+        //  Log.e(ZCarApp.LOG_TAG, String.valueOf(rowDeleted));
     }
 }

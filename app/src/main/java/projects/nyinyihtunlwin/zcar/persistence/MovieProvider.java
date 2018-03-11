@@ -4,6 +4,7 @@ import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,6 +12,8 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
+import projects.nyinyihtunlwin.zcar.services.CacheManager;
 
 
 public class MovieProvider extends ContentProvider {
@@ -171,17 +174,16 @@ public class MovieProvider extends ContentProvider {
         int insertedCount = 0;
 
         try {
-            db.beginTransaction();
-            for (ContentValues cv : values) {
-                long _id = db.insert(tableName, null, cv);
-                if (_id > 0) {
-                    insertedCount++;
+                db.beginTransaction();
+                for (ContentValues cv : values) {
+                    long _id = db.insert(tableName, null, cv);
+                    if (_id > 0) {
+                        insertedCount++;
+                    }
                 }
-            }
-            db.setTransactionSuccessful();
+                db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
-            db.close();
         }
 
         Context context = getContext();
@@ -204,7 +206,6 @@ public class MovieProvider extends ContentProvider {
         }
         return rowDeleted;
     }
-
 
 
     @Override

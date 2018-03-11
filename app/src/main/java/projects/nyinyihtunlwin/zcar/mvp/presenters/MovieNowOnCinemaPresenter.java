@@ -21,13 +21,12 @@ public class MovieNowOnCinemaPresenter extends BasePresenter<MovieNowOnCinemaVie
 
     public MovieNowOnCinemaPresenter(Context context) {
         this.mContext = context;
+        // check offline data storage
+        MovieModel.getInstance().checkForOfflineCache(mContext,AppConstants.MOVIE_NOW_ON_CINEMA);
     }
 
     @Override
     public void onStart() {
-        // check offline data storage
-        MovieModel.getInstance().checkForOfflineCache(mContext,AppConstants.MOVIE_NOW_ON_CINEMA);
-
         List<MovieVO> movieList = MovieModel.getInstance().getNowOnCinemaMovies();
         if (!movieList.isEmpty()) {
             mView.displayMoviesList(movieList);

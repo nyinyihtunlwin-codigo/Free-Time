@@ -21,13 +21,12 @@ public class MovieTopRatedPresenter extends BasePresenter<MovieTopRatedView> {
 
     public MovieTopRatedPresenter(Context context) {
         this.mContext = context;
+        //check offline data storage
+        MovieModel.getInstance().checkForOfflineCache(mContext, AppConstants.MOVIE_TOP_RATED);
     }
 
     @Override
     public void onStart() {
-        //check offline data storage
-        MovieModel.getInstance().checkForOfflineCache(mContext, AppConstants.MOVIE_TOP_RATED);
-
         List<MovieVO> movieList = MovieModel.getInstance().getTopRatedMovies();
         if (!movieList.isEmpty()) {
             mView.displayMoviesList(movieList);
