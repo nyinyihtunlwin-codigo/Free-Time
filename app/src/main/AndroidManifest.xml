@@ -28,15 +28,21 @@
             android:syncable="true" />
 
         <activity
-            android:label="@string/movie_name"
             android:name=".activities.MovieDetailsActivity"
+            android:label="@string/movie_name"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
+        <activity
+            android:name=".activities.SearchActivity"
+            android:label="@string/search"
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
 
         <service
             android:name=".services.CacheManager"
-            android:exported="false"/>
+            android:exported="false" />
     </application>
 
 </manifest>

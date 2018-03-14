@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -58,6 +59,9 @@ public class MainActivity extends BaseActivity implements DrawerMenuItemDelegate
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
+    @BindView(R.id.fab)
+    FloatingActionButton fabSearch;
+
     DrawerLayout drawer;
 
 
@@ -104,6 +108,7 @@ public class MainActivity extends BaseActivity implements DrawerMenuItemDelegate
 
         btnMovies.setOnClickListener(this);
         btnTvShows.setOnClickListener(this);
+        fabSearch.setOnClickListener(this);
 
         setFragment(new MoviesFragment());
 
@@ -153,6 +158,10 @@ public class MainActivity extends BaseActivity implements DrawerMenuItemDelegate
             case R.id.btn_tv_shows:
                 setFragment(new TVShowsFragment());
                 tvCurrentSection.setText("TV Shows");
+                break;
+            case R.id.fab:
+                Intent intent = SearchActivity.newIntent(getApplicationContext());
+                startActivity(intent);
                 break;
         }
 

@@ -15,6 +15,7 @@ import java.util.List;
 
 import projects.nyinyihtunlwin.zcar.ZCarApp;
 import projects.nyinyihtunlwin.zcar.data.vo.GenreVO;
+import projects.nyinyihtunlwin.zcar.data.vo.SearchResultVO;
 import projects.nyinyihtunlwin.zcar.data.vo.movies.MovieVO;
 import projects.nyinyihtunlwin.zcar.events.MoviesiEvents;
 import projects.nyinyihtunlwin.zcar.network.MovieDataAgentImpl;
@@ -275,6 +276,7 @@ public class MovieModel {
     public List<MovieVO> getTopRatedMovies() {
         return mTopRatedMovies;
     }
+
 
     private void loadMovies(Context context, String movieType) {
         switch (movieType) {

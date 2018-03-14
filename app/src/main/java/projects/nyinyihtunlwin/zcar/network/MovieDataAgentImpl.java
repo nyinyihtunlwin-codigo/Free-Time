@@ -12,6 +12,8 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import projects.nyinyihtunlwin.zcar.data.vo.movies.MovieVO;
 import projects.nyinyihtunlwin.zcar.events.MoviesiEvents;
+import projects.nyinyihtunlwin.zcar.events.SearchEvents;
+import projects.nyinyihtunlwin.zcar.network.responses.SearchResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.GetMovieCreditsResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.GetMovieReviewsResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.GetMovieTrailersResponse;
@@ -58,6 +60,7 @@ public class MovieDataAgentImpl implements MovieDataAgent {
         }
         return objectInstance;
     }
+
 
     @Override
     public void loadPopularMovies(String apiKey, int pageNo, String region, final Context context) {
@@ -187,7 +190,7 @@ public class MovieDataAgentImpl implements MovieDataAgent {
                 if (getMovieReviewsResponse != null) {
                     if (getMovieReviewsResponse.getReviews().size() > 0) {
                         EventBus.getDefault().post(new MoviesiEvents.MovieReviewsDataLoadedEvent(getMovieReviewsResponse.getReviews()));
-                    }else {
+                    } else {
                         EventBus.getDefault().post(new MoviesiEvents.ErrorInvokingAPIEvent("No reviews for now!"));
                     }
                 }
@@ -206,6 +209,27 @@ public class MovieDataAgentImpl implements MovieDataAgent {
                         && getMovieCreditsResponse.getCasts().size() > 0) {
                     EventBus.getDefault().post(new MoviesiEvents.MovieCreditsDataLoadedEvent(getMovieCreditsResponse.getCasts()));
                 }
+            }
+        });
+    }
+
+    @Override
+    public void startSearching(String apiKey, int pageNo, String query) {
+        Call<SearchResponse> loadSearhCall = movieAPI.search(apiKey, pageNo, query);
+        loadSearhCall.enqueue(new Callback<SearchResponse>() {
+            @Override
+            public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
+                SearchResponse getSearchResponse = response.body();
+                if (getSearchResponse != null
+                        && getSearchResponse.getResults().size() > 0) {
+                    SearchEvents.SearchResultsDataLoadedEvent event = new SearchEvents.SearchResultsDataLoadedEvent(getSearchResponse.getPage(), getSearchResponse.getResults());
+                    EventBus.getDefault().post(event);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SearchResponse> call, Throwable t) {
+
             }
         });
     }

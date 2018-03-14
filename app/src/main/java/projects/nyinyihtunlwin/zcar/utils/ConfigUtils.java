@@ -14,6 +14,8 @@ public class ConfigUtils {
     private static final String KEY_MOVIE_MOST_POPULAR_PAGE_INDEX = "KEY_MOVIE_MOST_POPULAR_PAGE_INDEX";
     private static final String KEY_MOVIE_TOP_RATED_PAGE_INDEX = "KEY_MOVIE_TOP_RATED_PAGE_INDEX";
 
+    private static final String KEY_SEARCH_RESULT_PAGE_INDEX = "KEY_SEARCH_RESULT_PAGE_INDEX";
+
     private SharedPreferences mSharedPreferences;
 
     private static ConfigUtils sObjInstance;
@@ -61,5 +63,13 @@ public class ConfigUtils {
 
     public int loadMovieTopRatedPageIndex() {
         return mSharedPreferences.getInt(KEY_MOVIE_TOP_RATED_PAGE_INDEX, 1);
+    }
+
+    public void saveSearchResultPageIndex(int pageIndex) {
+        mSharedPreferences.edit().putInt(KEY_SEARCH_RESULT_PAGE_INDEX, pageIndex).apply();
+    }
+
+    public int loadSearchResultPageIndex() {
+        return mSharedPreferences.getInt(KEY_SEARCH_RESULT_PAGE_INDEX, 1);
     }
 }

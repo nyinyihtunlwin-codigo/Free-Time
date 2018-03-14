@@ -24,5 +24,7 @@ public interface MovieDataAgent {
 
     void loadMovieReviews(int movieId, String apiKey);
 
-    void loadMovieCredits(int movieId,String apiKey);
+    void loadMovieCredits(int movieId, String apiKey);
+
+    void startSearching(String apiKey, int pageNo, String query);
 }
