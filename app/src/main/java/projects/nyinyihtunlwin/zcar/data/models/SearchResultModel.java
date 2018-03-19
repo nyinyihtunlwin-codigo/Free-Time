@@ -1,13 +1,5 @@
 package projects.nyinyihtunlwin.zcar.data.models;
 
-import android.content.Context;
-
-import org.greenrobot.eventbus.EventBus;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import projects.nyinyihtunlwin.zcar.data.vo.SearchResultVO;
 import projects.nyinyihtunlwin.zcar.network.MovieDataAgentImpl;
 import projects.nyinyihtunlwin.zcar.utils.AppConstants;
 import projects.nyinyihtunlwin.zcar.utils.ConfigUtils;
@@ -23,7 +15,6 @@ public class SearchResultModel {
     private String mQuery;
 
     private SearchResultModel() {
-        EventBus.getDefault().register(this);
     }
 
     public static SearchResultModel getInstance() {
@@ -40,6 +31,7 @@ public class SearchResultModel {
     }
 
     public void loadMoreResults(String mQuery) {
+        ConfigUtils.getObjInstance().saveSearchResultPageIndex(ConfigUtils.getObjInstance().loadSearchResultPageIndex() + 1);
         if (mQuery != null) {
             MovieDataAgentImpl.getObjectInstance().startSearching(AppConstants.API_KEY, ConfigUtils.getObjInstance().loadSearchResultPageIndex(), mQuery);
         }

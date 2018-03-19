@@ -14,9 +14,6 @@ import android.widget.TextView;
 
 import com.wang.avi.AVLoadingIndicatorView;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-
 import java.util.List;
 
 import butterknife.BindView;
@@ -26,11 +23,8 @@ import projects.nyinyihtunlwin.zcar.adapters.SearchResultAdapter;
 import projects.nyinyihtunlwin.zcar.components.SmartRecyclerView;
 import projects.nyinyihtunlwin.zcar.components.SmartScrollListener;
 import projects.nyinyihtunlwin.zcar.data.vo.SearchResultVO;
-import projects.nyinyihtunlwin.zcar.events.SearchEvents;
 import projects.nyinyihtunlwin.zcar.mvp.presenters.SearchPresenter;
 import projects.nyinyihtunlwin.zcar.mvp.views.SearchView;
-import projects.nyinyihtunlwin.zcar.network.MovieDataAgentImpl;
-import projects.nyinyihtunlwin.zcar.utils.AppConstants;
 
 /**
  * Created by Dell on 3/11/2018.
@@ -107,20 +101,21 @@ public class SearchActivity extends BaseActivity implements SearchView {
     @Override
     protected void onStart() {
         super.onStart();
-
+        mPresenter.onStart();
     }
 
 
     @Override
     protected void onStop() {
         super.onStop();
-
+        mPresenter.onStop();
     }
 
     @Override
     public void displaySearchResults(List<SearchResultVO> resultList) {
         mAdapter.appendNewData(resultList);
         loading.setVisibility(View.GONE);
+        tvMessage.setVisibility(View.GONE);
     }
 
     @Override

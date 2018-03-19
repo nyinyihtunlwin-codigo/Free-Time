@@ -51,6 +51,6 @@ public class SearchPresenter extends BasePresenter<SearchView> {
     }
 
     public void onResultListEndReached() {
-        SearchResultModel.getInstance().startSearching(mQuery);
+        SearchResultModel.getInstance().loadMoreResults(mQuery);
     }
 }
