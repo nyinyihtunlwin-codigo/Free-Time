@@ -17,6 +17,93 @@ public class MovieContract {
     public static final String PATH_MOVIE_GENRE = "movie_genre";
     public static final String PATH_MOVIE_IN_SCREEN = "movie_screen";
 
+    public static final String PATH_TV_SHOWS = "tv_shows";
+    public static final String PATH_TV_SHOWS_GENRE = "tv_shows_genre";
+    public static final String PATH_TV_SHOWS_IN_SCREEN = "tv_shows_screen";
+
+    public static final class TvShowsEntry implements BaseColumns {
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_TV_SHOWS).build();
+
+        public static final String DIR_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TV_SHOWS;
+
+        public static final String ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TV_SHOWS;
+
+        public static final String TABLE_NAME = "tv_shows";
+
+        public static final String COLUMN_TV_SHOWS_ID = "tv_show_id";
+        public static final String COLUMN_VOTE_COUNT = "vote_count";
+        public static final String COLUMN_VIDEO = "video";
+        public static final String COLUMN_VOTE_AVERAGE = "vote_average";
+        public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_POPULARITY = "popularity";
+        public static final String COLUMN_POSTER_PATH = "poster_path";
+        public static final String COLUMN_ORIGINAL_LANGUAGE = "original_language";
+        public static final String COLUMN_ORIGINAL_NAME = "original_name";
+        public static final String COLUMN_BACKDROP_PATH = "backdrop_path";
+        public static final String COLUMN_ADULT = "adult";
+        public static final String COLUMN_OVERVIEW = "overview";
+        public static final String COLUMN_RELEASE_DATE = "release_date";
+        public static final String COLUMN_FIRST_AIR_DATE = "first_air_date";
+
+
+        public static Uri buildTvShowUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        public static Uri buildTvShowUriWithTitle(String tvShowTitle) {
+            return CONTENT_URI.buildUpon()
+                    .appendQueryParameter(COLUMN_NAME, tvShowTitle)
+                    .build();
+        }
+
+        public static String getTitleFromParam(Uri uri) {
+            return uri.getQueryParameter(COLUMN_NAME);
+        }
+    }
+
+    public static final class TvShowInScreenEntry implements BaseColumns {
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_TV_SHOWS_IN_SCREEN).build();
+
+        public static final String DIR_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TV_SHOWS_IN_SCREEN;
+
+        public static final String ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TV_SHOWS_IN_SCREEN;
+
+        public static final String TABLE_NAME = "tv_show_in_screen";
+
+        public static final String COLUMN_TV_SHOWS_ID = "tv_show_id";
+        public static final String COLUMN_SCREEN = "screen";
+
+        public static Uri buildTvShowUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+    }
+
+    public static final class TvShowGenreEntry implements BaseColumns {
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_TV_SHOWS_GENRE).build();
+
+        public static final String DIR_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TV_SHOWS_GENRE;
+
+        public static final String ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TV_SHOWS_GENRE;
+
+        public static final String TABLE_NAME = "tv_show_genre";
+
+        public static final String COLUMN_GENRE_ID = "genre_id";
+        public static final String COLUMN_TV_SHOW_ID = "tv_show_id";
+
+        public static Uri buildTvShowUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+    }
+
     public static final class MovieEntry implements BaseColumns {
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIES).build();
