@@ -39,6 +39,8 @@ public class TvShowModel {
         return objectInstance;
     }
 
+
+    
     public void startLoadingTvShows(Context context, String showType) {
         switch (showType) {
             case AppConstants.TV_SHOWS_AIRING_TODAY:
