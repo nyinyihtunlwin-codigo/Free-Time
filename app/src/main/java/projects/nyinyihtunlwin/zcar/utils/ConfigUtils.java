@@ -14,6 +14,11 @@ public class ConfigUtils {
     private static final String KEY_MOVIE_MOST_POPULAR_PAGE_INDEX = "KEY_MOVIE_MOST_POPULAR_PAGE_INDEX";
     private static final String KEY_MOVIE_TOP_RATED_PAGE_INDEX = "KEY_MOVIE_TOP_RATED_PAGE_INDEX";
 
+    private static final String KEY_TV_SHOW_AIRING_TODAY_PAGE_INDEX = "KEY_TV_SHOW_AIRING_TODAY_PAGE_INDEX";
+    private static final String KEY_TV_SHOW_MOST_POPULAR_PAGE_INDEX = "KEY_TV_SHOW_MOST_POPULAR_PAGE_INDEX";
+    private static final String KEY_TV_SHOW_ON_THE_AIR_PAGE_INDEX = "KEY_TV_SHOW_ON_THE_AIR_PAGE_INDEX";
+    private static final String KEY_TV_SHOW_TOP_RATED_PAGE_INDEX = "KEY_TV_SHOW_TOP_RATED_PAGE_INDEX";
+
     private static final String KEY_SEARCH_RESULT_PAGE_INDEX = "KEY_SEARCH_RESULT_PAGE_INDEX";
 
     private SharedPreferences mSharedPreferences;
@@ -71,5 +76,37 @@ public class ConfigUtils {
 
     public int loadSearchResultPageIndex() {
         return mSharedPreferences.getInt(KEY_SEARCH_RESULT_PAGE_INDEX, 1);
+    }
+
+    // tv shows
+
+    public void saveTvShowsAiringTodayPageIndex(int pageIndex) {
+        mSharedPreferences.edit().putInt(KEY_TV_SHOW_AIRING_TODAY_PAGE_INDEX, pageIndex).apply();
+    }
+
+    public int loadTvShowsAiringTodayPageIndex() {
+        return mSharedPreferences.getInt(KEY_TV_SHOW_AIRING_TODAY_PAGE_INDEX, 1);
+    }
+
+    public void saveTvShowsMostPopularPageIndex(int pageIndex) {
+        mSharedPreferences.edit().putInt(KEY_TV_SHOW_MOST_POPULAR_PAGE_INDEX, pageIndex).apply();
+    }
+
+    public int loadTvShowsMostPopularPageIndex() {
+        return mSharedPreferences.getInt(KEY_TV_SHOW_MOST_POPULAR_PAGE_INDEX, 1);
+    }
+    public void saveTvShowsOnTheAirPageIndex(int pageIndex) {
+        mSharedPreferences.edit().putInt(KEY_TV_SHOW_ON_THE_AIR_PAGE_INDEX, pageIndex).apply();
+    }
+
+    public int loadTvShowsOnTheAirPageIndex() {
+        return mSharedPreferences.getInt(KEY_TV_SHOW_ON_THE_AIR_PAGE_INDEX, 1);
+    }
+    public void saveTvShowsTopRatedPageIndex(int pageIndex) {
+        mSharedPreferences.edit().putInt(KEY_TV_SHOW_TOP_RATED_PAGE_INDEX, pageIndex).apply();
+    }
+
+    public int loadTvShowsTopRatedPageIndex() {
+        return mSharedPreferences.getInt(KEY_TV_SHOW_TOP_RATED_PAGE_INDEX, 1);
     }
 }

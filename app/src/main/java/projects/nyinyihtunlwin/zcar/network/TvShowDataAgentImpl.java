@@ -4,9 +4,12 @@ import android.content.Context;
 
 import com.google.gson.Gson;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
+import projects.nyinyihtunlwin.zcar.events.TvShowsEvents;
 import projects.nyinyihtunlwin.zcar.network.responses.tvshows.TvAiringTodayResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.tvshows.TvMostPopularResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.tvshows.TvOnTheAirResponse;
@@ -60,14 +63,17 @@ public class TvShowDataAgentImpl implements TvShowDataAgent {
                 TvAiringTodayResponse getTvAiringTodayResponse = response.body();
                 if (getTvAiringTodayResponse != null
                         && getTvAiringTodayResponse.getTvShows().size() > 0) {
-
+                    TvShowsEvents.TvAiringTodayEvent tvAiringTodayEvent = new TvShowsEvents.TvAiringTodayEvent(
+                            getTvAiringTodayResponse.getPage(), getTvAiringTodayResponse.getTvShows(), context
+                    );
+                    EventBus.getDefault().post(tvAiringTodayEvent);
                 }
             }
         });
     }
 
     @Override
-    public void loadTvOnTheAir(String apiKey, int pageNo, String region, Context context) {
+    public void loadTvOnTheAir(String apiKey, int pageNo, String region, final Context context) {
         Call<TvOnTheAirResponse> loadTvOnTheAirCall = movieAPI.loadTvOnTheAir(apiKey, pageNo);
         loadTvOnTheAirCall.enqueue(new MovieCallback<TvOnTheAirResponse>() {
             @Override
@@ -75,14 +81,17 @@ public class TvShowDataAgentImpl implements TvShowDataAgent {
                 TvOnTheAirResponse getTvOnTheAirResponse = response.body();
                 if (getTvOnTheAirResponse != null
                         && getTvOnTheAirResponse.getTvShows().size() > 0) {
-
+                    TvShowsEvents.TvOnTheAirEvent tvOnTheAirEvent = new TvShowsEvents.TvOnTheAirEvent(
+                            getTvOnTheAirResponse.getPage(), getTvOnTheAirResponse.getTvShows(), context
+                    );
+                    EventBus.getDefault().post(tvOnTheAirEvent);
                 }
             }
         });
     }
 
     @Override
-    public void loadTvMostPopular(String apiKey, int pageNo, String region, Context context) {
+    public void loadTvMostPopular(String apiKey, int pageNo, String region, final Context context) {
         Call<TvMostPopularResponse> loadTvMostPopularCall = movieAPI.loadTvMostPopular(apiKey, pageNo);
         loadTvMostPopularCall.enqueue(new MovieCallback<TvMostPopularResponse>() {
             @Override
@@ -90,14 +99,17 @@ public class TvShowDataAgentImpl implements TvShowDataAgent {
                 TvMostPopularResponse getTvMostPopularResponse = response.body();
                 if (getTvMostPopularResponse != null
                         && getTvMostPopularResponse.getTvShows().size() > 0) {
-
+                    TvShowsEvents.TvMostPopularEvent tvMostPopularEvent = new TvShowsEvents.TvMostPopularEvent(
+                            getTvMostPopularResponse.getPage(), getTvMostPopularResponse.getTvShows(), context
+                    );
+                    EventBus.getDefault().post(tvMostPopularEvent);
                 }
             }
         });
     }
 
     @Override
-    public void loadTvTopRated(String apiKey, int pageNo, String region, Context context) {
+    public void loadTvTopRated(String apiKey, int pageNo, String region, final Context context) {
         Call<TvTopRatedResponse> loadTvTopRatedCall = movieAPI.loadTvTopRated(apiKey, pageNo);
         loadTvTopRatedCall.enqueue(new MovieCallback<TvTopRatedResponse>() {
             @Override
@@ -105,7 +117,10 @@ public class TvShowDataAgentImpl implements TvShowDataAgent {
                 TvTopRatedResponse getTvTopRatedResponse = response.body();
                 if (getTvTopRatedResponse != null
                         && getTvTopRatedResponse.getTvShows().size() > 0) {
-
+                    TvShowsEvents.TvTopRatedEvent tvTopRatedEvent = new TvShowsEvents.TvTopRatedEvent(
+                            getTvTopRatedResponse.getPage(), getTvTopRatedResponse.getTvShows(), context
+                    );
+                    EventBus.getDefault().post(tvTopRatedEvent);
                 }
             }
         });

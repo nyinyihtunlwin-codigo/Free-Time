@@ -1,8 +1,15 @@
 package projects.nyinyihtunlwin.zcar.data.vo.tvshows;
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import projects.nyinyihtunlwin.zcar.persistence.MovieContract;
 
 /**
  * Created by Dell on 2/22/2018.
@@ -11,7 +18,7 @@ import java.util.List;
 public class TvShowVO {
 
     @SerializedName("id")
-    private Integer id;
+    private String id;
 
     @SerializedName("name")
     private String name;
@@ -49,7 +56,7 @@ public class TvShowVO {
     @SerializedName("origin_country")
     private List<String> originCountries;
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
@@ -99,6 +106,62 @@ public class TvShowVO {
 
     public List<String> getOriginCountries() {
         return originCountries;
+    }
+
+
+    public ContentValues parseToContentValues() {
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MovieContract.TvShowsEntry.COLUMN_TV_SHOWS_ID, id);
+        contentValues.put(MovieContract.TvShowsEntry.COLUMN_VOTE_COUNT, voteCount);
+        contentValues.put(MovieContract.TvShowsEntry.COLUMN_VOTE_AVERAGE, voteAverage);
+        contentValues.put(MovieContract.TvShowsEntry.COLUMN_ORIGINAL_NAME, originalName);
+        contentValues.put(MovieContract.TvShowsEntry.COLUMN_NAME, name);
+        contentValues.put(MovieContract.TvShowsEntry.COLUMN_POPULARITY, popularity);
+        contentValues.put(MovieContract.TvShowsEntry.COLUMN_POSTER_PATH, posterPath);
+        contentValues.put(MovieContract.TvShowsEntry.COLUMN_ORIGINAL_LANGUAGE, originalLanguage);
+        contentValues.put(MovieContract.TvShowsEntry.COLUMN_BACKDROP_PATH, backdropPath);
+        contentValues.put(MovieContract.TvShowsEntry.COLUMN_OVERVIEW, overview);
+        contentValues.put(MovieContract.TvShowsEntry.COLUMN_FIRST_AIR_DATE, firstAirDate);
+        return contentValues;
+    }
+
+    public static TvShowVO parseFromCursor(Context context, Cursor cursor) {
+        TvShowVO tvShow = new TvShowVO();
+        tvShow.id = cursor.getString(cursor.getColumnIndex(MovieContract.TvShowsEntry.COLUMN_TV_SHOWS_ID));
+        tvShow.voteCount = cursor.getInt(cursor.getColumnIndex(MovieContract.TvShowsEntry.COLUMN_VOTE_COUNT));
+        tvShow.voteAverage = cursor.getDouble(cursor.getColumnIndex(MovieContract.TvShowsEntry.COLUMN_VOTE_AVERAGE));
+        tvShow.name = cursor.getString(cursor.getColumnIndex(MovieContract.TvShowsEntry.COLUMN_NAME));
+        tvShow.popularity = cursor.getDouble(cursor.getColumnIndex(MovieContract.TvShowsEntry.COLUMN_POPULARITY));
+        tvShow.posterPath = cursor.getString(cursor.getColumnIndex(MovieContract.TvShowsEntry.COLUMN_POSTER_PATH));
+        tvShow.originalLanguage = cursor.getString(cursor.getColumnIndex(MovieContract.TvShowsEntry.COLUMN_ORIGINAL_LANGUAGE));
+        tvShow.originalName = cursor.getString(cursor.getColumnIndex(MovieContract.TvShowsEntry.COLUMN_ORIGINAL_NAME));
+        tvShow.backdropPath = cursor.getString(cursor.getColumnIndex(MovieContract.TvShowsEntry.COLUMN_BACKDROP_PATH));
+        tvShow.overview = cursor.getString(cursor.getColumnIndex(MovieContract.TvShowsEntry.COLUMN_OVERVIEW));
+        tvShow.firstAirDate = cursor.getString(cursor.getColumnIndex(MovieContract.TvShowsEntry.COLUMN_FIRST_AIR_DATE));
+        tvShow.genreIds = loadGenresInMovie(context, tvShow.id);
+        return tvShow;
+    }
+
+    private static List<Integer> loadGenresInMovie(Context context, String movieId) {
+        Cursor genresInTvShowCursor = context.getContentResolver().query(MovieContract.TvShowGenreEntry.CONTENT_URI,
+                null,
+                MovieContract.TvShowGenreEntry.COLUMN_TV_SHOW_ID + " = ?", new String[]{movieId},
+                null);
+
+        if (genresInTvShowCursor != null && genresInTvShowCursor.moveToFirst()) {
+            List<Integer> genresInMovies = new ArrayList<>();
+            do {
+                genresInMovies.add(
+                        genresInTvShowCursor.getInt(
+                                genresInTvShowCursor.getColumnIndex(MovieContract.TvShowGenreEntry.COLUMN_GENRE_ID)
+                        )
+                );
+            } while (genresInTvShowCursor.moveToNext());
+            genresInTvShowCursor.close();
+            return genresInMovies;
+        }
+        return null;
     }
 
 }

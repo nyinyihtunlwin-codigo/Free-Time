@@ -65,9 +65,7 @@ public class MovieDBHelper extends SQLiteOpenHelper {
             MovieContract.TvShowsEntry.COLUMN_POSTER_PATH + " TEXT, " +
             MovieContract.TvShowsEntry.COLUMN_ORIGINAL_LANGUAGE + " TEXT NOT NULL, " +
             MovieContract.TvShowsEntry.COLUMN_BACKDROP_PATH + " TEXT, " +
-            MovieContract.TvShowsEntry.COLUMN_ADULT + " INTEGER DEFAULT 0, " +
             MovieContract.TvShowsEntry.COLUMN_OVERVIEW + " TEXT NOT NULL, " +
-            MovieContract.TvShowsEntry.COLUMN_RELEASE_DATE + " TEXT NOT NULL, " +
             " UNIQUE (" + MovieContract.TvShowsEntry.COLUMN_NAME + ") ON CONFLICT REPLACE" +
             " );";
 

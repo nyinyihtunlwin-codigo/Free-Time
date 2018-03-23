@@ -43,9 +43,7 @@ public class MovieContract {
         public static final String COLUMN_ORIGINAL_LANGUAGE = "original_language";
         public static final String COLUMN_ORIGINAL_NAME = "original_name";
         public static final String COLUMN_BACKDROP_PATH = "backdrop_path";
-        public static final String COLUMN_ADULT = "adult";
         public static final String COLUMN_OVERVIEW = "overview";
-        public static final String COLUMN_RELEASE_DATE = "release_date";
         public static final String COLUMN_FIRST_AIR_DATE = "first_air_date";
 
 

@@ -23,11 +23,16 @@ public class MovieProvider extends ContentProvider {
     public static final int MOVIE_GENRE = 300;
     public static final int MOVIE_IN_SCREEN = 400;
 
+    public static final int TV_SHOW = 500;
+    public static final int TV_SHOW_GENRE = 600;
+    public static final int TV_SHOW_IN_SCREEN = 700;
+
 
     private MovieDBHelper mDbHelper;
 
     public static final UriMatcher sUriMatcher = buildUriMatcher();
-    private static final SQLiteQueryBuilder sMovieWithMovieInScreen_IJ, sMovieGenreWithGenre_IJ;
+    private static final SQLiteQueryBuilder sMovieWithMovieInScreen_IJ, sMovieGenreWithGenre_IJ,
+            sTvShowWithTvShowInScreen_IJ, sTvShowGenreWithGenre_IJ;
 
     static {
         sMovieWithMovieInScreen_IJ = new SQLiteQueryBuilder();
@@ -46,6 +51,23 @@ public class MovieProvider extends ContentProvider {
                         MovieContract.MovieGenreEntry.TABLE_NAME + "." + MovieContract.MovieGenreEntry.COLUMN_GENRE_ID + " = " +
                         MovieContract.GenreEntry.TABLE_NAME + "." + MovieContract.GenreEntry.COLUMN_GENRE_ID
         );
+        // for tv shows
+        sTvShowWithTvShowInScreen_IJ = new SQLiteQueryBuilder();
+        sTvShowWithTvShowInScreen_IJ.setTables(
+                MovieContract.TvShowInScreenEntry.TABLE_NAME + " INNER JOIN " +
+                        MovieContract.TvShowsEntry.TABLE_NAME +
+                        " ON " +
+                        MovieContract.TvShowInScreenEntry.TABLE_NAME + "." + MovieContract.TvShowInScreenEntry.COLUMN_TV_SHOWS_ID + " = " +
+                        MovieContract.TvShowsEntry.TABLE_NAME + "." + MovieContract.TvShowsEntry.COLUMN_TV_SHOWS_ID
+        );
+        sTvShowGenreWithGenre_IJ = new SQLiteQueryBuilder();
+        sTvShowGenreWithGenre_IJ.setTables(
+                MovieContract.TvShowGenreEntry.TABLE_NAME + " INNER JOIN " +
+                        MovieContract.GenreEntry.TABLE_NAME +
+                        " ON " +
+                        MovieContract.TvShowGenreEntry.TABLE_NAME + "." + MovieContract.TvShowGenreEntry.COLUMN_GENRE_ID + " = " +
+                        MovieContract.GenreEntry.TABLE_NAME + "." + MovieContract.GenreEntry.COLUMN_GENRE_ID
+        );
     }
 
     private static UriMatcher buildUriMatcher() {
@@ -57,6 +79,9 @@ public class MovieProvider extends ContentProvider {
         uriMatcher.addURI(MovieContract.CONTENT_AUTHORITY, MovieContract.PATH_MOVIE_GENRE, MOVIE_GENRE);
         uriMatcher.addURI(MovieContract.CONTENT_AUTHORITY, MovieContract.PATH_MOVIE_IN_SCREEN, MOVIE_IN_SCREEN);
 
+        uriMatcher.addURI(MovieContract.CONTENT_AUTHORITY, MovieContract.PATH_TV_SHOWS, TV_SHOW);
+        uriMatcher.addURI(MovieContract.CONTENT_AUTHORITY, MovieContract.PATH_TV_SHOWS_GENRE, TV_SHOW_GENRE);
+        uriMatcher.addURI(MovieContract.CONTENT_AUTHORITY, MovieContract.PATH_TV_SHOWS_IN_SCREEN, TV_SHOW_IN_SCREEN);
 
         return uriMatcher;
     }
@@ -71,6 +96,12 @@ public class MovieProvider extends ContentProvider {
                 return MovieContract.MovieGenreEntry.TABLE_NAME;
             case MOVIE_IN_SCREEN:
                 return MovieContract.MovieInScreenEntry.TABLE_NAME;
+            case TV_SHOW:
+                return MovieContract.TvShowsEntry.TABLE_NAME;
+            case TV_SHOW_GENRE:
+                return MovieContract.TvShowGenreEntry.TABLE_NAME;
+            case TV_SHOW_IN_SCREEN:
+                return MovieContract.TvShowInScreenEntry.TABLE_NAME;
         }
         return null;
     }
@@ -85,6 +116,12 @@ public class MovieProvider extends ContentProvider {
                 return MovieContract.MovieGenreEntry.CONTENT_URI;
             case MOVIE_IN_SCREEN:
                 return MovieContract.MovieInScreenEntry.CONTENT_URI;
+            case TV_SHOW:
+                return MovieContract.TvShowsEntry.CONTENT_URI;
+            case TV_SHOW_GENRE:
+                return MovieContract.TvShowGenreEntry.CONTENT_URI;
+            case TV_SHOW_IN_SCREEN:
+                return MovieContract.TvShowInScreenEntry.CONTENT_URI;
         }
         return null;
     }
@@ -109,8 +146,26 @@ public class MovieProvider extends ContentProvider {
                         null,
                         sortOrder);
                 break;
+            case TV_SHOW_IN_SCREEN:
+                queryCursor = sTvShowWithTvShowInScreen_IJ.query(mDbHelper.getReadableDatabase(),
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
+                break;
             case MOVIE_GENRE:
                 queryCursor = sMovieGenreWithGenre_IJ.query(mDbHelper.getReadableDatabase(),
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
+                break;
+            case TV_SHOW_GENRE:
+                queryCursor = sTvShowGenreWithGenre_IJ.query(mDbHelper.getReadableDatabase(),
                         projection,
                         selection,
                         selectionArgs,
@@ -146,6 +201,12 @@ public class MovieProvider extends ContentProvider {
                 return MovieContract.MovieGenreEntry.DIR_TYPE;
             case MOVIE_IN_SCREEN:
                 return MovieContract.MovieInScreenEntry.DIR_TYPE;
+            case TV_SHOW:
+                return MovieContract.TvShowsEntry.DIR_TYPE;
+            case TV_SHOW_GENRE:
+                return MovieContract.TvShowGenreEntry.DIR_TYPE;
+            case TV_SHOW_IN_SCREEN:
+                return MovieContract.TvShowInScreenEntry.DIR_TYPE;
         }
         return null;
     }
@@ -174,14 +235,14 @@ public class MovieProvider extends ContentProvider {
         int insertedCount = 0;
 
         try {
-                db.beginTransaction();
-                for (ContentValues cv : values) {
-                    long _id = db.insert(tableName, null, cv);
-                    if (_id > 0) {
-                        insertedCount++;
-                    }
+            db.beginTransaction();
+            for (ContentValues cv : values) {
+                long _id = db.insert(tableName, null, cv);
+                if (_id > 0) {
+                    insertedCount++;
                 }
-                db.setTransactionSuccessful();
+            }
+            db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
         }
