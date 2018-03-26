@@ -22,13 +22,13 @@ public class TvShowsAiringTodayPresenter extends BasePresenter<TvShowsAiringToda
 
     public TvShowsAiringTodayPresenter(Context context) {
         this.mContext = context;
-        // check offline data storage
-        //   TvShowModel.getInstance().checkForOfflineCache(mContext, AppConstants.TV_SHOWS_AIRING_TODAY);
+       //  check offline data storage
+           TvShowModel.getInstance().checkForOfflineCache(mContext, AppConstants.TV_SHOWS_AIRING_TODAY);
     }
 
     @Override
     public void onStart() {
-        List<TvShowVO> tvShowList = TvShowModel.getInstance().getmAiringTodayTvShows();
+        List<TvShowVO> tvShowList = TvShowModel.getInstance().getAiringTodayTvShows();
         if (!tvShowList.isEmpty()) {
             mView.displayTvShowList(tvShowList);
         }
@@ -58,7 +58,7 @@ public class TvShowsAiringTodayPresenter extends BasePresenter<TvShowsAiringToda
     }
 
     public void onTvShowListEndReached(Context context) {
-        //  TvShowModel.getInstance().loadMoreMovies(context, AppConstants.MOVIE_NOW_ON_CINEMA);
+          TvShowModel.getInstance().loadMoreTvShows(context, AppConstants.TV_SHOWS_AIRING_TODAY);
     }
 
     public void onForceRefresh(Context context) {

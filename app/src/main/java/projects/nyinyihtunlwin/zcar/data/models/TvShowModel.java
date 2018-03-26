@@ -2,6 +2,9 @@ package projects.nyinyihtunlwin.zcar.data.models;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.text.TextUtils;
 import android.util.Log;
 
 import org.greenrobot.eventbus.EventBus;
@@ -15,6 +18,7 @@ import projects.nyinyihtunlwin.zcar.data.vo.tvshows.TvShowVO;
 import projects.nyinyihtunlwin.zcar.events.TvShowsEvents;
 import projects.nyinyihtunlwin.zcar.network.TvShowDataAgentImpl;
 import projects.nyinyihtunlwin.zcar.persistence.MovieContract;
+import projects.nyinyihtunlwin.zcar.persistence.MovieDBHelper;
 import projects.nyinyihtunlwin.zcar.utils.AppConstants;
 import projects.nyinyihtunlwin.zcar.utils.ConfigUtils;
 
@@ -74,7 +78,7 @@ public class TvShowModel {
         }
         mAiringTodayTvShows.addAll(event.getLoadedTvShows());
         ConfigUtils.getObjInstance().saveTvShowsAiringTodayPageIndex(event.getLoadedPageIndex() + 1);
-        saveDataForOfflineMode(event, AppConstants.MOVIE_NOW_ON_CINEMA);
+        saveDataForOfflineMode(event, AppConstants.TV_SHOWS_AIRING_TODAY);
     }
 
     private void clearRecentTvShowsOnDb(String screenName, TvShowsEvents.TvShowsDataLoadedEvent event) {
@@ -122,6 +126,51 @@ public class TvShowModel {
     }
 
 
+    public void loadMoreTvShows(Context context, String movieType) {
+        loadTvShows(context, movieType);
+    }
+
+    public void checkForOfflineCache(Context context, String screenType) {
+        Cursor cursor = context.getContentResolver().query(MovieContract.TvShowInScreenEntry.CONTENT_URI,
+                null,
+                MovieContract.TvShowInScreenEntry.COLUMN_SCREEN + "=?",
+                new String[]{screenType}, null);
+        if (cursor != null) {
+            if (cursor.getCount() > 0) {
+                if (cursor.getCount() > 20) {
+                    List<String> toDeleteMoviesIds = new ArrayList<>();
+                    for (cursor.moveToPosition(20); !cursor.isAfterLast(); cursor.moveToNext()) {
+                        String col21 = cursor.getString(cursor.getColumnIndex(MovieContract.TvShowInScreenEntry.COLUMN_TV_SHOWS_ID));
+                        Log.e(ZCarApp.LOG_TAG, col21 + "YOH");
+                        toDeleteMoviesIds.add(col21);
+                    }
+                    String[] movieIdsToDelete = toDeleteMoviesIds.toArray(new String[0]);
+                    String args = TextUtils.join(", ", movieIdsToDelete);
+                    Log.e(ZCarApp.LOG_TAG, args);
+                    MovieDBHelper dbHelper = new MovieDBHelper(context);
+                    SQLiteDatabase db = dbHelper.getWritableDatabase();
+                    db.execSQL(String.format("DELETE FROM " + MovieContract.TvShowInScreenEntry.TABLE_NAME +
+                            " WHERE " + MovieContract.TvShowInScreenEntry.COLUMN_TV_SHOWS_ID + " IN (%s);", args));
+                }
+                switch (screenType) {
+                    case AppConstants.TV_SHOWS_AIRING_TODAY:
+                        ConfigUtils.getObjInstance().saveTvShowsAiringTodayPageIndex(2);
+                        break;
+                    case AppConstants.TV_SHOWS_ON_THE_AIR:
+                        ConfigUtils.getObjInstance().saveTvShowsOnTheAirPageIndex(2);
+                        break;
+                    case AppConstants.TV_SHOWS_MOST_POPULAR:
+                        ConfigUtils.getObjInstance().saveTvShowsMostPopularPageIndex(2);
+                        break;
+                    case AppConstants.TV_SHOWS_TOP_RATED:
+                        ConfigUtils.getObjInstance().saveTvShowsTopRatedPageIndex(2);
+                        break;
+                }
+            }
+        }
+        //////////////////////////////////////////////////////////////////////////////////////////
+    }
+
     public void forceRefreshTvShows(Context context, String showType) {
         switch (showType) {
             case AppConstants.TV_SHOWS_AIRING_TODAY:
@@ -161,19 +210,19 @@ public class TvShowModel {
         }
     }
 
-    public List<TvShowVO> getmAiringTodayTvShows() {
+    public List<TvShowVO> getAiringTodayTvShows() {
         return mAiringTodayTvShows;
     }
 
-    public List<TvShowVO> getmOnTheAirTvShows() {
+    public List<TvShowVO> getOnTheAirTvShows() {
         return mOnTheAirTvShows;
     }
 
-    public List<TvShowVO> getmMostPopularTvShows() {
+    public List<TvShowVO> getMostPopularTvShows() {
         return mMostPopularTvShows;
     }
 
-    public List<TvShowVO> getmTopRatedTvShows() {
+    public List<TvShowVO> getTopRatedTvShows() {
         return mTopRatedTvShows;
     }
 }

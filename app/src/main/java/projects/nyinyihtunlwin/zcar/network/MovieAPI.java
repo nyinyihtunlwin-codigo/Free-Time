@@ -1,6 +1,7 @@
 package projects.nyinyihtunlwin.zcar.network;
 
 import projects.nyinyihtunlwin.zcar.data.vo.movies.MovieVO;
+import projects.nyinyihtunlwin.zcar.data.vo.tvshows.TvShowVO;
 import projects.nyinyihtunlwin.zcar.network.responses.SearchResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.GetMovieCreditsResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.GetMovieReviewsResponse;
@@ -66,6 +67,9 @@ public interface MovieAPI {
 
     @GET("tv/top_rated")
     Call<TvTopRatedResponse> loadTvTopRated(@Query("api_key") String apiKey, @Query("page") Integer page);
+
+    @GET("tv/{id}")
+    Call<TvShowVO> loadTVShowDetails(@Path("id") Integer tvShowId, @Query("api_key") String apiKey);
 
     // Search Movies and TV Shows
     @GET("search/multi")
