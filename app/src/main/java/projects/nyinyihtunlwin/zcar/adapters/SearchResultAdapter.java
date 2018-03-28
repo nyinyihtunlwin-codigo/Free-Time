@@ -20,7 +20,7 @@ public class SearchResultAdapter extends BaseRecyclerAdapter<SearchResultViewHol
 
     @Override
     public SearchResultViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mLayoutInflater.inflate(R.layout.view_item_grid_movie, parent, false);
+        View view = mLayoutInflater.inflate(R.layout.view_item_list_movie, parent, false);
         return new SearchResultViewHolder(view);
     }
 }

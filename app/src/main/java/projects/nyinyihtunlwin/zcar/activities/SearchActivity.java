@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.View;
@@ -80,8 +81,8 @@ public class SearchActivity extends BaseActivity implements SearchView {
         mAdapter = new SearchResultAdapter(getApplicationContext());
         rvResult.setAdapter(mAdapter);
         rvResult.setHasFixedSize(true);
-        rvResult.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
-        rvResult.addOnScrollListener(mSmartScrollListener);
+        rvResult.setLayoutManager(new LinearLayoutManager(this));
+   //     rvResult.addOnScrollListener(mSmartScrollListener);
 
         etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
