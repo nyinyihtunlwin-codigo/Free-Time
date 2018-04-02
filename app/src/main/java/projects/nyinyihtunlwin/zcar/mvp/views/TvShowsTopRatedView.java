@@ -4,12 +4,7 @@ import java.util.List;
 
 import projects.nyinyihtunlwin.zcar.data.vo.tvshows.TvShowVO;
 
-/**
- * Created by Dell on 3/6/2018.
- */
-
-public interface TvShowsAiringTodayView {
-
+public interface TvShowsTopRatedView {
     void displayTvShowList(List<TvShowVO> tvShowList);
 
     void showLoding();

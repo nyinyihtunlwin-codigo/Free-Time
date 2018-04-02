@@ -9,32 +9,32 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
-import projects.nyinyihtunlwin.zcar.data.models.MovieModel;
 import projects.nyinyihtunlwin.zcar.data.models.TvShowModel;
 import projects.nyinyihtunlwin.zcar.data.vo.tvshows.TvShowVO;
 import projects.nyinyihtunlwin.zcar.events.ConnectionEvent;
 import projects.nyinyihtunlwin.zcar.events.MoviesiEvents;
 import projects.nyinyihtunlwin.zcar.mvp.views.TvShowsAiringTodayView;
+import projects.nyinyihtunlwin.zcar.mvp.views.TvShowsTopRatedView;
 import projects.nyinyihtunlwin.zcar.utils.AppConstants;
 
 /**
  * Created by Dell on 3/6/2018.
  */
 
-public class TvShowsAiringTodayPresenter extends BasePresenter<TvShowsAiringTodayView> {
+public class TvShowsTopRatedPresenter extends BasePresenter<TvShowsTopRatedView> {
 
     private Context mContext;
 
-    public TvShowsAiringTodayPresenter(Context context) {
+    public TvShowsTopRatedPresenter(Context context) {
         this.mContext = context;
         //  check offline data storage
-        TvShowModel.getInstance().checkForOfflineCache(mContext, AppConstants.TV_SHOWS_AIRING_TODAY);
+        TvShowModel.getInstance().checkForOfflineCache(mContext, AppConstants.TV_SHOWS_TOP_RATED);
     }
 
     @Override
     public void onStart() {
         EventBus.getDefault().register(this);
-        List<TvShowVO> tvShowList = TvShowModel.getInstance().getAiringTodayTvShows();
+        List<TvShowVO> tvShowList = TvShowModel.getInstance().getTopRatedTvShows();
         if (!tvShowList.isEmpty()) {
             mView.displayTvShowList(tvShowList);
         }
@@ -55,7 +55,7 @@ public class TvShowsAiringTodayPresenter extends BasePresenter<TvShowsAiringToda
             mView.displayTvShowList(tvShowList);
         } else {
             mView.showLoding();
-            TvShowModel.getInstance().startLoadingTvShows(mContext, AppConstants.TV_SHOWS_AIRING_TODAY);
+            TvShowModel.getInstance().startLoadingTvShows(mContext, AppConstants.TV_SHOWS_TOP_RATED);
         }
     }
 
@@ -64,11 +64,11 @@ public class TvShowsAiringTodayPresenter extends BasePresenter<TvShowsAiringToda
     }
 
     public void onTvShowListEndReached(Context context) {
-        TvShowModel.getInstance().loadMoreTvShows(context, AppConstants.TV_SHOWS_AIRING_TODAY);
+        TvShowModel.getInstance().loadMoreTvShows(context, AppConstants.TV_SHOWS_TOP_RATED);
     }
 
     public void onForceRefresh(Context context) {
-        TvShowModel.getInstance().forceRefreshTvShows(context, AppConstants.TV_SHOWS_AIRING_TODAY);
+        TvShowModel.getInstance().forceRefreshTvShows(context, AppConstants.TV_SHOWS_TOP_RATED);
     }
 
     @Subscribe

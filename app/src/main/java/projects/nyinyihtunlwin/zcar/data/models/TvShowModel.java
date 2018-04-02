@@ -15,11 +15,13 @@ import java.util.List;
 
 import projects.nyinyihtunlwin.zcar.ZCarApp;
 import projects.nyinyihtunlwin.zcar.data.vo.tvshows.TvShowVO;
+import projects.nyinyihtunlwin.zcar.events.ConnectionEvent;
 import projects.nyinyihtunlwin.zcar.events.TvShowsEvents;
 import projects.nyinyihtunlwin.zcar.network.TvShowDataAgentImpl;
 import projects.nyinyihtunlwin.zcar.persistence.MovieContract;
 import projects.nyinyihtunlwin.zcar.persistence.MovieDBHelper;
 import projects.nyinyihtunlwin.zcar.utils.AppConstants;
+import projects.nyinyihtunlwin.zcar.utils.AppUtils;
 import projects.nyinyihtunlwin.zcar.utils.ConfigUtils;
 
 /**
@@ -68,7 +70,11 @@ public class TvShowModel {
                 ConfigUtils.getObjInstance().saveTvShowsTopRatedPageIndex(1);
                 break;
         }
-        loadTvShows(context, showType);
+        if (AppUtils.getObjInstance().hasConnection()) {
+            loadTvShows(context, showType);
+        } else {
+            EventBus.getDefault().post(new ConnectionEvent("No internet connection.", AppConstants.TYPE_START_LOADING_DATA));
+        }
     }
 
     @Subscribe
@@ -79,6 +85,36 @@ public class TvShowModel {
         mAiringTodayTvShows.addAll(event.getLoadedTvShows());
         ConfigUtils.getObjInstance().saveTvShowsAiringTodayPageIndex(event.getLoadedPageIndex() + 1);
         saveDataForOfflineMode(event, AppConstants.TV_SHOWS_AIRING_TODAY);
+    }
+
+    @Subscribe
+    public void onTvMostPopularTvShowsLoaded(TvShowsEvents.TvMostPopularEvent event) {
+        if (event.getLoadedPageIndex() == 1) {
+            clearRecentTvShowsOnDb(AppConstants.TV_SHOWS_MOST_POPULAR, event);
+        }
+        mMostPopularTvShows.addAll(event.getLoadedTvShows());
+        ConfigUtils.getObjInstance().saveTvShowsMostPopularPageIndex(event.getLoadedPageIndex() + 1);
+        saveDataForOfflineMode(event, AppConstants.TV_SHOWS_MOST_POPULAR);
+    }
+
+    @Subscribe
+    public void onTvOnTheAirShowsLoaded(TvShowsEvents.TvOnTheAirEvent event) {
+        if (event.getLoadedPageIndex() == 1) {
+            clearRecentTvShowsOnDb(AppConstants.TV_SHOWS_ON_THE_AIR, event);
+        }
+        mMostPopularTvShows.addAll(event.getLoadedTvShows());
+        ConfigUtils.getObjInstance().saveTvShowsOnTheAirPageIndex(event.getLoadedPageIndex() + 1);
+        saveDataForOfflineMode(event, AppConstants.TV_SHOWS_ON_THE_AIR);
+    }
+
+    @Subscribe
+    public void onTvTopRatedTvShowsLoaded(TvShowsEvents.TvTopRatedEvent event) {
+        if (event.getLoadedPageIndex() == 1) {
+            clearRecentTvShowsOnDb(AppConstants.TV_SHOWS_TOP_RATED, event);
+        }
+        mMostPopularTvShows.addAll(event.getLoadedTvShows());
+        ConfigUtils.getObjInstance().saveTvShowsTopRatedPageIndex(event.getLoadedPageIndex() + 1);
+        saveDataForOfflineMode(event, AppConstants.TV_SHOWS_TOP_RATED);
     }
 
     private void clearRecentTvShowsOnDb(String screenName, TvShowsEvents.TvShowsDataLoadedEvent event) {
@@ -126,8 +162,12 @@ public class TvShowModel {
     }
 
 
-    public void loadMoreTvShows(Context context, String movieType) {
-        loadTvShows(context, movieType);
+    public void loadMoreTvShows(Context context, String showType) {
+        if (AppUtils.getObjInstance().hasConnection()) {
+            loadTvShows(context, showType);
+        } else {
+            EventBus.getDefault().post(new ConnectionEvent("No internet connection.", AppConstants.TYPE_lOAD_MORE_DATA));
+        }
     }
 
     public void checkForOfflineCache(Context context, String screenType) {
@@ -190,7 +230,11 @@ public class TvShowModel {
                 ConfigUtils.getObjInstance().saveTvShowsTopRatedPageIndex(1);
                 break;
         }
-        loadTvShows(context, showType);
+        if (AppUtils.getObjInstance().hasConnection()) {
+            loadTvShows(context, showType);
+        } else {
+            EventBus.getDefault().post(new ConnectionEvent("No internet connection.", AppConstants.TYPE_START_LOADING_DATA));
+        }
     }
 
     private void loadTvShows(Context context, String showType) {
