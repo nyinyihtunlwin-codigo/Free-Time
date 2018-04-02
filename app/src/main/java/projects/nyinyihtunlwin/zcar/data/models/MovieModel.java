@@ -17,11 +17,13 @@ import projects.nyinyihtunlwin.zcar.ZCarApp;
 import projects.nyinyihtunlwin.zcar.data.vo.GenreVO;
 import projects.nyinyihtunlwin.zcar.data.vo.SearchResultVO;
 import projects.nyinyihtunlwin.zcar.data.vo.movies.MovieVO;
+import projects.nyinyihtunlwin.zcar.events.ConnectionEvent;
 import projects.nyinyihtunlwin.zcar.events.MoviesiEvents;
 import projects.nyinyihtunlwin.zcar.network.MovieDataAgentImpl;
 import projects.nyinyihtunlwin.zcar.persistence.MovieContract;
 import projects.nyinyihtunlwin.zcar.persistence.MovieDBHelper;
 import projects.nyinyihtunlwin.zcar.utils.AppConstants;
+import projects.nyinyihtunlwin.zcar.utils.AppUtils;
 import projects.nyinyihtunlwin.zcar.utils.ConfigUtils;
 
 /**
@@ -91,7 +93,11 @@ public class MovieModel {
                 ConfigUtils.getObjInstance().saveMovieTopRatedPageIndex(1);
                 break;
         }
-        loadMovies(context, movieType);
+        if (AppUtils.getObjInstance().hasConnection()) {
+            loadMovies(context, movieType);
+        } else {
+            EventBus.getDefault().post(new ConnectionEvent("No internet connection.", AppConstants.TYPE_START_LOADING_DATA));
+        }
     }
 
     public void checkForOfflineCache(Context context, String screenType) {
@@ -234,7 +240,11 @@ public class MovieModel {
 
 
     public void loadMoreMovies(Context context, String movieType) {
-        loadMovies(context, movieType);
+        if (AppUtils.getObjInstance().hasConnection()) {
+            loadMovies(context, movieType);
+        } else {
+            EventBus.getDefault().post(new ConnectionEvent("No internet connection.", AppConstants.TYPE_lOAD_MORE_DATA));
+        }
     }
 
 
@@ -257,7 +267,12 @@ public class MovieModel {
                 ConfigUtils.getObjInstance().saveMovieTopRatedPageIndex(1);
                 break;
         }
-        loadMovies(context, movieType);
+        if (AppUtils.getObjInstance().hasConnection()) {
+            loadMovies(context, movieType);
+        } else {
+            EventBus.getDefault().post(new ConnectionEvent("No internet connection.", AppConstants.TYPE_START_LOADING_DATA));
+        }
+
     }
 
 

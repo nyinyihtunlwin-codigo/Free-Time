@@ -2,6 +2,7 @@ package projects.nyinyihtunlwin.zcar.network;
 
 import org.greenrobot.eventbus.EventBus;
 
+import projects.nyinyihtunlwin.zcar.events.ConnectionEvent;
 import projects.nyinyihtunlwin.zcar.events.MoviesiEvents;
 import projects.nyinyihtunlwin.zcar.network.responses.BaseResponse;
 import retrofit2.Call;
@@ -25,7 +26,7 @@ public abstract class MovieCallback<T extends BaseResponse> implements Callback<
     @Override
     public void onFailure(Call<T> call, Throwable t) {
         MoviesiEvents.ErrorInvokingAPIEvent errorEvent
-                = new MoviesiEvents.ErrorInvokingAPIEvent(t.getMessage());
+                = new MoviesiEvents.ErrorInvokingAPIEvent("Can't load data. Please try again.");
         EventBus.getDefault().post(errorEvent);
     }
 }

@@ -15,4 +15,8 @@ public interface MovieTopRatedView {
     void showLoding();
 
     void navigateToMovieDetails(String movieId);
+
+    void onConnectionError(String message, int retryConnectionType);
+
+    void onApiError(String message);
 }

@@ -4,6 +4,7 @@ import android.app.Application;
 
 import projects.nyinyihtunlwin.zcar.data.models.MovieModel;
 import projects.nyinyihtunlwin.zcar.utils.AppConstants;
+import projects.nyinyihtunlwin.zcar.utils.AppUtils;
 import projects.nyinyihtunlwin.zcar.utils.ConfigUtils;
 
 /**
@@ -17,6 +18,7 @@ public class ZCarApp extends Application {
     public void onCreate() {
         super.onCreate();
         ConfigUtils.initConfigUtils(getApplicationContext());
-       MovieModel.getInstance().startLoadingMovieGenres(getApplicationContext());
+        AppUtils.initAppUtils(getApplicationContext());
+        MovieModel.getInstance().startLoadingMovieGenres(getApplicationContext());
     }
 }

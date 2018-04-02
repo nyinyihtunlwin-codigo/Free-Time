@@ -4,9 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
@@ -14,26 +11,20 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import projects.nyinyihtunlwin.zcar.R;
-import projects.nyinyihtunlwin.zcar.ZCarApp;
 import projects.nyinyihtunlwin.zcar.activities.MovieDetailsActivity;
 import projects.nyinyihtunlwin.zcar.adapters.MovieAdapter;
 import projects.nyinyihtunlwin.zcar.components.EmptyViewPod;
@@ -46,9 +37,7 @@ import projects.nyinyihtunlwin.zcar.fragments.BaseFragment;
 import projects.nyinyihtunlwin.zcar.mvp.presenters.MovieNowOnCinemaPresenter;
 import projects.nyinyihtunlwin.zcar.mvp.views.MovieNowOnCinemaView;
 import projects.nyinyihtunlwin.zcar.persistence.MovieContract;
-import projects.nyinyihtunlwin.zcar.persistence.MovieDBHelper;
 import projects.nyinyihtunlwin.zcar.utils.AppConstants;
-import projects.nyinyihtunlwin.zcar.utils.ConfigUtils;
 
 
 public class NowOnCinemaFragment extends BaseFragment implements MovieItemDelegate, MovieNowOnCinemaView {
@@ -68,12 +57,15 @@ public class NowOnCinemaFragment extends BaseFragment implements MovieItemDelega
     SwipeRefreshLayout swipeRefreshLayout;
 
     private MovieNowOnCinemaPresenter mPresenter;
+    private Snackbar mSnackbar;
+    private int mRetryConnectionType;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_now_on_cinema, container, false);
         ButterKnife.bind(this, view);
+
 
         mPresenter = new MovieNowOnCinemaPresenter(getActivity());
         mPresenter.onCreate(this);
@@ -157,20 +149,13 @@ public class NowOnCinemaFragment extends BaseFragment implements MovieItemDelega
     @Override
     public void onStart() {
         super.onStart();
-        EventBus.getDefault().register(this);
         mPresenter.onStart();
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onErrorInvokingAPI(MoviesiEvents.ErrorInvokingAPIEvent event) {
-        Snackbar.make(rvNowOnCinema, event.getErrorMsg(), Snackbar.LENGTH_INDEFINITE).show();
-        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
     public void onStop() {
-        EventBus.getDefault().unregister(this);
         super.onStop();
+        mPresenter.onStop();
     }
 
     @Override
@@ -190,6 +175,7 @@ public class NowOnCinemaFragment extends BaseFragment implements MovieItemDelega
 
     @Override
     public void displayMoviesList(List<MovieVO> moviesList) {
+        hideSnackBar();
         adapter.setNewData(moviesList);
         swipeRefreshLayout.setRefreshing(false);
     }
@@ -203,5 +189,51 @@ public class NowOnCinemaFragment extends BaseFragment implements MovieItemDelega
     public void navigateToMovieDetails(String movieId) {
         Intent intent = MovieDetailsActivity.newIntent(getActivity().getApplicationContext(), movieId);
         startActivity(intent);
+    }
+
+    @Override
+    public void onConnectionError(String message, int retryConnectionType) {
+        showSnackBar(message);
+        mRetryConnectionType = retryConnectionType;
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onApiError(String message) {
+        mSnackbar = Snackbar.make(rvNowOnCinema, message, Snackbar.LENGTH_INDEFINITE);
+        mSnackbar.setAction("Dismiss", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSnackbar.dismiss();
+            }
+        });
+        mSnackbar.show();
+    }
+
+
+    public void showSnackBar(String message) {
+        mSnackbar = Snackbar.make(rvNowOnCinema, message, Snackbar.LENGTH_INDEFINITE);
+        mSnackbar.setAction("Retry", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSnackbar.dismiss();
+                switch (mRetryConnectionType) {
+                    case AppConstants.TYPE_START_LOADING_DATA:
+                        swipeRefreshLayout.setRefreshing(true);
+                        mPresenter.onForceRefresh(getActivity().getApplicationContext());
+                        break;
+                    case AppConstants.TYPE_lOAD_MORE_DATA:
+                        mPresenter.onMovieListEndReached(getActivity().getApplicationContext());
+                        break;
+                }
+            }
+        });
+        mSnackbar.show();
+    }
+
+    public void hideSnackBar() {
+        if (mSnackbar != null && mSnackbar.isShown()) {
+            mSnackbar.dismiss();
+        }
     }
 }

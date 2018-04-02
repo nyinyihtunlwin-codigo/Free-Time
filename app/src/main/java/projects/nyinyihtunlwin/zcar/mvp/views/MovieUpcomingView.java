@@ -16,4 +16,9 @@ public interface MovieUpcomingView {
 
     void navigateToMovieDetails(String movieId);
 
+    void onConnectionError(String message, int retryConnectionType);
+
+    void onApiError(String message);
+
+
 }

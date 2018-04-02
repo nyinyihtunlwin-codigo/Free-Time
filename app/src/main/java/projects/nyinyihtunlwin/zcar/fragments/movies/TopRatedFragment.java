@@ -57,6 +57,8 @@ public class TopRatedFragment extends BaseFragment implements MovieItemDelegate,
     private SmartScrollListener mSmartScrollListener;
 
     private MovieTopRatedPresenter mPresenter;
+    private Snackbar mSnackbar;
+    private int mRetryConnectionType;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -113,7 +115,7 @@ public class TopRatedFragment extends BaseFragment implements MovieItemDelegate,
                 MovieContract.MovieInScreenEntry.CONTENT_URI,
                 null,
                 MovieContract.MovieInScreenEntry.COLUMN_SCREEN + "=?",
-                new String[]{AppConstants.MOVIE_TOP_RATED},null);
+                new String[]{AppConstants.MOVIE_TOP_RATED}, null);
 
     }
 
@@ -131,20 +133,13 @@ public class TopRatedFragment extends BaseFragment implements MovieItemDelegate,
     @Override
     public void onStart() {
         super.onStart();
-        EventBus.getDefault().register(this);
         mPresenter.onStart();
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onErrorInvokingAPI(MoviesiEvents.ErrorInvokingAPIEvent event) {
-        Snackbar.make(rvTopRated, event.getErrorMsg(), Snackbar.LENGTH_INDEFINITE).show();
-        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
     public void onStop() {
-        EventBus.getDefault().unregister(this);
         super.onStop();
+        mPresenter.onStop();
     }
 
     @Override
@@ -177,5 +172,51 @@ public class TopRatedFragment extends BaseFragment implements MovieItemDelegate,
     public void navigateToMovieDetails(String movieId) {
         Intent intent = MovieDetailsActivity.newIntent(getActivity().getApplicationContext(), movieId);
         startActivity(intent);
+    }
+
+    @Override
+    public void onConnectionError(String message, int retryConnectionType) {
+        showSnackBar(message);
+        mRetryConnectionType = retryConnectionType;
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onApiError(String message) {
+        mSnackbar = Snackbar.make(rvTopRated, message, Snackbar.LENGTH_INDEFINITE);
+        mSnackbar.setAction("Dismiss", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSnackbar.dismiss();
+            }
+        });
+        mSnackbar.show();
+    }
+
+
+    public void showSnackBar(String message) {
+        mSnackbar = Snackbar.make(rvTopRated, message, Snackbar.LENGTH_INDEFINITE);
+        mSnackbar.setAction("Retry", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSnackbar.dismiss();
+                switch (mRetryConnectionType) {
+                    case AppConstants.TYPE_START_LOADING_DATA:
+                        swipeRefreshLayout.setRefreshing(true);
+                        mPresenter.onForceRefresh(getActivity().getApplicationContext());
+                        break;
+                    case AppConstants.TYPE_lOAD_MORE_DATA:
+                        mPresenter.onMovieListEndReached(getActivity().getApplicationContext());
+                        break;
+                }
+            }
+        });
+        mSnackbar.show();
+    }
+
+    public void hideSnackBar() {
+        if (mSnackbar != null && mSnackbar.isShown()) {
+            mSnackbar.dismiss();
+        }
     }
 }

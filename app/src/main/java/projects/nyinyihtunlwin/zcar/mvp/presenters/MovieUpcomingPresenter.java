@@ -3,11 +3,16 @@ package projects.nyinyihtunlwin.zcar.mvp.presenters;
 import android.content.Context;
 import android.database.Cursor;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import projects.nyinyihtunlwin.zcar.data.models.MovieModel;
 import projects.nyinyihtunlwin.zcar.data.vo.movies.MovieVO;
+import projects.nyinyihtunlwin.zcar.events.ConnectionEvent;
+import projects.nyinyihtunlwin.zcar.events.MoviesiEvents;
 import projects.nyinyihtunlwin.zcar.mvp.views.MovieUpcomingView;
 import projects.nyinyihtunlwin.zcar.utils.AppConstants;
 
@@ -22,13 +27,12 @@ public class MovieUpcomingPresenter extends BasePresenter<MovieUpcomingView> {
     public MovieUpcomingPresenter(Context context) {
         this.mContext = context;
         //check offline data storage
-        MovieModel.getInstance().checkForOfflineCache(mContext,AppConstants.MOVIE_UPCOMING);
+        MovieModel.getInstance().checkForOfflineCache(mContext, AppConstants.MOVIE_UPCOMING);
     }
 
     @Override
     public void onStart() {
-
-
+        EventBus.getDefault().register(this);
         List<MovieVO> movieList = MovieModel.getInstance().getUpcomingMovies();
         if (!movieList.isEmpty()) {
             mView.displayMoviesList(movieList);
@@ -37,7 +41,7 @@ public class MovieUpcomingPresenter extends BasePresenter<MovieUpcomingView> {
 
     @Override
     public void onStop() {
-
+        EventBus.getDefault().unregister(this);
     }
 
     public void onDataLoaded(Context context, Cursor data) {
@@ -48,7 +52,7 @@ public class MovieUpcomingPresenter extends BasePresenter<MovieUpcomingView> {
                 movieList.add(newsVO);
             } while (data.moveToNext());
             mView.displayMoviesList(movieList);
-        }else{
+        } else {
             mView.showLoding();
             MovieModel.getInstance().startLoadingMovies(mContext, AppConstants.MOVIE_UPCOMING);
         }
@@ -64,5 +68,16 @@ public class MovieUpcomingPresenter extends BasePresenter<MovieUpcomingView> {
 
     public void onForceRefresh(Context context) {
         MovieModel.getInstance().forceRefreshMovies(context, AppConstants.MOVIE_UPCOMING);
+    }
+
+
+    @Subscribe
+    public void onConnectionError(ConnectionEvent event) {
+        mView.onConnectionError(event.getMessage(), event.getType());
+    }
+
+    @Subscribe
+    public void onApiError(MoviesiEvents.ErrorInvokingAPIEvent event) {
+        mView.onApiError(event.getErrorMsg());
     }
 }

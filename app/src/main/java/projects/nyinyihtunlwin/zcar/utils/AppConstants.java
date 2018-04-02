@@ -36,4 +36,7 @@ public class AppConstants {
     public static final int TV_SHOWS_ON_THE_AIR_LOADER_ID = 6001;
     public static final int TV_SHOWS_MOST_POPULAR_LOADER_ID = 7001;
     public static final int TV_SHOWS_TOP_RATED_LOADER_ID = 8001;
+
+    public static final int TYPE_START_LOADING_DATA = 00;
+    public static final int TYPE_lOAD_MORE_DATA = 11;
 }
