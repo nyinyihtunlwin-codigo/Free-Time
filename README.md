@@ -1,5 +1,5 @@
 # ZCar
-Movie Review App
+Movies & TV Shows
 
 This app is to show information of movies and TV shows, such as overviews, reviews, cast list, trailers, ratings, etc. 
 
