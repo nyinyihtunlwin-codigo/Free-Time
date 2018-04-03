@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -42,9 +43,11 @@ import projects.nyinyihtunlwin.zcar.data.vo.GenreVO;
 import projects.nyinyihtunlwin.zcar.data.vo.movies.MovieVO;
 import projects.nyinyihtunlwin.zcar.data.vo.ReviewVO;
 import projects.nyinyihtunlwin.zcar.delegates.MovieDetailsDelegate;
+import projects.nyinyihtunlwin.zcar.events.MovieDetailsEvent;
 import projects.nyinyihtunlwin.zcar.events.MoviesiEvents;
 import projects.nyinyihtunlwin.zcar.persistence.MovieContract;
 import projects.nyinyihtunlwin.zcar.utils.AppConstants;
+import projects.nyinyihtunlwin.zcar.utils.AppUtils;
 
 public class MovieDetailsActivity extends BaseActivity implements MovieDetailsDelegate, View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -121,6 +124,8 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsDe
 
     private String movieTagline, imdbId, homepage;
 
+    private Snackbar mSnackbar;
+
     public static Intent newIntent(Context context, String movieId) {
         Intent intent = new Intent(context, MovieDetailsActivity.class);
         intent.putExtra(KEY_MOVIE_ID, movieId);
@@ -139,10 +144,7 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsDe
 
         if (getIntent().getStringExtra(KEY_MOVIE_ID) != null) {
             currentMovieId = getIntent().getStringExtra(KEY_MOVIE_ID);
-            MovieModel.getInstance().startLoadingMovieDetails(currentMovieId);
-            MovieModel.getInstance().startLoadingMovieTrailers(currentMovieId);
-            MovieModel.getInstance().startLoadingMovieReviews(currentMovieId);
-            MovieModel.getInstance().startLoadingMovieCredits(currentMovieId);
+            loadDetails();
         }
         currentGenreIds = new ArrayList<>();
 
@@ -186,6 +188,18 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsDe
                 }
             }
         });
+    }
+
+    private void loadDetails() {
+        if (AppUtils.getObjInstance().hasConnection()) {
+            MovieModel.getInstance().startLoadingMovieDetails(currentMovieId);
+            MovieModel.getInstance().startLoadingMovieTrailers(currentMovieId);
+            MovieModel.getInstance().startLoadingMovieReviews(currentMovieId);
+            MovieModel.getInstance().startLoadingMovieCredits(currentMovieId);
+        } else {
+            showSnackBar("No internet connection.");
+            loadingView.setVisibility(View.GONE);
+        }
     }
 
 
@@ -324,6 +338,7 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsDe
 
     @Subscribe
     public void onMovieReviewsDataLoaded(MoviesiEvents.MovieReviewsDataLoadedEvent event) {
+        hideSnackBar();
         loadingView.setVisibility(View.GONE);
         tvReviews.setVisibility(View.VISIBLE);
         for (ReviewVO reviewVO : event.getReviews()) {
@@ -353,11 +368,6 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsDe
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onErrorInvokingAPI(MoviesiEvents.ErrorInvokingAPIEvent event) {
-        loadingView.setVisibility(View.GONE);
-    }
-
     @Override
     protected void onStop() {
         super.onStop();
@@ -368,5 +378,36 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsDe
     public void onClickTriler(String trailerKey) {
         Intent youtubeIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(AppConstants.YOUTUBE_WATCH_BASE_URL + trailerKey));
         startActivity(youtubeIntent);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onApiError(MovieDetailsEvent.ErrorInvokingAPIEvent event) {
+        mSnackbar = Snackbar.make(rvMovieCasts, event.getErrorMsg(), Snackbar.LENGTH_INDEFINITE);
+        mSnackbar.setAction("Dismiss", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSnackbar.dismiss();
+            }
+        });
+        mSnackbar.show();
+    }
+
+    public void showSnackBar(String message) {
+        mSnackbar = Snackbar.make(rvMovieCasts, message, Snackbar.LENGTH_INDEFINITE);
+        mSnackbar.setAction("Retry", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSnackbar.dismiss();
+                loadingView.setVisibility(View.VISIBLE);
+                loadDetails();
+            }
+        });
+        mSnackbar.show();
+    }
+
+    public void hideSnackBar() {
+        if (mSnackbar != null && mSnackbar.isShown()) {
+            mSnackbar.dismiss();
+        }
     }
 }

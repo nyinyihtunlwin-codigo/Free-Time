@@ -11,7 +11,9 @@ import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import projects.nyinyihtunlwin.zcar.data.vo.tvshows.TvShowVO;
+import projects.nyinyihtunlwin.zcar.events.MovieDetailsEvent;
 import projects.nyinyihtunlwin.zcar.events.MoviesiEvents;
+import projects.nyinyihtunlwin.zcar.events.TvShowDetailsEvent;
 import projects.nyinyihtunlwin.zcar.events.TvShowsEvents;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.GetMovieCreditsResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.GetMovieReviewsResponse;
@@ -148,8 +150,8 @@ public class TvShowDataAgentImpl implements TvShowDataAgent {
 
             @Override
             public void onFailure(Call<TvShowVO> call, Throwable t) {
-                TvShowsEvents.ErrorInvokingAPIEvent errorEvent
-                        = new TvShowsEvents.ErrorInvokingAPIEvent(t.getMessage());
+                TvShowDetailsEvent.ErrorInvokingAPIEvent errorEvent
+                        = new TvShowDetailsEvent.ErrorInvokingAPIEvent("Can't load data. Try again.");
                 EventBus.getDefault().post(errorEvent);
             }
         });
@@ -158,7 +160,7 @@ public class TvShowDataAgentImpl implements TvShowDataAgent {
     @Override
     public void loadTvShowTrailers(int movieId, String apiKey) {
         Call<GetMovieTrailersResponse> loadMovieTrailersResponse = movieAPI.loadTvShowTrailers(movieId, apiKey);
-        loadMovieTrailersResponse.enqueue(new MovieCallback<GetMovieTrailersResponse>() {
+        loadMovieTrailersResponse.enqueue(new Callback<GetMovieTrailersResponse>() {
             @Override
             public void onResponse(Call<GetMovieTrailersResponse> call, Response<GetMovieTrailersResponse> response) {
                 GetMovieTrailersResponse getMovieTrailersResponse = response.body();
@@ -168,13 +170,20 @@ public class TvShowDataAgentImpl implements TvShowDataAgent {
                     Log.e("Trailers:", getMovieTrailersResponse.getVideos().size() + "");
                 }
             }
+
+            @Override
+            public void onFailure(Call<GetMovieTrailersResponse> call, Throwable t) {
+                TvShowDetailsEvent.ErrorInvokingAPIEvent errorEvent
+                        = new TvShowDetailsEvent.ErrorInvokingAPIEvent("Can't load data. Try again.");
+                EventBus.getDefault().post(errorEvent);
+            }
         });
     }
 
     @Override
     public void loadTvShowReviews(int movieId, String apiKey) {
         Call<GetMovieReviewsResponse> loadMovieReviewsResponse = movieAPI.loadTvShowReviews(movieId, apiKey);
-        loadMovieReviewsResponse.enqueue(new MovieCallback<GetMovieReviewsResponse>() {
+        loadMovieReviewsResponse.enqueue(new Callback<GetMovieReviewsResponse>() {
             @Override
             public void onResponse(Call<GetMovieReviewsResponse> call, Response<GetMovieReviewsResponse> response) {
                 GetMovieReviewsResponse getMovieReviewsResponse = response.body();
@@ -186,13 +195,20 @@ public class TvShowDataAgentImpl implements TvShowDataAgent {
                     }
                 }
             }
+
+            @Override
+            public void onFailure(Call<GetMovieReviewsResponse> call, Throwable t) {
+                TvShowDetailsEvent.ErrorInvokingAPIEvent errorEvent
+                        = new TvShowDetailsEvent.ErrorInvokingAPIEvent("Can't load data. Try again.");
+                EventBus.getDefault().post(errorEvent);
+            }
         });
     }
 
     @Override
     public void loadTvShowCredits(int movieId, String apiKey) {
         Call<GetMovieCreditsResponse> loadMovieCreditsResponse = movieAPI.loadTvShowCredits(movieId, apiKey);
-        loadMovieCreditsResponse.enqueue(new MovieCallback<GetMovieCreditsResponse>() {
+        loadMovieCreditsResponse.enqueue(new Callback<GetMovieCreditsResponse>() {
             @Override
             public void onResponse(Call<GetMovieCreditsResponse> call, Response<GetMovieCreditsResponse> response) {
                 GetMovieCreditsResponse getMovieCreditsResponse = response.body();
@@ -200,6 +216,13 @@ public class TvShowDataAgentImpl implements TvShowDataAgent {
                         && getMovieCreditsResponse.getCasts().size() > 0) {
                     EventBus.getDefault().post(new MoviesiEvents.MovieCreditsDataLoadedEvent(getMovieCreditsResponse.getCasts()));
                 }
+            }
+
+            @Override
+            public void onFailure(Call<GetMovieCreditsResponse> call, Throwable t) {
+                TvShowDetailsEvent.ErrorInvokingAPIEvent errorEvent
+                        = new TvShowDetailsEvent.ErrorInvokingAPIEvent("Can't load data. Try again.");
+                EventBus.getDefault().post(errorEvent);
             }
         });
     }

@@ -8,13 +8,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -37,17 +37,18 @@ import projects.nyinyihtunlwin.zcar.R;
 import projects.nyinyihtunlwin.zcar.adapters.CastAdapter;
 import projects.nyinyihtunlwin.zcar.adapters.GenreAdapter;
 import projects.nyinyihtunlwin.zcar.adapters.TrailersAdapter;
-import projects.nyinyihtunlwin.zcar.data.models.MovieModel;
 import projects.nyinyihtunlwin.zcar.data.models.TvShowModel;
 import projects.nyinyihtunlwin.zcar.data.vo.GenreVO;
 import projects.nyinyihtunlwin.zcar.data.vo.ReviewVO;
-import projects.nyinyihtunlwin.zcar.data.vo.movies.MovieVO;
 import projects.nyinyihtunlwin.zcar.data.vo.tvshows.TvShowVO;
 import projects.nyinyihtunlwin.zcar.delegates.MovieDetailsDelegate;
+import projects.nyinyihtunlwin.zcar.events.MovieDetailsEvent;
 import projects.nyinyihtunlwin.zcar.events.MoviesiEvents;
+import projects.nyinyihtunlwin.zcar.events.TvShowDetailsEvent;
 import projects.nyinyihtunlwin.zcar.events.TvShowsEvents;
 import projects.nyinyihtunlwin.zcar.persistence.MovieContract;
 import projects.nyinyihtunlwin.zcar.utils.AppConstants;
+import projects.nyinyihtunlwin.zcar.utils.AppUtils;
 
 public class TvShowDetailsActivity extends BaseActivity implements MovieDetailsDelegate, View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -140,6 +141,8 @@ public class TvShowDetailsActivity extends BaseActivity implements MovieDetailsD
     private TrailersAdapter mTrailersAdapter;
     private CastAdapter mCastAdapter;
 
+    private Snackbar mSnackbar;
+
     public static Intent newIntent(Context context, String tvShowId) {
         Intent intent = new Intent(context, TvShowDetailsActivity.class);
         intent.putExtra(KEY_TV_SHOW_ID, tvShowId);
@@ -158,10 +161,7 @@ public class TvShowDetailsActivity extends BaseActivity implements MovieDetailsD
 
         if (getIntent().getStringExtra(KEY_TV_SHOW_ID) != null) {
             currentMovieId = getIntent().getStringExtra(KEY_TV_SHOW_ID);
-            TvShowModel.getInstance().startLoadingTvShowDetails(currentMovieId);
-            TvShowModel.getInstance().startLoadingTvShowTrailers(currentMovieId);
-            TvShowModel.getInstance().startLoadingTvShowReviews(currentMovieId);
-            TvShowModel.getInstance().startLoadingTvShowCredits(currentMovieId);
+            loadDetails();
         }
         currentGenreIds = new ArrayList<>();
 
@@ -205,6 +205,19 @@ public class TvShowDetailsActivity extends BaseActivity implements MovieDetailsD
                 }
             }
         });
+    }
+
+    private void loadDetails() {
+        if (AppUtils.getObjInstance().hasConnection()) {
+            TvShowModel.getInstance().startLoadingTvShowTrailers(currentMovieId);
+            TvShowModel.getInstance().startLoadingTvShowReviews(currentMovieId);
+            TvShowModel.getInstance().startLoadingTvShowCredits(currentMovieId);
+            TvShowModel.getInstance().startLoadingTvShowDetails(currentMovieId);
+        } else {
+            showSnackBar("No internet connection.");
+            loadingView.setVisibility(View.GONE);
+        }
+
     }
 
 
@@ -339,6 +352,7 @@ public class TvShowDetailsActivity extends BaseActivity implements MovieDetailsD
         tvCasts.setVisibility(View.VISIBLE);
         mCastAdapter.setNewData(event.getMovieCasts());
         loadingView.setVisibility(View.GONE);
+        hideSnackBar();
     }
 
     @Subscribe
@@ -372,11 +386,6 @@ public class TvShowDetailsActivity extends BaseActivity implements MovieDetailsD
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onErrorInvokingAPI(MoviesiEvents.ErrorInvokingAPIEvent event) {
-        loadingView.setVisibility(View.GONE);
-    }
-
     @Override
     protected void onStop() {
         super.onStop();
@@ -387,5 +396,36 @@ public class TvShowDetailsActivity extends BaseActivity implements MovieDetailsD
     public void onClickTriler(String trailerKey) {
         Intent youtubeIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(AppConstants.YOUTUBE_WATCH_BASE_URL + trailerKey));
         startActivity(youtubeIntent);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onDetailsApiError(TvShowDetailsEvent.ErrorInvokingAPIEvent event) {
+        mSnackbar = Snackbar.make(rvMovieCasts, event.getErrorMsg(), Snackbar.LENGTH_INDEFINITE);
+        mSnackbar.setAction("Dismiss", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSnackbar.dismiss();
+            }
+        });
+        mSnackbar.show();
+    }
+
+    public void showSnackBar(String message) {
+        mSnackbar = Snackbar.make(rvMovieCasts, message, Snackbar.LENGTH_INDEFINITE);
+        mSnackbar.setAction("Retry", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSnackbar.dismiss();
+                loadingView.setVisibility(View.VISIBLE);
+                loadDetails();
+            }
+        });
+        mSnackbar.show();
+    }
+
+    public void hideSnackBar() {
+        if (mSnackbar != null && mSnackbar.isShown()) {
+            mSnackbar.dismiss();
+        }
     }
 }

@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import projects.nyinyihtunlwin.zcar.data.vo.movies.MovieVO;
+import projects.nyinyihtunlwin.zcar.events.MovieDetailsEvent;
 import projects.nyinyihtunlwin.zcar.events.MoviesiEvents;
 import projects.nyinyihtunlwin.zcar.events.SearchEvents;
 import projects.nyinyihtunlwin.zcar.network.responses.SearchResponse;
@@ -157,8 +158,8 @@ public class MovieDataAgentImpl implements MovieDataAgent {
 
             @Override
             public void onFailure(Call<MovieVO> call, Throwable t) {
-                MoviesiEvents.ErrorInvokingAPIEvent errorEvent
-                        = new MoviesiEvents.ErrorInvokingAPIEvent(t.getMessage());
+                MovieDetailsEvent.ErrorInvokingAPIEvent errorEvent
+                        = new MovieDetailsEvent.ErrorInvokingAPIEvent("Can't load data. Try again.");
                 EventBus.getDefault().post(errorEvent);
             }
         });
@@ -176,6 +177,13 @@ public class MovieDataAgentImpl implements MovieDataAgent {
                     EventBus.getDefault().post(new MoviesiEvents.MovieTrailersDataLoadedEvent(getMovieTrailersResponse.getVideos()));
                     Log.e("Trailers:", getMovieTrailersResponse.getVideos().size() + "");
                 }
+            }
+
+            @Override
+            public void onFailure(Call<GetMovieTrailersResponse> call, Throwable t) {
+                MovieDetailsEvent.ErrorInvokingAPIEvent errorEvent
+                        = new MovieDetailsEvent.ErrorInvokingAPIEvent("Can't load data. Try again.");
+                EventBus.getDefault().post(errorEvent);
             }
         });
     }
@@ -195,6 +203,13 @@ public class MovieDataAgentImpl implements MovieDataAgent {
                     }
                 }
             }
+
+            @Override
+            public void onFailure(Call<GetMovieReviewsResponse> call, Throwable t) {
+                MovieDetailsEvent.ErrorInvokingAPIEvent errorEvent
+                        = new MovieDetailsEvent.ErrorInvokingAPIEvent("Can't load data. Try again.");
+                EventBus.getDefault().post(errorEvent);
+            }
         });
     }
 
@@ -209,6 +224,13 @@ public class MovieDataAgentImpl implements MovieDataAgent {
                         && getMovieCreditsResponse.getCasts().size() > 0) {
                     EventBus.getDefault().post(new MoviesiEvents.MovieCreditsDataLoadedEvent(getMovieCreditsResponse.getCasts()));
                 }
+            }
+
+            @Override
+            public void onFailure(Call<GetMovieCreditsResponse> call, Throwable t) {
+                MovieDetailsEvent.ErrorInvokingAPIEvent errorEvent
+                        = new MovieDetailsEvent.ErrorInvokingAPIEvent("Can't load data. Try again.");
+                EventBus.getDefault().post(errorEvent);
             }
         });
     }

@@ -120,7 +120,7 @@ public class UpcomingFragment extends BaseFragment implements MovieItemDelegate,
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mPresenter.onDataLoaded(getActivity().getApplicationContext(), data);
+        mPresenter.onDataLoaded(getActivity(), data);
         swipeRefreshLayout.setRefreshing(false);
     }
 

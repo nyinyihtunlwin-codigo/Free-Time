@@ -203,10 +203,10 @@ public class TopRatedFragment extends BaseFragment implements MovieItemDelegate,
                 switch (mRetryConnectionType) {
                     case AppConstants.TYPE_START_LOADING_DATA:
                         swipeRefreshLayout.setRefreshing(true);
-                        mPresenter.onForceRefresh(getActivity().getApplicationContext());
+                        mPresenter.onForceRefresh(getActivity());
                         break;
                     case AppConstants.TYPE_lOAD_MORE_DATA:
-                        mPresenter.onMovieListEndReached(getActivity().getApplicationContext());
+                        mPresenter.onMovieListEndReached(getActivity());
                         break;
                 }
             }
