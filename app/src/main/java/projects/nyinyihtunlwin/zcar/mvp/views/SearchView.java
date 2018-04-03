@@ -14,5 +14,5 @@ public interface SearchView {
 
     void showLoding();
 
-    void navigateToDetails(String movieId);
+    void navigateToDetails(String movieId,String mediaType);
 }

@@ -46,8 +46,8 @@ public class SearchPresenter extends BasePresenter<SearchView> {
     }
 
 
-    public void onTapResult(String movieId) {
-
+    public void onTapResult(String movieId, String mediaType) {
+        mView.navigateToDetails(movieId,mediaType);
     }
 
     public void onResultListEndReached() {

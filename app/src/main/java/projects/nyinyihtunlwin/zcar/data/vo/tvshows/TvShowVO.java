@@ -56,6 +56,24 @@ public class TvShowVO {
     @SerializedName("origin_country")
     private List<String> originCountries;
 
+    @SerializedName("last_air_date")
+    private String lastAirDate;
+
+    @SerializedName("number_of_episodes")
+    private Integer numberOfEpisodes;
+
+    @SerializedName("number_of_seasons")
+    private Integer numberOfSeasons;
+
+    @SerializedName("status")
+    private String status;
+
+    @SerializedName("networks")
+    private List<Network> networks;
+
+    @SerializedName("episode_run_time")
+    private List<Integer> episodeRunTime;
+
     public String getId() {
         return id;
     }
@@ -109,6 +127,58 @@ public class TvShowVO {
     }
 
 
+    public String getLastAirDate() {
+        return lastAirDate;
+    }
+
+    public void setLastAirDate(String lastAirDate) {
+        this.lastAirDate = lastAirDate;
+    }
+
+    public Integer getNumberOfEpisodes() {
+        return numberOfEpisodes;
+    }
+
+    public void setNumberOfEpisodes(Integer numberOfEpisodes) {
+        this.numberOfEpisodes = numberOfEpisodes;
+    }
+
+    public Integer getNumberOfSeasons() {
+        return numberOfSeasons;
+    }
+
+    public void setNumberOfSeasons(Integer numberOfSeasons) {
+        this.numberOfSeasons = numberOfSeasons;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setOriginCountries(List<String> originCountries) {
+        this.originCountries = originCountries;
+    }
+
+    public List<Network> getNetworks() {
+        return networks;
+    }
+
+    public void setNetworks(List<Network> networks) {
+        this.networks = networks;
+    }
+
+    public List<Integer> getEpisodeRunTime() {
+        return episodeRunTime;
+    }
+
+    public void setEpisodeRunTime(List<Integer> episodeRunTime) {
+        this.episodeRunTime = episodeRunTime;
+    }
+
     public ContentValues parseToContentValues() {
 
         ContentValues contentValues = new ContentValues();
@@ -123,6 +193,10 @@ public class TvShowVO {
         contentValues.put(MovieContract.TvShowsEntry.COLUMN_BACKDROP_PATH, backdropPath);
         contentValues.put(MovieContract.TvShowsEntry.COLUMN_OVERVIEW, overview);
         contentValues.put(MovieContract.TvShowsEntry.COLUMN_FIRST_AIR_DATE, firstAirDate);
+        contentValues.put(MovieContract.TvShowsEntry.COLUMN_LAST_AIR_DATE, lastAirDate);
+        contentValues.put(MovieContract.TvShowsEntry.COLUMN_STATUS, status);
+        contentValues.put(MovieContract.TvShowsEntry.COLUMN_NO_OF_EPISODES, numberOfEpisodes);
+        contentValues.put(MovieContract.TvShowsEntry.COLUMN_NO_OF_SEASONS, numberOfSeasons);
         return contentValues;
     }
 
@@ -139,6 +213,10 @@ public class TvShowVO {
         tvShow.backdropPath = cursor.getString(cursor.getColumnIndex(MovieContract.TvShowsEntry.COLUMN_BACKDROP_PATH));
         tvShow.overview = cursor.getString(cursor.getColumnIndex(MovieContract.TvShowsEntry.COLUMN_OVERVIEW));
         tvShow.firstAirDate = cursor.getString(cursor.getColumnIndex(MovieContract.TvShowsEntry.COLUMN_FIRST_AIR_DATE));
+        tvShow.lastAirDate = cursor.getString(cursor.getColumnIndex(MovieContract.TvShowsEntry.COLUMN_LAST_AIR_DATE));
+        tvShow.status = cursor.getString(cursor.getColumnIndex(MovieContract.TvShowsEntry.COLUMN_STATUS));
+        tvShow.numberOfEpisodes = cursor.getInt(cursor.getColumnIndex(MovieContract.TvShowsEntry.COLUMN_NO_OF_EPISODES));
+        tvShow.numberOfSeasons = cursor.getInt(cursor.getColumnIndex(MovieContract.TvShowsEntry.COLUMN_NO_OF_SEASONS));
         tvShow.genreIds = loadGenresInMovie(context, tvShow.id);
         return tvShow;
     }

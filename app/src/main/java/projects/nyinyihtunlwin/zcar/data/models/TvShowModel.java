@@ -50,6 +50,22 @@ public class TvShowModel {
         return objectInstance;
     }
 
+    public void startLoadingTvShowDetails(String movieId) {
+        TvShowDataAgentImpl.getObjectInstance().loadTvShowDetails(Integer.parseInt(movieId), AppConstants.API_KEY);
+    }
+
+    public void startLoadingTvShowTrailers(String movieId) {
+        TvShowDataAgentImpl.getObjectInstance().loadTvShowTrailers(Integer.parseInt(movieId), AppConstants.API_KEY);
+    }
+
+    public void startLoadingTvShowReviews(String movieId) {
+        TvShowDataAgentImpl.getObjectInstance().loadTvShowReviews(Integer.parseInt(movieId), AppConstants.API_KEY);
+    }
+
+    public void startLoadingTvShowCredits(String movieId) {
+        TvShowDataAgentImpl.getObjectInstance().loadTvShowCredits(Integer.parseInt(movieId), AppConstants.API_KEY);
+    }
+
 
     public void startLoadingTvShows(Context context, String showType) {
         switch (showType) {

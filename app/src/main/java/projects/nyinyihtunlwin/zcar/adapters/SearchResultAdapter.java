@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 
 import projects.nyinyihtunlwin.zcar.R;
 import projects.nyinyihtunlwin.zcar.data.vo.SearchResultVO;
+import projects.nyinyihtunlwin.zcar.delegates.SearchResultDelegate;
 import projects.nyinyihtunlwin.zcar.viewholders.SearchResultViewHolder;
 
 /**
@@ -14,13 +15,16 @@ import projects.nyinyihtunlwin.zcar.viewholders.SearchResultViewHolder;
 
 public class SearchResultAdapter extends BaseRecyclerAdapter<SearchResultViewHolder, SearchResultVO> {
 
-    public SearchResultAdapter(Context context) {
+    private SearchResultDelegate mSearchResultDelegate;
+
+    public SearchResultAdapter(Context context, SearchResultDelegate searchResultDelegate) {
         super(context);
+        this.mSearchResultDelegate = searchResultDelegate;
     }
 
     @Override
     public SearchResultViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mLayoutInflater.inflate(R.layout.view_item_list_movie, parent, false);
-        return new SearchResultViewHolder(view);
+        return new SearchResultViewHolder(view,mSearchResultDelegate);
     }
 }

@@ -71,4 +71,17 @@ public class TvShowsEvents {
             super(loadedPageIndex, loadedTvShows, context);
         }
     }
+
+    public static class TvShowDetailsDataLoadedEvent {
+        private TvShowVO mTvShow;
+
+        public TvShowDetailsDataLoadedEvent(TvShowVO mTvShow) {
+            this.mTvShow = mTvShow;
+        }
+
+        public TvShowVO getTvShow() {
+            return mTvShow;
+        }
+    }
+
 }

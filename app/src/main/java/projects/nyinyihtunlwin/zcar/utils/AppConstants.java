@@ -39,4 +39,8 @@ public class AppConstants {
 
     public static final int TYPE_START_LOADING_DATA = 00;
     public static final int TYPE_lOAD_MORE_DATA = 11;
+
+    public static final String TYPE_SEARCH_MOVIE="movie";
+    public static final String TYPE_SEARCH_TV_SHOW="tv";
+    public static final String TYPE_SEARCH_PERSON="person";
 }

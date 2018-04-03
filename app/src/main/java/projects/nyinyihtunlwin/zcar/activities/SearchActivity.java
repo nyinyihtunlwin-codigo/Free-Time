@@ -1,5 +1,6 @@
 package projects.nyinyihtunlwin.zcar.activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,8 +11,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -24,14 +27,16 @@ import projects.nyinyihtunlwin.zcar.adapters.SearchResultAdapter;
 import projects.nyinyihtunlwin.zcar.components.SmartRecyclerView;
 import projects.nyinyihtunlwin.zcar.components.SmartScrollListener;
 import projects.nyinyihtunlwin.zcar.data.vo.SearchResultVO;
+import projects.nyinyihtunlwin.zcar.delegates.SearchResultDelegate;
 import projects.nyinyihtunlwin.zcar.mvp.presenters.SearchPresenter;
 import projects.nyinyihtunlwin.zcar.mvp.views.SearchView;
+import projects.nyinyihtunlwin.zcar.utils.AppConstants;
 
 /**
  * Created by Dell on 3/11/2018.
  */
 
-public class SearchActivity extends BaseActivity implements SearchView {
+public class SearchActivity extends BaseActivity implements SearchView, SearchResultDelegate {
 
     public static Intent newIntent(Context context) {
         Intent intent = new Intent(context, SearchActivity.class);
@@ -78,11 +83,11 @@ public class SearchActivity extends BaseActivity implements SearchView {
             }
         });
 
-        mAdapter = new SearchResultAdapter(getApplicationContext());
+        mAdapter = new SearchResultAdapter(getApplicationContext(), this);
         rvResult.setAdapter(mAdapter);
         rvResult.setHasFixedSize(true);
-        rvResult.setLayoutManager(new LinearLayoutManager(this));
-   //     rvResult.addOnScrollListener(mSmartScrollListener);
+        rvResult.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
+        rvResult.addOnScrollListener(mSmartScrollListener);
 
         etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -90,7 +95,13 @@ public class SearchActivity extends BaseActivity implements SearchView {
                 if (keyCode == EditorInfo.IME_ACTION_SEARCH) {
                     if (!etSearch.getText().toString().equals("")) {
                         String query = etSearch.getText().toString();
-                        mPresenter.onTapSearch(query);
+                        if (!query.equals("")) {
+                            mAdapter.clearData();
+                            hideSoftKeyboard(getApplicationContext());
+                            mPresenter.onTapSearch(query);
+                        } else {
+                            etSearch.setError("Enter keywords.");
+                        }
                     }
                     return true;
                 }
@@ -125,7 +136,20 @@ public class SearchActivity extends BaseActivity implements SearchView {
     }
 
     @Override
-    public void navigateToDetails(String movieId) {
+    public void navigateToDetails(String movieId, String mediaType) {
+        switch (mediaType) {
+            case AppConstants.TYPE_SEARCH_MOVIE:
+                break;
+            case AppConstants.TYPE_SEARCH_TV_SHOW:
+                break;
+            case AppConstants.TYPE_SEARCH_PERSON:
+                break;
+        }
+    }
 
+
+    @Override
+    public void onClickResultItems(String movieId, String mediaType) {
+        mPresenter.onTapResult(movieId, mediaType);
     }
 }

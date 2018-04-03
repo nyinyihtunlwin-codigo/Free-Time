@@ -15,4 +15,13 @@ public interface TvShowDataAgent {
     void loadTvMostPopular(String apiKey, int pageNo, String region, Context context);
 
     void loadTvTopRated(String apiKey, int pageNo, String region, Context context);
+
+    void loadTvShowDetails(int movieId, String apiKey);
+
+    void loadTvShowTrailers(int movieId, String apiKey);
+
+    void loadTvShowReviews(int movieId, String apiKey);
+
+    void loadTvShowCredits(int movieId, String apiKey);
+
 }

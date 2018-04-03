@@ -45,6 +45,10 @@ public class MovieContract {
         public static final String COLUMN_BACKDROP_PATH = "backdrop_path";
         public static final String COLUMN_OVERVIEW = "overview";
         public static final String COLUMN_FIRST_AIR_DATE = "first_air_date";
+        public static final String COLUMN_LAST_AIR_DATE = "last_air_date";
+        public static final String COLUMN_NO_OF_EPISODES = "no_of_episodes";
+        public static final String COLUMN_NO_OF_SEASONS = "no_of_seasons";
+        public static final String COLUMN_STATUS = "status";
 
 
         public static Uri buildTvShowUri(long id) {

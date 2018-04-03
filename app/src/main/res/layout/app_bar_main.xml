@@ -37,21 +37,35 @@
                     android:textSize="@dimen/text_heading_1x"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/tv_current_section"
+                <RelativeLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_gravity="right|center_vertical"
-                    android:layout_marginEnd="@dimen/margin_medium"
-                    android:background="@drawable/bg_round_accent_border"
-                    android:paddingBottom="@dimen/margin_small"
-                    android:paddingEnd="@dimen/margin_medium"
-                    android:paddingStart="@dimen/margin_medium"
-                    android:paddingTop="@dimen/margin_small"
-                    android:text="@string/section_name_placeholder"
-                    android:textColor="@color/accent"
-                    android:textSize="@dimen/text_regular"
-                    android:textStyle="bold" />
+                    android:layout_marginEnd="@dimen/margin_medium">
+
+                    <TextView
+                        android:id="@+id/tv_current_section"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/bg_round_accent_border"
+                        android:paddingBottom="@dimen/margin_small"
+                        android:paddingEnd="@dimen/margin_medium"
+                        android:paddingStart="@dimen/margin_medium"
+                        android:paddingTop="@dimen/margin_small"
+                        android:text="@string/section_name_placeholder"
+                        android:textColor="@color/accent"
+                        android:textSize="@dimen/text_regular"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_above="@id/tv_current_section"
+                        android:layout_centerHorizontal="true"
+                        android:text="|        |"
+                        android:textColor="@color/accent" />
+                </RelativeLayout>
             </LinearLayout>
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>

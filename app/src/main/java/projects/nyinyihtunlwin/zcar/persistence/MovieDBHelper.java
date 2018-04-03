@@ -58,7 +58,11 @@ public class MovieDBHelper extends SQLiteOpenHelper {
             MovieContract.TvShowsEntry.COLUMN_NAME + " TEXT NOT NULL, " +
             MovieContract.TvShowsEntry.COLUMN_ORIGINAL_NAME + " TEXT, " +
             MovieContract.TvShowsEntry.COLUMN_FIRST_AIR_DATE + " TEXT, " +
+            MovieContract.TvShowsEntry.COLUMN_LAST_AIR_DATE + " TEXT, " +
+            MovieContract.TvShowsEntry.COLUMN_STATUS + " TEXT, " +
             MovieContract.TvShowsEntry.COLUMN_VOTE_COUNT + " INTEGER, " +
+            MovieContract.TvShowsEntry.COLUMN_NO_OF_EPISODES + " INTEGER, " +
+            MovieContract.TvShowsEntry.COLUMN_NO_OF_SEASONS + " INTEGER, " +
             MovieContract.TvShowsEntry.COLUMN_VIDEO + " INTEGER DEFAULT 0, " +
             MovieContract.TvShowsEntry.COLUMN_VOTE_AVERAGE + " REAL, " +
             MovieContract.TvShowsEntry.COLUMN_POPULARITY + " REAL, " +

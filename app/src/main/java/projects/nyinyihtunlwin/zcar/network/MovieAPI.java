@@ -71,6 +71,16 @@ public interface MovieAPI {
     @GET("tv/{id}")
     Call<TvShowVO> loadTVShowDetails(@Path("id") Integer tvShowId, @Query("api_key") String apiKey);
 
+    @GET("tv/{id}/videos")
+    Call<GetMovieTrailersResponse> loadTvShowTrailers(@Path("id") Integer movieId, @Query("api_key") String apiKey);
+
+    @GET("tv/{id}/credits")
+    Call<GetMovieCreditsResponse> loadTvShowCredits(@Path("id") Integer movieId, @Query("api_key") String apiKey);
+
+    @GET("/tv/{tv_id}/reviews")
+    Call<GetMovieReviewsResponse> loadTvShowReviews(@Path("tv_id") Integer movieId, @Query("api_key") String apiKey);
+
+
     // Search Movies and TV Shows
     @GET("search/multi")
     Call<SearchResponse> search(@Query("api_key") String apiKey, @Query("page") Integer page, @Query("query") String query);
