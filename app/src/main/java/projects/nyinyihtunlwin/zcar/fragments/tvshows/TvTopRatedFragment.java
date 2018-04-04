@@ -1,6 +1,7 @@
 package projects.nyinyihtunlwin.zcar.fragments.tvshows;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import projects.nyinyihtunlwin.zcar.R;
+import projects.nyinyihtunlwin.zcar.activities.TvShowDetailsActivity;
 import projects.nyinyihtunlwin.zcar.adapters.TvShowAdapter;
 import projects.nyinyihtunlwin.zcar.components.EmptyViewPod;
 import projects.nyinyihtunlwin.zcar.components.SmartRecyclerView;
@@ -185,7 +187,8 @@ public class TvTopRatedFragment extends BaseFragment implements MovieItemDelegat
 
     @Override
     public void navigateToTvShowDetails(String tvShowId) {
-
+        Intent intent = TvShowDetailsActivity.newIntent(getActivity().getApplicationContext(), tvShowId);
+        startActivity(intent);
     }
 
 

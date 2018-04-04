@@ -5,10 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NavUtils;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -31,6 +33,7 @@ import projects.nyinyihtunlwin.zcar.delegates.SearchResultDelegate;
 import projects.nyinyihtunlwin.zcar.mvp.presenters.SearchPresenter;
 import projects.nyinyihtunlwin.zcar.mvp.views.SearchView;
 import projects.nyinyihtunlwin.zcar.utils.AppConstants;
+import projects.nyinyihtunlwin.zcar.utils.AppUtils;
 
 /**
  * Created by Dell on 3/11/2018.
@@ -98,9 +101,13 @@ public class SearchActivity extends BaseActivity implements SearchView, SearchRe
                         if (!query.equals("")) {
                             mAdapter.clearData();
                             hideSoftKeyboard(getApplicationContext());
-                            mPresenter.onTapSearch(query);
+                            if (AppUtils.getObjInstance().hasConnection()) {
+                                mPresenter.onTapSearch(query);
+                            } else {
+                                tvMessage.setText("No internet connection!");
+                            }
                         } else {
-                            etSearch.setError("Enter keywords.");
+                            tvMessage.setError("Enter keywords.");
                         }
                     }
                     return true;
@@ -137,19 +144,33 @@ public class SearchActivity extends BaseActivity implements SearchView, SearchRe
 
     @Override
     public void navigateToDetails(String movieId, String mediaType) {
+        Intent intent = null;
         switch (mediaType) {
             case AppConstants.TYPE_SEARCH_MOVIE:
+                intent = MovieDetailsActivity.newIntent(getApplicationContext(), movieId);
                 break;
             case AppConstants.TYPE_SEARCH_TV_SHOW:
+                intent = TvShowDetailsActivity.newIntent(getApplicationContext(), movieId);
                 break;
             case AppConstants.TYPE_SEARCH_PERSON:
                 break;
         }
+        startActivity(intent);
     }
 
 
     @Override
     public void onClickResultItems(String movieId, String mediaType) {
         mPresenter.onTapResult(movieId, mediaType);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -80,7 +80,7 @@ public class TopRatedFragment extends BaseFragment implements MovieItemDelegate,
             @Override
             public void onListEndReached() {
                 showLoadMore();
-                mPresenter.onMovieListEndReached(getActivity().getApplicationContext());
+                mPresenter.onMovieListEndReached(getActivity());
             }
         });
 
@@ -90,7 +90,7 @@ public class TopRatedFragment extends BaseFragment implements MovieItemDelegate,
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mPresenter.onForceRefresh(getActivity().getApplicationContext());
+                mPresenter.onForceRefresh(getActivity());
             }
         });
 

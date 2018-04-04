@@ -15,6 +15,7 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -220,7 +221,6 @@ public class TvShowDetailsActivity extends BaseActivity implements MovieDetailsD
 
     }
 
-
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -310,6 +310,8 @@ public class TvShowDetailsActivity extends BaseActivity implements MovieDetailsD
 
     @Subscribe
     public void onMovieDetailsLoaded(TvShowsEvents.TvShowDetailsDataLoadedEvent event) {
+        bindData(event.getTvShow());
+        loadingView.setVisibility(View.GONE);
         if (event.getTvShow().getEpisodeRunTime() != null) {
             llTime.setVisibility(View.VISIBLE);
             int hour = event.getTvShow().getEpisodeRunTime().get(0) / 60;
@@ -343,6 +345,7 @@ public class TvShowDetailsActivity extends BaseActivity implements MovieDetailsD
 
     @Subscribe
     public void onMovieTrailersLoaded(MoviesiEvents.MovieTrailersDataLoadedEvent event) {
+        loadingView.setVisibility(View.GONE);
         tvTrailers.setVisibility(View.VISIBLE);
         mTrailersAdapter.setNewData(event.getmTrailers());
     }

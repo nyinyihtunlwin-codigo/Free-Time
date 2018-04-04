@@ -305,6 +305,8 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsDe
 
     @Subscribe
     public void onMovieDetailsLoaded(MoviesiEvents.MovieDetailsDataLoadedEvent event) {
+        bindData(event.getmMovie());
+        loadingView.setVisibility(View.GONE);
         if (event.getmMovie().getRuntime() != null) {
             llTime.setVisibility(View.VISIBLE);
             int hour = event.getmMovie().getRuntime() / 60;
@@ -326,12 +328,14 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsDe
 
     @Subscribe
     public void onMovieTrailersLoaded(MoviesiEvents.MovieTrailersDataLoadedEvent event) {
+        loadingView.setVisibility(View.GONE);
         tvTrailers.setVisibility(View.VISIBLE);
         mTrailersAdapter.setNewData(event.getmTrailers());
     }
 
     @Subscribe
     public void onMovieCastsDataLoaded(MoviesiEvents.MovieCreditsDataLoadedEvent event) {
+        loadingView.setVisibility(View.GONE);
         tvCasts.setVisibility(View.VISIBLE);
         mCastAdapter.setNewData(event.getMovieCasts());
     }
