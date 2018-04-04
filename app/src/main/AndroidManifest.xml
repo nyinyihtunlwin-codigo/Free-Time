@@ -54,6 +54,9 @@
         <service
             android:name=".services.CacheManager"
             android:exported="false" />
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="eff833c2330484af83a1fe4372f334ffa3466d04" />
     </application>
 
 </manifest>
