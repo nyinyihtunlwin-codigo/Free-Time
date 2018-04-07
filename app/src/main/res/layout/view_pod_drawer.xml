@@ -10,6 +10,13 @@
         android:background="@drawable/side_nav_bar"
         android:orientation="horizontal">
 
+        <ImageView
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/margin_medium_2"
+            android:src="@drawable/app_logo" />
+
         <TextView
             android:id="@+id/tv_version"
             android:layout_width="wrap_content"
@@ -36,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:paddingStart="@dimen/margin_medium_2"
-            android:src="@drawable/ic_movies" />
+            android:src="@drawable/ic_live_tv_24dp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -67,7 +74,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:paddingStart="@dimen/margin_medium_2"
-            android:src="@drawable/ic_live_tv_24dp" />
+            android:src="@drawable/ic_movies" />
 
         <TextView
             android:layout_width="match_parent"
@@ -84,5 +91,35 @@
         android:layout_height="0.5dp"
         android:background="@color/accent" />
 
+    <LinearLayout
+        android:id="@+id/btn_about"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/menu_item_height"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="@drawable/bg_ripple_white"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingStart="@dimen/margin_medium_2"
+            android:src="@drawable/ic_info_outline_24dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingStart="@dimen/margin_xlarge"
+            android:text="@string/about"
+            android:textColor="@color/icons"
+            android:textSize="@dimen/text_regular_2x" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/accent" />
 
 </LinearLayout>

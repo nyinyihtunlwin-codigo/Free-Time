@@ -148,5 +148,7 @@
     <string name="cast">Cast</string>
     <string name="search">Search</string>
     <string name="hint_search">Enter movie and tv shows</string>
+    <string name="title_activity_about">AboutActivity</string>
+    <string name="about">About</string>
 
 </resources>

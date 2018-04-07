@@ -53,6 +53,9 @@ public class MainActivity extends BaseActivity implements DrawerMenuItemDelegate
     @BindView(R.id.btn_tv_shows)
     LinearLayout btnTvShows;
 
+    @BindView(R.id.btn_about)
+    LinearLayout btnAbout;
+
     @BindView(R.id.tv_current_section)
     TextView tvCurrentSection;
 
@@ -109,6 +112,7 @@ public class MainActivity extends BaseActivity implements DrawerMenuItemDelegate
         btnMovies.setOnClickListener(this);
         btnTvShows.setOnClickListener(this);
         fabSearch.setOnClickListener(this);
+        btnAbout.setOnClickListener(this);
 
         setFragment(new MoviesFragment());
 
@@ -158,6 +162,10 @@ public class MainActivity extends BaseActivity implements DrawerMenuItemDelegate
             case R.id.btn_tv_shows:
                 setFragment(new TVShowsFragment());
                 tvCurrentSection.setText("TV Shows");
+                break;
+            case R.id.btn_about:
+                Intent toAboutScreen = AboutActivity.newIntent(MainActivity.this);
+                startActivity(toAboutScreen);
                 break;
             case R.id.fab:
                 Intent intent = SearchActivity.newIntent(getApplicationContext());
