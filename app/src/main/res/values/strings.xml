@@ -150,5 +150,9 @@
     <string name="hint_search">Enter movie and tv shows</string>
     <string name="title_activity_about">AboutActivity</string>
     <string name="about">About</string>
+    <string name="moves_and_tvshows"><![CDATA[Movies & TV Shows]]></string>
+    <string name="Developed_by">Developed by</string>
+    <string name="me">Nyi Nyi Htun Lwin</string>
+    <string name="contact">Contact me via</string>
 
 </resources>
