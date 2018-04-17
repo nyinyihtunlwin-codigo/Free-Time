@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -30,6 +32,9 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener 
     @BindView(R.id.iv_github)
     ImageView btnGitHub;
 
+    @BindView(R.id.tv_app_name)
+    TextView tvAppName;
+
     public static Intent newIntent(Context context) {
         Intent intent = new Intent(context, AboutActivity.class);
         return intent;
@@ -45,6 +50,8 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener 
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         ButterKnife.bind(this, this);
+
+        tvAppName.setTypeface(Typeface.createFromAsset(getAssets(), "code_heavy.ttf"));
 
         btnFacebook.setOnClickListener(this);
         btnLinkedIn.setOnClickListener(this);
