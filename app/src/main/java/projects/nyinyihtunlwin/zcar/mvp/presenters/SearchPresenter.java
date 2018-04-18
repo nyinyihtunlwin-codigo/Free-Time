@@ -40,6 +40,11 @@ public class SearchPresenter extends BasePresenter<SearchView> {
         mView.displaySearchResults(event.getLoadedSearchResults());
     }
 
+    @Subscribe
+    public void onErrorInvokingAPILoaded(SearchEvents.ErrorInvokingAPIEvent event) {
+        mView.showErrorMsg(event.getErrorMsg());
+    }
+
     @Override
     public void onStop() {
         EventBus.getDefault().unregister(this);

@@ -15,4 +15,6 @@ public interface SearchView {
     void showLoding();
 
     void navigateToDetails(String movieId,String mediaType);
+
+    void showErrorMsg(String message);
 }

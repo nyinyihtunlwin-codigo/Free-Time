@@ -103,6 +103,7 @@ public class SearchActivity extends BaseActivity implements SearchView, SearchRe
                             hideSoftKeyboard(getApplicationContext());
                             if (AppUtils.getObjInstance().hasConnection()) {
                                 mPresenter.onTapSearch(query);
+                                tvMessage.setText("searching...");
                             } else {
                                 tvMessage.setText("No internet connection!");
                             }
@@ -156,6 +157,12 @@ public class SearchActivity extends BaseActivity implements SearchView, SearchRe
                 break;
         }
         startActivity(intent);
+    }
+
+    @Override
+    public void showErrorMsg(String message) {
+        loading.setVisibility(View.GONE);
+        tvMessage.setText(message);
     }
 
 

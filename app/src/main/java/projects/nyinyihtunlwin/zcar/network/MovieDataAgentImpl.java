@@ -246,12 +246,18 @@ public class MovieDataAgentImpl implements MovieDataAgent {
                         && getSearchResponse.getResults().size() > 0) {
                     SearchEvents.SearchResultsDataLoadedEvent event = new SearchEvents.SearchResultsDataLoadedEvent(getSearchResponse.getPage(), getSearchResponse.getResults());
                     EventBus.getDefault().post(event);
+                } else {
+                    SearchEvents.ErrorInvokingAPIEvent errorEvent
+                            = new SearchEvents.ErrorInvokingAPIEvent("No data found.");
+                    EventBus.getDefault().post(errorEvent);
                 }
             }
 
             @Override
             public void onFailure(Call<SearchResponse> call, Throwable t) {
-
+                SearchEvents.ErrorInvokingAPIEvent errorEvent
+                        = new SearchEvents.ErrorInvokingAPIEvent("Can't load data. Try again.");
+                EventBus.getDefault().post(errorEvent);
             }
         });
     }
