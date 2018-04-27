@@ -198,8 +198,6 @@ public class MovieDataAgentImpl implements MovieDataAgent {
                 if (getMovieReviewsResponse != null) {
                     if (getMovieReviewsResponse.getReviews().size() > 0) {
                         EventBus.getDefault().post(new MoviesiEvents.MovieReviewsDataLoadedEvent(getMovieReviewsResponse.getReviews()));
-                    } else {
-                        EventBus.getDefault().post(new MoviesiEvents.ErrorInvokingAPIEvent("No reviews for now!"));
                     }
                 }
             }
