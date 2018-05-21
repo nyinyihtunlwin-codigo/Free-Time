@@ -154,23 +154,43 @@ public class MainActivity extends BaseActivity implements DrawerMenuItemDelegate
     @Override
     public void onClick(final View view) {
         drawer.closeDrawer(Gravity.START);
-        switch (view.getId()) {
-            case R.id.btn_movies:
-                tvCurrentSection.setText("Movies");
-                setFragment(new MoviesFragment());
-                break;
-            case R.id.btn_tv_shows:
-                setFragment(new TVShowsFragment());
-                tvCurrentSection.setText("TV Shows");
-                break;
-            case R.id.btn_about:
-                Intent toAboutScreen = AboutActivity.newIntent(MainActivity.this);
-                startActivity(toAboutScreen);
-                break;
-            case R.id.fab:
-                Intent intent = SearchActivity.newIntent(getApplicationContext());
-                startActivity(intent);
-                break;
+        drawer.setDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+                switch (view.getId()) {
+                    case R.id.btn_movies:
+                        tvCurrentSection.setText("Movies");
+                        setFragment(new MoviesFragment());
+                        break;
+                    case R.id.btn_tv_shows:
+                        setFragment(new TVShowsFragment());
+                        tvCurrentSection.setText("TV Shows");
+                        break;
+                    case R.id.btn_about:
+                        Intent toAboutScreen = AboutActivity.newIntent(MainActivity.this);
+                        startActivity(toAboutScreen);
+                        break;
+                }
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
+        if (view.getId() == R.id.fab) {
+            Intent intent = SearchActivity.newIntent(getApplicationContext());
+            startActivity(intent);
         }
 
     }
