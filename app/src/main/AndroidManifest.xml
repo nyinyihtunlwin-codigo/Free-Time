@@ -53,11 +53,6 @@
             android:name="io.fabric.ApiKey"
             android:value="eff833c2330484af83a1fe4372f334ffa3466d04" />
 
-        <activity
-            android:name=".activities.AboutActivity"
-            android:label="@string/about"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

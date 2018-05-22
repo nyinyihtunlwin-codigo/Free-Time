@@ -1,27 +1,23 @@
-package projects.nyinyihtunlwin.zcar.activities;
+package projects.nyinyihtunlwin.zcar.fragments;
 
-import android.app.ActivityOptions;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import projects.nyinyihtunlwin.zcar.R;
 
-public class AboutActivity extends BaseActivity implements View.OnClickListener {
+public class AboutFragment extends BaseFragment implements View.OnClickListener {
+
 
     @BindView(R.id.iv_facebook)
     ImageView btnFacebook;
@@ -35,27 +31,24 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener 
     @BindView(R.id.tv_app_name)
     TextView tvAppName;
 
-    public static Intent newIntent(Context context) {
-        Intent intent = new Intent(context, AboutActivity.class);
-        return intent;
+    public AboutFragment() {
     }
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_about);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-        ButterKnife.bind(this, this);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_about, container, false);
+        ButterKnife.bind(this, view);
 
-        tvAppName.setTypeface(Typeface.createFromAsset(getAssets(), "code_heavy.ttf"));
+        if (getActivity() != null) {
+            tvAppName.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), "code_heavy.ttf"));
+        }
 
         btnFacebook.setOnClickListener(this);
         btnLinkedIn.setOnClickListener(this);
         btnGitHub.setOnClickListener(this);
+
+        return view;
     }
 
     @Override
@@ -76,15 +69,5 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener 
     public void open(String url) {
         Intent viewIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         startActivity(viewIntent);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 }

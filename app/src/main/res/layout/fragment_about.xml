@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/screen_back"
+    android:padding="@dimen/margin_medium_2">
+
+    <ImageView
+        android:id="@+id/iv_app_logo"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_above="@id/tv_app_name"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/app_logo" />
+
+    <TextView
+        android:id="@+id/tv_app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/tv_movies_and_tvshow"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/margin_medium_2"
+        android:text="@string/app_name"
+        android:textColor="@color/accent"
+        android:textSize="@dimen/text_big" />
+
+    <TextView
+        android:id="@+id/tv_movies_and_tvshow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/tv_version"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/margin_medium_2"
+        android:text="@string/moves_and_tvshows"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_regular" />
+
+    <TextView
+        android:id="@+id/tv_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/tv_developed_by"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/margin_medium_2"
+        android:text="@string/version"
+        android:textColor="@color/accent" />
+
+    <TextView
+        android:id="@+id/tv_developed_by"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="@string/Developed_by"
+        android:textColor="@color/accent" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iv_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_developed_by"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/margin_medium_2"
+        android:src="@drawable/img_movie_back_placeholder"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tv_developer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/iv_profile"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/margin_medium"
+        android:text="@string/me"
+        android:textColor="@color/accent"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_contact_me"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_developer"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/margin_medium_2"
+        android:text="@string/contact"
+        android:textColor="@color/white" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_contact_me"
+        android:layout_marginTop="@dimen/margin_medium_2"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/iv_facebook"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/if_facebook_410527" />
+
+        <ImageView
+            android:id="@+id/iv_linkedin"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/if_linkedin_386655" />
+
+        <ImageView
+            android:id="@+id/iv_github"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/git_light_120px_plus" />
+    </LinearLayout>
+
+</RelativeLayout>

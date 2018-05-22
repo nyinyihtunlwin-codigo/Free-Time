@@ -31,6 +31,7 @@ import projects.nyinyihtunlwin.zcar.ZCarApp;
 import projects.nyinyihtunlwin.zcar.data.vo.DrawerMenuItemVO;
 import projects.nyinyihtunlwin.zcar.delegates.DrawerMenuItemDelegate;
 import projects.nyinyihtunlwin.zcar.events.TapDrawerMenuItemEvent;
+import projects.nyinyihtunlwin.zcar.fragments.AboutFragment;
 import projects.nyinyihtunlwin.zcar.fragments.MoviesFragment;
 import projects.nyinyihtunlwin.zcar.fragments.TVShowsFragment;
 import projects.nyinyihtunlwin.zcar.services.CacheManager;
@@ -66,6 +67,8 @@ public class MainActivity extends BaseActivity implements DrawerMenuItemDelegate
     FloatingActionButton fabSearch;
 
     DrawerLayout drawer;
+
+    private int mCurrentSection = 0;
 
 
     @Override
@@ -169,16 +172,28 @@ public class MainActivity extends BaseActivity implements DrawerMenuItemDelegate
             public void onDrawerClosed(@NonNull View drawerView) {
                 switch (view.getId()) {
                     case R.id.btn_movies:
+                        fabSearch.setVisibility(View.VISIBLE);
                         tvCurrentSection.setText("Movies");
-                        setFragment(new MoviesFragment());
+                        if (mCurrentSection != 0) {
+                            setFragment(new MoviesFragment());
+                            mCurrentSection = 0;
+                        }
                         break;
                     case R.id.btn_tv_shows:
-                        setFragment(new TVShowsFragment());
+                        fabSearch.setVisibility(View.VISIBLE);
                         tvCurrentSection.setText("TV Shows");
+                        if (mCurrentSection != 1) {
+                            setFragment(new TVShowsFragment());
+                            mCurrentSection = 1;
+                        }
                         break;
                     case R.id.btn_about:
-                        Intent toAboutScreen = AboutActivity.newIntent(MainActivity.this);
-                        startActivity(toAboutScreen);
+                        tvCurrentSection.setText("About");
+                        fabSearch.setVisibility(View.GONE);
+                        if (mCurrentSection != 2) {
+                            setFragment(new AboutFragment());
+                            mCurrentSection = 2;
+                        }
                         break;
                 }
             }
