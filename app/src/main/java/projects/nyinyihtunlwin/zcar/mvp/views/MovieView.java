@@ -4,12 +4,7 @@ import java.util.List;
 
 import projects.nyinyihtunlwin.zcar.data.vo.movies.MovieVO;
 
-/**
- * Created by Dell on 2/9/2018.
- */
-
-public interface MovieNowOnCinemaView {
-
+public interface MovieView {
     void displayMoviesList(List<MovieVO> moviesList);
 
     void showLoding();
@@ -19,5 +14,4 @@ public interface MovieNowOnCinemaView {
     void onConnectionError(String message, int retryConnectionType);
 
     void onApiError(String message);
-
 }

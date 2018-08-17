@@ -13,22 +13,31 @@ import projects.nyinyihtunlwin.zcar.data.models.MovieModel;
 import projects.nyinyihtunlwin.zcar.data.vo.movies.MovieVO;
 import projects.nyinyihtunlwin.zcar.events.ConnectionEvent;
 import projects.nyinyihtunlwin.zcar.events.MoviesiEvents;
-import projects.nyinyihtunlwin.zcar.mvp.views.MovieMostPopularView;
+import projects.nyinyihtunlwin.zcar.mvp.views.MovieView;
 import projects.nyinyihtunlwin.zcar.utils.AppConstants;
 
-/**
- * Created by Dell on 2/9/2018.
- */
-
-public class MovieMostPopularPresenter extends BasePresenter<MovieMostPopularView> {
-
+public class MoviePresenter extends BasePresenter<MovieView> {
     private Context mContext;
+    private String mCurrentScreen = null;
 
-    public MovieMostPopularPresenter(Context context) {
+    public MoviePresenter(Context context, int screenId) {
         this.mContext = context;
         //check offline data storage
-        MovieModel.getInstance().checkForOfflineCache(mContext, AppConstants.MOVIE_MOST_POPULAR);
-
+        switch (screenId) {
+            case 0:
+                mCurrentScreen = AppConstants.MOVIE_NOW_ON_CINEMA;
+                break;
+            case 1:
+                mCurrentScreen = AppConstants.MOVIE_UPCOMING;
+                break;
+            case 2:
+                mCurrentScreen = AppConstants.MOVIE_MOST_POPULAR;
+                break;
+            case 3:
+                mCurrentScreen = AppConstants.MOVIE_TOP_RATED;
+                break;
+        }
+        MovieModel.getInstance().checkForOfflineCache(mContext, mCurrentScreen);
     }
 
     @Override
@@ -55,7 +64,7 @@ public class MovieMostPopularPresenter extends BasePresenter<MovieMostPopularVie
             mView.displayMoviesList(movieList);
         } else {
             mView.showLoding();
-            MovieModel.getInstance().startLoadingMovies(mContext, AppConstants.MOVIE_MOST_POPULAR);
+            MovieModel.getInstance().startLoadingMovies(mContext, mCurrentScreen);
         }
     }
 
@@ -64,17 +73,17 @@ public class MovieMostPopularPresenter extends BasePresenter<MovieMostPopularVie
     }
 
     public void onMovieListEndReached(Context context) {
-        MovieModel.getInstance().loadMoreMovies(context, AppConstants.MOVIE_MOST_POPULAR);
+        MovieModel.getInstance().loadMoreMovies(context, mCurrentScreen);
     }
 
     public void onForceRefresh(Context context) {
-        MovieModel.getInstance().forceRefreshMovies(context, AppConstants.MOVIE_MOST_POPULAR);
+        MovieModel.getInstance().forceRefreshMovies(context, mCurrentScreen);
     }
 
 
     @Subscribe
     public void onConnectionError(ConnectionEvent event) {
-        mView.onConnectionError(event.getMessage(),event.getType());
+        mView.onConnectionError(event.getMessage(), event.getType());
     }
 
     @Subscribe

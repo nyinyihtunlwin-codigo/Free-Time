@@ -3,22 +3,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/screen_back"
-    tools:context="projects.nyinyihtunlwin.zcar.fragments.tvshows.TvAiringTodayFragment">
+    tools:context="projects.nyinyihtunlwin.zcar.fragments.movies.MostPopularFragment">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
+        <!-- TODO: Update blank fragment layout -->
         <projects.nyinyihtunlwin.zcar.components.SmartRecyclerView
-            android:id="@+id/rv_on_the_air_tv"
+            android:id="@+id/rv_movie"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
         <include
-            android:id="@+id/vp_empty_tv_shows"
+            android:id="@+id/vp_empty_movie"
             layout="@layout/view_pod_empty"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </android.support.v4.widget.SwipeRefreshLayout>
+
 </FrameLayout>

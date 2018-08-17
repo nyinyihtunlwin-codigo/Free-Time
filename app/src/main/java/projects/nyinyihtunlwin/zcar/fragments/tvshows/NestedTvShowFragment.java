@@ -1,9 +1,11 @@
-package projects.nyinyihtunlwin.zcar.fragments.movies;
+package projects.nyinyihtunlwin.zcar.fragments.tvshows;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -15,76 +17,91 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import projects.nyinyihtunlwin.zcar.R;
-import projects.nyinyihtunlwin.zcar.ZCarApp;
-import projects.nyinyihtunlwin.zcar.activities.MovieDetailsActivity;
-import projects.nyinyihtunlwin.zcar.adapters.MovieAdapter;
+import projects.nyinyihtunlwin.zcar.activities.TvShowDetailsActivity;
+import projects.nyinyihtunlwin.zcar.adapters.TvShowAdapter;
 import projects.nyinyihtunlwin.zcar.components.EmptyViewPod;
 import projects.nyinyihtunlwin.zcar.components.SmartRecyclerView;
 import projects.nyinyihtunlwin.zcar.components.SmartScrollListener;
-import projects.nyinyihtunlwin.zcar.data.vo.movies.MovieVO;
+import projects.nyinyihtunlwin.zcar.data.vo.tvshows.TvShowVO;
 import projects.nyinyihtunlwin.zcar.delegates.MovieItemDelegate;
-import projects.nyinyihtunlwin.zcar.events.MoviesiEvents;
 import projects.nyinyihtunlwin.zcar.fragments.BaseFragment;
-import projects.nyinyihtunlwin.zcar.mvp.presenters.MovieUpcomingPresenter;
-import projects.nyinyihtunlwin.zcar.mvp.views.MovieUpcomingView;
+import projects.nyinyihtunlwin.zcar.mvp.presenters.TvShowPresenter;
+import projects.nyinyihtunlwin.zcar.mvp.views.TvShowView;
 import projects.nyinyihtunlwin.zcar.persistence.MovieContract;
 import projects.nyinyihtunlwin.zcar.utils.AppConstants;
-import projects.nyinyihtunlwin.zcar.utils.ConfigUtils;
 
+/**
+ * Created by Dell on 2/22/2018.
+ */
 
-public class UpcomingFragment extends BaseFragment implements MovieItemDelegate, MovieUpcomingView {
+public class NestedTvShowFragment extends BaseFragment implements MovieItemDelegate, TvShowView {
 
+    private static final String SCREEN_ID = "SCREEN_ID";
 
-    @BindView(R.id.rv_upcoming)
-    SmartRecyclerView rvUpcoming;
+    @BindView(R.id.rv_tv_show)
+    SmartRecyclerView rvTvShow;
 
-    private MovieAdapter adapter;
+    private TvShowAdapter adapter;
 
     @BindView(R.id.vp_empty_movie)
     EmptyViewPod vpEmptyMovie;
 
+    private SmartScrollListener mSmartScrollListener;
+
     @BindView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout swipeRefreshLayout;
 
-    private SmartScrollListener mSmartScrollListener;
-
-    private MovieUpcomingPresenter mPresenter;
+    private TvShowPresenter mPresenter;
     private Snackbar mSnackbar;
     private int mRetryConnectionType;
+    private int mScreenId;
+
+    public static NestedTvShowFragment newInstance(int screenId) {
+
+        Bundle args = new Bundle();
+        args.putInt(SCREEN_ID, screenId);
+        NestedTvShowFragment fragment = new NestedTvShowFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_upcoming, container, false);
+        View view = inflater.inflate(R.layout.fragment_nested_tv_show, container, false);
         ButterKnife.bind(this, view);
 
-        mPresenter = new MovieUpcomingPresenter(getActivity());
+        if (getArguments() != null) {
+            mScreenId = getArguments().getInt(SCREEN_ID, -1);
+            Log.e("Screen ID", mScreenId + "");
+        }
+
+        mPresenter = new TvShowPresenter(getActivity(), mScreenId);
         mPresenter.onCreate(this);
 
-        rvUpcoming.setHasFixedSize(true);
-        adapter = new MovieAdapter(getContext(), this);
-        rvUpcoming.setEmptyView(vpEmptyMovie);
-        rvUpcoming.setAdapter(adapter);
-        rvUpcoming.setLayoutManager(new GridLayoutManager(container.getContext(), 2));
+        rvTvShow.setHasFixedSize(true);
+
+
+        adapter = new TvShowAdapter(getContext(), this);
+
+        rvTvShow.setEmptyView(vpEmptyMovie);
+        rvTvShow.setAdapter(adapter);
+        rvTvShow.setLayoutManager(new GridLayoutManager(container.getContext(), 2));
 
         mSmartScrollListener = new SmartScrollListener(new SmartScrollListener.OnSmartScrollListener() {
             @Override
             public void onListEndReached() {
                 showLoadMore();
-                mPresenter.onMovieListEndReached(getActivity().getApplicationContext());
+                mPresenter.onTvShowListEndReached(getActivity().getApplicationContext());
             }
         });
 
-        rvUpcoming.addOnScrollListener(mSmartScrollListener);
+        rvTvShow.addOnScrollListener(mSmartScrollListener);
 
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -95,13 +112,33 @@ public class UpcomingFragment extends BaseFragment implements MovieItemDelegate,
         });
 
         showLoding();
-        getActivity().getSupportLoaderManager().initLoader(AppConstants.MOVIE_UPCOMING_LOADER_ID, null, this);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                int tvShowLoaderId = 0;
+                switch (mScreenId) {
+                    case 0:
+                        tvShowLoaderId = AppConstants.TV_SHOWS_AIRING_TODAY_LOADER_ID;
+                        break;
+                    case 1:
+                        tvShowLoaderId = AppConstants.TV_SHOWS_ON_THE_AIR_LOADER_ID;
+                        break;
+                    case 2:
+                        tvShowLoaderId = AppConstants.TV_SHOWS_MOST_POPULAR_LOADER_ID;
+                        break;
+                    case 3:
+                        tvShowLoaderId = AppConstants.TV_SHOWS_TOP_RATED_LOADER_ID;
+                        break;
+                }
+                getActivity().getSupportLoaderManager().initLoader(tvShowLoaderId, null, NestedTvShowFragment.this);
+            }
+        }, 1000);
 
         return view;
     }
 
     private void showLoadMore() {
-        Snackbar snackbar = Snackbar.make(rvUpcoming, "loading movies...", Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(rvTvShow, "loading tv shows...", Snackbar.LENGTH_LONG);
         View view = snackbar.getView();
         TextView textView = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
         textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
@@ -110,17 +147,41 @@ public class UpcomingFragment extends BaseFragment implements MovieItemDelegate,
     }
 
     @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        boolean orientationLand = (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ? true : false);
+        if (orientationLand) {
+            rvTvShow.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        }
+    }
+
+    @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String currentScreen = null;
+        switch (mScreenId) {
+            case 0:
+                currentScreen = AppConstants.TV_SHOWS_AIRING_TODAY;
+                break;
+            case 1:
+                currentScreen = AppConstants.TV_SHOWS_ON_THE_AIR;
+                break;
+            case 2:
+                currentScreen = AppConstants.TV_SHOWS_MOST_POPULAR;
+                break;
+            case 3:
+                currentScreen = AppConstants.TV_SHOWS_TOP_RATED;
+                break;
+        }
         return new CursorLoader(getActivity().getApplicationContext(),
-                MovieContract.MovieInScreenEntry.CONTENT_URI,
+                MovieContract.TvShowInScreenEntry.CONTENT_URI,
                 null,
-                MovieContract.MovieInScreenEntry.COLUMN_SCREEN + "=?",
-                new String[]{AppConstants.MOVIE_UPCOMING}, null);
+                MovieContract.TvShowInScreenEntry.COLUMN_SCREEN + "=?",
+                new String[]{currentScreen}, null);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mPresenter.onDataLoaded(getActivity(), data);
+        mPresenter.onDataLoaded(getActivity().getApplicationContext(), data);
         swipeRefreshLayout.setRefreshing(false);
     }
 
@@ -141,6 +202,7 @@ public class UpcomingFragment extends BaseFragment implements MovieItemDelegate,
         mPresenter.onStop();
     }
 
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -153,13 +215,13 @@ public class UpcomingFragment extends BaseFragment implements MovieItemDelegate,
 
     @Override
     public void onClickMovie(String movieId) {
-        mPresenter.onTapMovie(movieId);
+        mPresenter.onTapTvShow(movieId);
     }
 
     @Override
-    public void displayMoviesList(List<MovieVO> moviesList) {
+    public void displayTvShowList(List<TvShowVO> tvShowList) {
         hideSnackBar();
-        adapter.setNewData(moviesList);
+        adapter.setNewData(tvShowList);
         swipeRefreshLayout.setRefreshing(false);
     }
 
@@ -169,8 +231,8 @@ public class UpcomingFragment extends BaseFragment implements MovieItemDelegate,
     }
 
     @Override
-    public void navigateToMovieDetails(String movieId) {
-        Intent intent = MovieDetailsActivity.newIntent(getActivity().getApplicationContext(), movieId);
+    public void navigateToTvShowDetails(String tvShowId) {
+        Intent intent = TvShowDetailsActivity.newIntent(getActivity().getApplicationContext(), tvShowId);
         startActivity(intent);
     }
 
@@ -184,7 +246,7 @@ public class UpcomingFragment extends BaseFragment implements MovieItemDelegate,
 
     @Override
     public void onApiError(String message) {
-        mSnackbar = Snackbar.make(rvUpcoming, message, Snackbar.LENGTH_INDEFINITE);
+        mSnackbar = Snackbar.make(rvTvShow, message, Snackbar.LENGTH_INDEFINITE);
         mSnackbar.setAction("Dismiss", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -196,7 +258,7 @@ public class UpcomingFragment extends BaseFragment implements MovieItemDelegate,
 
 
     public void showSnackBar(String message) {
-        mSnackbar = Snackbar.make(rvUpcoming, message, Snackbar.LENGTH_INDEFINITE);
+        mSnackbar = Snackbar.make(rvTvShow, message, Snackbar.LENGTH_INDEFINITE);
         mSnackbar.setAction("Retry", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -207,7 +269,7 @@ public class UpcomingFragment extends BaseFragment implements MovieItemDelegate,
                         mPresenter.onForceRefresh(getActivity().getApplicationContext());
                         break;
                     case AppConstants.TYPE_lOAD_MORE_DATA:
-                        mPresenter.onMovieListEndReached(getActivity().getApplicationContext());
+                        mPresenter.onTvShowListEndReached(getActivity().getApplicationContext());
                         break;
                 }
             }
@@ -220,4 +282,5 @@ public class UpcomingFragment extends BaseFragment implements MovieItemDelegate,
             mSnackbar.dismiss();
         }
     }
+
 }

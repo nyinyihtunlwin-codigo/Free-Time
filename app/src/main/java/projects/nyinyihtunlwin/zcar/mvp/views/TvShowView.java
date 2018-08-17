@@ -4,7 +4,8 @@ import java.util.List;
 
 import projects.nyinyihtunlwin.zcar.data.vo.tvshows.TvShowVO;
 
-public interface TvShowsTopRatedView {
+public interface TvShowView {
+
     void displayTvShowList(List<TvShowVO> tvShowList);
 
     void showLoding();

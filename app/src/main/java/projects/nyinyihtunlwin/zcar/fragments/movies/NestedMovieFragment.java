@@ -2,8 +2,10 @@ package projects.nyinyihtunlwin.zcar.fragments.movies;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -15,16 +17,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import projects.nyinyihtunlwin.zcar.R;
-import projects.nyinyihtunlwin.zcar.ZCarApp;
 import projects.nyinyihtunlwin.zcar.activities.MovieDetailsActivity;
 import projects.nyinyihtunlwin.zcar.adapters.MovieAdapter;
 import projects.nyinyihtunlwin.zcar.components.EmptyViewPod;
@@ -32,76 +30,114 @@ import projects.nyinyihtunlwin.zcar.components.SmartRecyclerView;
 import projects.nyinyihtunlwin.zcar.components.SmartScrollListener;
 import projects.nyinyihtunlwin.zcar.data.vo.movies.MovieVO;
 import projects.nyinyihtunlwin.zcar.delegates.MovieItemDelegate;
-import projects.nyinyihtunlwin.zcar.events.MoviesiEvents;
 import projects.nyinyihtunlwin.zcar.fragments.BaseFragment;
-import projects.nyinyihtunlwin.zcar.mvp.presenters.MovieTopRatedPresenter;
-import projects.nyinyihtunlwin.zcar.mvp.views.MovieTopRatedView;
+import projects.nyinyihtunlwin.zcar.mvp.presenters.MoviePresenter;
+import projects.nyinyihtunlwin.zcar.mvp.views.MovieView;
 import projects.nyinyihtunlwin.zcar.persistence.MovieContract;
 import projects.nyinyihtunlwin.zcar.utils.AppConstants;
-import projects.nyinyihtunlwin.zcar.utils.ConfigUtils;
 
 
-public class TopRatedFragment extends BaseFragment implements MovieItemDelegate, MovieTopRatedView {
+public class NestedMovieFragment extends BaseFragment implements MovieItemDelegate, MovieView {
 
-    @BindView(R.id.rv_top_rated)
-    SmartRecyclerView rvTopRated;
+
+    private static final String SCREEN_ID = "SCREEN_ID";
+
+    @BindView(R.id.rv_movie)
+    SmartRecyclerView rvMovie;
 
     private MovieAdapter adapter;
 
     @BindView(R.id.vp_empty_movie)
     EmptyViewPod vpEmptyMovie;
 
+    private SmartScrollListener mSmartScrollListener;
+
     @BindView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout swipeRefreshLayout;
 
-    private SmartScrollListener mSmartScrollListener;
-
-    private MovieTopRatedPresenter mPresenter;
+    private MoviePresenter mPresenter;
     private Snackbar mSnackbar;
     private int mRetryConnectionType;
+    private int mScreenId;
+
+    public static NestedMovieFragment newInstance(int screenId) {
+        Bundle args = new Bundle();
+        args.putInt(SCREEN_ID, screenId);
+        NestedMovieFragment fragment = new NestedMovieFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_top_rated, container, false);
+        View view = inflater.inflate(R.layout.fragment_nested_movie, container, false);
         ButterKnife.bind(this, view);
 
-        mPresenter = new MovieTopRatedPresenter(getActivity());
+        if (getArguments() != null) {
+            mScreenId = getArguments().getInt(SCREEN_ID, -1);
+            Log.e("Screen ID", mScreenId + "");
+        }
+
+
+        mPresenter = new MoviePresenter(getActivity(),mScreenId);
         mPresenter.onCreate(this);
 
-        rvTopRated.setHasFixedSize(true);
-        adapter = new MovieAdapter(getContext(), this);
-        rvTopRated.setEmptyView(vpEmptyMovie);
-        rvTopRated.setAdapter(adapter);
-        rvTopRated.setLayoutManager(new GridLayoutManager(container.getContext(), 2));
+        rvMovie.setHasFixedSize(true);
 
+
+        adapter = new MovieAdapter(getContext(), this);
+
+        rvMovie.setEmptyView(vpEmptyMovie);
+        rvMovie.setAdapter(adapter);
+        rvMovie.setLayoutManager(new GridLayoutManager(container.getContext(), 2));
 
         mSmartScrollListener = new SmartScrollListener(new SmartScrollListener.OnSmartScrollListener() {
             @Override
             public void onListEndReached() {
                 showLoadMore();
-                mPresenter.onMovieListEndReached(getActivity());
+                mPresenter.onMovieListEndReached(getActivity().getApplicationContext());
             }
         });
 
-        rvTopRated.addOnScrollListener(mSmartScrollListener);
+        rvMovie.addOnScrollListener(mSmartScrollListener);
 
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mPresenter.onForceRefresh(getActivity());
+                mPresenter.onForceRefresh(getActivity().getApplicationContext());
             }
         });
 
         showLoding();
-        getActivity().getSupportLoaderManager().initLoader(AppConstants.MOVIE_TOP_RATED_LOADER_ID, null, this);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                int movieLoaderId = 0;
+                switch (mScreenId) {
+                    case 0:
+                        movieLoaderId = AppConstants.MOVIE_NOW_ON_CINEMA_LOADER_ID;
+                        break;
+                    case 1:
+                        movieLoaderId = AppConstants.MOVIE_UPCOMING_LOADER_ID;
+                        break;
+                    case 2:
+                        movieLoaderId = AppConstants.MOVIE_MOST_POPULAR_LOADER_ID;
+                        break;
+                    case 3:
+                        movieLoaderId = AppConstants.MOVIE_TOP_RATED_LOADER_ID;
+                        break;
+                }
+                Objects.requireNonNull(getActivity()).getSupportLoaderManager().initLoader(movieLoaderId, null, NestedMovieFragment.this);
+            }
+        }, 1000);
 
         return view;
     }
 
     private void showLoadMore() {
-        Snackbar snackbar = Snackbar.make(rvTopRated, "loading movies...", Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(rvMovie, "loading movies...", Snackbar.LENGTH_LONG);
         View view = snackbar.getView();
         TextView textView = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
         textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
@@ -110,13 +146,36 @@ public class TopRatedFragment extends BaseFragment implements MovieItemDelegate,
     }
 
     @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        boolean orientationLand = (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ? true : false);
+        if (orientationLand) {
+            rvMovie.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        }
+    }
+
+    @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(getActivity().getApplicationContext(),
+        String currentScreen = null;
+        switch (mScreenId) {
+            case 0:
+                currentScreen = AppConstants.MOVIE_NOW_ON_CINEMA;
+                break;
+            case 1:
+                currentScreen = AppConstants.MOVIE_UPCOMING;
+                break;
+            case 2:
+                currentScreen = AppConstants.MOVIE_MOST_POPULAR;
+                break;
+            case 3:
+                currentScreen = AppConstants.MOVIE_TOP_RATED;
+                break;
+        }
+        return new CursorLoader(Objects.requireNonNull(getActivity()).getApplicationContext(),
                 MovieContract.MovieInScreenEntry.CONTENT_URI,
                 null,
                 MovieContract.MovieInScreenEntry.COLUMN_SCREEN + "=?",
-                new String[]{AppConstants.MOVIE_TOP_RATED}, null);
-
+                new String[]{currentScreen}, null);
     }
 
     @Override
@@ -159,6 +218,7 @@ public class TopRatedFragment extends BaseFragment implements MovieItemDelegate,
 
     @Override
     public void displayMoviesList(List<MovieVO> moviesList) {
+        hideSnackBar();
         adapter.setNewData(moviesList);
         swipeRefreshLayout.setRefreshing(false);
     }
@@ -183,7 +243,7 @@ public class TopRatedFragment extends BaseFragment implements MovieItemDelegate,
 
     @Override
     public void onApiError(String message) {
-        mSnackbar = Snackbar.make(rvTopRated, message, Snackbar.LENGTH_INDEFINITE);
+        mSnackbar = Snackbar.make(rvMovie, message, Snackbar.LENGTH_INDEFINITE);
         mSnackbar.setAction("Dismiss", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -195,7 +255,7 @@ public class TopRatedFragment extends BaseFragment implements MovieItemDelegate,
 
 
     public void showSnackBar(String message) {
-        mSnackbar = Snackbar.make(rvTopRated, message, Snackbar.LENGTH_INDEFINITE);
+        mSnackbar = Snackbar.make(rvMovie, message, Snackbar.LENGTH_INDEFINITE);
         mSnackbar.setAction("Retry", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -203,10 +263,10 @@ public class TopRatedFragment extends BaseFragment implements MovieItemDelegate,
                 switch (mRetryConnectionType) {
                     case AppConstants.TYPE_START_LOADING_DATA:
                         swipeRefreshLayout.setRefreshing(true);
-                        mPresenter.onForceRefresh(getActivity());
+                        mPresenter.onForceRefresh(getActivity().getApplicationContext());
                         break;
                     case AppConstants.TYPE_lOAD_MORE_DATA:
-                        mPresenter.onMovieListEndReached(getActivity());
+                        mPresenter.onMovieListEndReached(getActivity().getApplicationContext());
                         break;
                 }
             }

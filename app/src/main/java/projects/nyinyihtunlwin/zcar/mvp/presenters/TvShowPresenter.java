@@ -13,23 +13,38 @@ import projects.nyinyihtunlwin.zcar.data.models.TvShowModel;
 import projects.nyinyihtunlwin.zcar.data.vo.tvshows.TvShowVO;
 import projects.nyinyihtunlwin.zcar.events.ConnectionEvent;
 import projects.nyinyihtunlwin.zcar.events.MoviesiEvents;
-import projects.nyinyihtunlwin.zcar.mvp.views.TvShowsMostPopularView;
+import projects.nyinyihtunlwin.zcar.mvp.views.TvShowView;
 import projects.nyinyihtunlwin.zcar.utils.AppConstants;
 
-public class TvShowsMostPopularPresenter extends BasePresenter<TvShowsMostPopularView> {
+public class TvShowPresenter extends BasePresenter<TvShowView> {
 
     private Context mContext;
+    private String mScreenType = null;
 
-    public TvShowsMostPopularPresenter(Context context) {
+    public TvShowPresenter(Context context, int screenId) {
         this.mContext = context;
         //  check offline data storage
-        TvShowModel.getInstance().checkForOfflineCache(mContext, AppConstants.TV_SHOWS_MOST_POPULAR);
+        switch (screenId) {
+            case 0:
+                mScreenType = AppConstants.TV_SHOWS_AIRING_TODAY;
+                break;
+            case 1:
+                mScreenType = AppConstants.TV_SHOWS_ON_THE_AIR;
+                break;
+            case 2:
+                mScreenType = AppConstants.TV_SHOWS_MOST_POPULAR;
+                break;
+            case 3:
+                mScreenType = AppConstants.TV_SHOWS_TOP_RATED;
+                break;
+        }
+        TvShowModel.getInstance().checkForOfflineCache(mContext, mScreenType);
     }
 
     @Override
     public void onStart() {
         EventBus.getDefault().register(this);
-        List<TvShowVO> tvShowList = TvShowModel.getInstance().getMostPopularTvShows();
+        List<TvShowVO> tvShowList = TvShowModel.getInstance().getAiringTodayTvShows();
         if (!tvShowList.isEmpty()) {
             mView.displayTvShowList(tvShowList);
         }
@@ -50,7 +65,7 @@ public class TvShowsMostPopularPresenter extends BasePresenter<TvShowsMostPopula
             mView.displayTvShowList(tvShowList);
         } else {
             mView.showLoding();
-            TvShowModel.getInstance().startLoadingTvShows(mContext, AppConstants.TV_SHOWS_MOST_POPULAR);
+            TvShowModel.getInstance().startLoadingTvShows(mContext,mScreenType);
         }
     }
 
@@ -59,11 +74,11 @@ public class TvShowsMostPopularPresenter extends BasePresenter<TvShowsMostPopula
     }
 
     public void onTvShowListEndReached(Context context) {
-        TvShowModel.getInstance().loadMoreTvShows(context, AppConstants.TV_SHOWS_MOST_POPULAR);
+        TvShowModel.getInstance().loadMoreTvShows(context,mScreenType);
     }
 
     public void onForceRefresh(Context context) {
-        TvShowModel.getInstance().forceRefreshTvShows(context, AppConstants.TV_SHOWS_MOST_POPULAR);
+        TvShowModel.getInstance().forceRefreshTvShows(context,mScreenType);
     }
 
     @Subscribe
