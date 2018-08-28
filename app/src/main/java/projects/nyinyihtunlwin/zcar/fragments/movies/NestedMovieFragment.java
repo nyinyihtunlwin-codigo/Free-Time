@@ -20,9 +20,12 @@ import android.widget.TextView;
 import java.util.List;
 import java.util.Objects;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import projects.nyinyihtunlwin.zcar.R;
+import projects.nyinyihtunlwin.zcar.ZCarApp;
 import projects.nyinyihtunlwin.zcar.activities.MovieDetailsActivity;
 import projects.nyinyihtunlwin.zcar.adapters.MovieAdapter;
 import projects.nyinyihtunlwin.zcar.components.EmptyViewPod;
@@ -60,6 +63,11 @@ public class NestedMovieFragment extends BaseFragment implements MovieItemDelega
     private int mRetryConnectionType;
     private int mScreenId;
 
+    @Inject
+    Context mContext;
+
+    private View mView;
+
     public static NestedMovieFragment newInstance(int screenId) {
         Bundle args = new Bundle();
         args.putInt(SCREEN_ID, screenId);
@@ -71,32 +79,37 @@ public class NestedMovieFragment extends BaseFragment implements MovieItemDelega
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_nested_movie, container, false);
-        ButterKnife.bind(this, view);
+        if (mView == null) {
+            mView = inflater.inflate(R.layout.fragment_nested_movie, container, false);
+        }
+        ButterKnife.bind(this, mView);
 
         if (getArguments() != null) {
             mScreenId = getArguments().getInt(SCREEN_ID, -1);
             Log.e("Screen ID", mScreenId + "");
         }
+        if (getActivity() != null) {
+            ZCarApp zCarApp = (ZCarApp) getActivity().getApplicationContext();
+            zCarApp.getAppComponent().inject(this);
+        }
 
-
-        mPresenter = new MoviePresenter(getActivity(),mScreenId);
+        mPresenter = new MoviePresenter(mContext, mScreenId);
         mPresenter.onCreate(this);
 
         rvMovie.setHasFixedSize(true);
 
 
-        adapter = new MovieAdapter(getContext(), this);
+        adapter = new MovieAdapter(mContext, this);
 
         rvMovie.setEmptyView(vpEmptyMovie);
         rvMovie.setAdapter(adapter);
-        rvMovie.setLayoutManager(new GridLayoutManager(container.getContext(), 2));
+        rvMovie.setLayoutManager(new GridLayoutManager(mContext, 2));
 
         mSmartScrollListener = new SmartScrollListener(new SmartScrollListener.OnSmartScrollListener() {
             @Override
             public void onListEndReached() {
                 showLoadMore();
-                mPresenter.onMovieListEndReached(getActivity().getApplicationContext());
+                mPresenter.onMovieListEndReached(mContext);
             }
         });
 
@@ -106,7 +119,7 @@ public class NestedMovieFragment extends BaseFragment implements MovieItemDelega
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mPresenter.onForceRefresh(getActivity().getApplicationContext());
+                mPresenter.onForceRefresh(mContext);
             }
         });
 
@@ -133,7 +146,7 @@ public class NestedMovieFragment extends BaseFragment implements MovieItemDelega
             }
         }, 1000);
 
-        return view;
+        return mView;
     }
 
     private void showLoadMore() {
@@ -150,7 +163,7 @@ public class NestedMovieFragment extends BaseFragment implements MovieItemDelega
         super.onConfigurationChanged(newConfig);
         boolean orientationLand = (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ? true : false);
         if (orientationLand) {
-            rvMovie.setLayoutManager(new GridLayoutManager(getContext(), 3));
+            rvMovie.setLayoutManager(new GridLayoutManager(mContext, 3));
         }
     }
 
@@ -171,7 +184,7 @@ public class NestedMovieFragment extends BaseFragment implements MovieItemDelega
                 currentScreen = AppConstants.MOVIE_TOP_RATED;
                 break;
         }
-        return new CursorLoader(Objects.requireNonNull(getActivity()).getApplicationContext(),
+        return new CursorLoader(mContext,
                 MovieContract.MovieInScreenEntry.CONTENT_URI,
                 null,
                 MovieContract.MovieInScreenEntry.COLUMN_SCREEN + "=?",
@@ -180,7 +193,7 @@ public class NestedMovieFragment extends BaseFragment implements MovieItemDelega
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mPresenter.onDataLoaded(getActivity().getApplicationContext(), data);
+        mPresenter.onDataLoaded(mContext, data);
         swipeRefreshLayout.setRefreshing(false);
     }
 
@@ -230,7 +243,7 @@ public class NestedMovieFragment extends BaseFragment implements MovieItemDelega
 
     @Override
     public void navigateToMovieDetails(String movieId) {
-        Intent intent = MovieDetailsActivity.newIntent(getActivity().getApplicationContext(), movieId);
+        Intent intent = MovieDetailsActivity.newIntent(mContext, movieId);
         startActivity(intent);
     }
 
@@ -263,10 +276,10 @@ public class NestedMovieFragment extends BaseFragment implements MovieItemDelega
                 switch (mRetryConnectionType) {
                     case AppConstants.TYPE_START_LOADING_DATA:
                         swipeRefreshLayout.setRefreshing(true);
-                        mPresenter.onForceRefresh(getActivity().getApplicationContext());
+                        mPresenter.onForceRefresh(mContext);
                         break;
                     case AppConstants.TYPE_lOAD_MORE_DATA:
-                        mPresenter.onMovieListEndReached(getActivity().getApplicationContext());
+                        mPresenter.onMovieListEndReached(mContext);
                         break;
                 }
             }

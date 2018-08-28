@@ -18,7 +18,7 @@ public class TvShowPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return new NestedTvShowFragment().newInstance(position);
+        return NestedTvShowFragment.newInstance(position);
     }
 
     @Override

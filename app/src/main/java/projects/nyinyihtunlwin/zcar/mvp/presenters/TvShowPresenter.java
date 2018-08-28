@@ -9,7 +9,9 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
+import projects.nyinyihtunlwin.zcar.data.models.MovieModel;
 import projects.nyinyihtunlwin.zcar.data.models.TvShowModel;
+import projects.nyinyihtunlwin.zcar.data.vo.movies.MovieVO;
 import projects.nyinyihtunlwin.zcar.data.vo.tvshows.TvShowVO;
 import projects.nyinyihtunlwin.zcar.events.ConnectionEvent;
 import projects.nyinyihtunlwin.zcar.events.MoviesiEvents;
@@ -44,9 +46,25 @@ public class TvShowPresenter extends BasePresenter<TvShowView> {
     @Override
     public void onStart() {
         EventBus.getDefault().register(this);
-        List<TvShowVO> tvShowList = TvShowModel.getInstance().getAiringTodayTvShows();
-        if (!tvShowList.isEmpty()) {
-            mView.displayTvShowList(tvShowList);
+        List<TvShowVO> tvShowList = null;
+        if (mScreenType != null) {
+            switch (mScreenType) {
+                case AppConstants.TV_SHOWS_AIRING_TODAY:
+                    tvShowList = TvShowModel.getInstance().getAiringTodayTvShows();
+                    break;
+                case AppConstants.TV_SHOWS_ON_THE_AIR:
+                    tvShowList = TvShowModel.getInstance().getOnTheAirTvShows();
+                    break;
+                case AppConstants.TV_SHOWS_MOST_POPULAR:
+                    tvShowList = TvShowModel.getInstance().getMostPopularTvShows();
+                    break;
+                case AppConstants.TV_SHOWS_TOP_RATED:
+                    tvShowList = TvShowModel.getInstance().getTopRatedTvShows();
+                    break;
+            }
+            if (tvShowList != null && !tvShowList.isEmpty()) {
+                mView.displayTvShowList(tvShowList);
+            }
         }
     }
 
@@ -65,7 +83,7 @@ public class TvShowPresenter extends BasePresenter<TvShowView> {
             mView.displayTvShowList(tvShowList);
         } else {
             mView.showLoding();
-            TvShowModel.getInstance().startLoadingTvShows(mContext,mScreenType);
+            TvShowModel.getInstance().startLoadingTvShows(mContext, mScreenType);
         }
     }
 
@@ -74,11 +92,11 @@ public class TvShowPresenter extends BasePresenter<TvShowView> {
     }
 
     public void onTvShowListEndReached(Context context) {
-        TvShowModel.getInstance().loadMoreTvShows(context,mScreenType);
+        TvShowModel.getInstance().loadMoreTvShows(context, mScreenType);
     }
 
     public void onForceRefresh(Context context) {
-        TvShowModel.getInstance().forceRefreshTvShows(context,mScreenType);
+        TvShowModel.getInstance().forceRefreshTvShows(context, mScreenType);
     }
 
     @Subscribe

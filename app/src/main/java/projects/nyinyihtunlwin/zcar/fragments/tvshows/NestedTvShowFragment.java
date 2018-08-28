@@ -19,9 +19,12 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import projects.nyinyihtunlwin.zcar.R;
+import projects.nyinyihtunlwin.zcar.ZCarApp;
 import projects.nyinyihtunlwin.zcar.activities.TvShowDetailsActivity;
 import projects.nyinyihtunlwin.zcar.adapters.TvShowAdapter;
 import projects.nyinyihtunlwin.zcar.components.EmptyViewPod;
@@ -61,6 +64,11 @@ public class NestedTvShowFragment extends BaseFragment implements MovieItemDeleg
     private int mRetryConnectionType;
     private int mScreenId;
 
+    @Inject
+    Context mContext;
+
+    private View mView;
+
     public static NestedTvShowFragment newInstance(int screenId) {
 
         Bundle args = new Bundle();
@@ -73,31 +81,37 @@ public class NestedTvShowFragment extends BaseFragment implements MovieItemDeleg
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_nested_tv_show, container, false);
-        ButterKnife.bind(this, view);
+        if (mView == null) {
+            mView = inflater.inflate(R.layout.fragment_nested_tv_show, container, false);
+        }
+        ButterKnife.bind(this, mView);
 
         if (getArguments() != null) {
             mScreenId = getArguments().getInt(SCREEN_ID, -1);
             Log.e("Screen ID", mScreenId + "");
         }
+        if (getActivity() != null) {
+            ZCarApp zCarApp = (ZCarApp) getActivity().getApplicationContext();
+            zCarApp.getAppComponent().inject(this);
+        }
 
-        mPresenter = new TvShowPresenter(getActivity(), mScreenId);
+        mPresenter = new TvShowPresenter(mContext, mScreenId);
         mPresenter.onCreate(this);
 
         rvTvShow.setHasFixedSize(true);
 
 
-        adapter = new TvShowAdapter(getContext(), this);
+        adapter = new TvShowAdapter(mContext, this);
 
         rvTvShow.setEmptyView(vpEmptyMovie);
         rvTvShow.setAdapter(adapter);
-        rvTvShow.setLayoutManager(new GridLayoutManager(container.getContext(), 2));
+        rvTvShow.setLayoutManager(new GridLayoutManager(mContext, 2));
 
         mSmartScrollListener = new SmartScrollListener(new SmartScrollListener.OnSmartScrollListener() {
             @Override
             public void onListEndReached() {
                 showLoadMore();
-                mPresenter.onTvShowListEndReached(getActivity().getApplicationContext());
+                mPresenter.onTvShowListEndReached(mContext);
             }
         });
 
@@ -107,7 +121,7 @@ public class NestedTvShowFragment extends BaseFragment implements MovieItemDeleg
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mPresenter.onForceRefresh(getActivity().getApplicationContext());
+                mPresenter.onForceRefresh(mContext);
             }
         });
 
@@ -134,7 +148,7 @@ public class NestedTvShowFragment extends BaseFragment implements MovieItemDeleg
             }
         }, 1000);
 
-        return view;
+        return mView;
     }
 
     private void showLoadMore() {
@@ -232,7 +246,7 @@ public class NestedTvShowFragment extends BaseFragment implements MovieItemDeleg
 
     @Override
     public void navigateToTvShowDetails(String tvShowId) {
-        Intent intent = TvShowDetailsActivity.newIntent(getActivity().getApplicationContext(), tvShowId);
+        Intent intent = TvShowDetailsActivity.newIntent(mContext, tvShowId);
         startActivity(intent);
     }
 

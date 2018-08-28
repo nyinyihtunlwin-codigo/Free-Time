@@ -43,9 +43,25 @@ public class MoviePresenter extends BasePresenter<MovieView> {
     @Override
     public void onStart() {
         EventBus.getDefault().register(this);
-        List<MovieVO> movieList = MovieModel.getInstance().getMostPopularMovies();
-        if (!movieList.isEmpty()) {
-            mView.displayMoviesList(movieList);
+        List<MovieVO> movieList = null;
+        if (mCurrentScreen != null) {
+            switch (mCurrentScreen) {
+                case AppConstants.MOVIE_NOW_ON_CINEMA:
+                    movieList = MovieModel.getInstance().getNowOnCinemaMovies();
+                    break;
+                case AppConstants.MOVIE_UPCOMING:
+                    movieList = MovieModel.getInstance().getUpcomingMovies();
+                    break;
+                case AppConstants.MOVIE_MOST_POPULAR:
+                    movieList = MovieModel.getInstance().getMostPopularMovies();
+                    break;
+                case AppConstants.MOVIE_TOP_RATED:
+                    movieList = MovieModel.getInstance().getTopRatedMovies();
+                    break;
+            }
+            if (movieList != null && !movieList.isEmpty()) {
+                mView.displayMoviesList(movieList);
+            }
         }
     }
 

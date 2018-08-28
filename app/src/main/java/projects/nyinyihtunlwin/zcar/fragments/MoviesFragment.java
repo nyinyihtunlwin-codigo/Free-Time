@@ -2,7 +2,6 @@ package projects.nyinyihtunlwin.zcar.fragments;
 
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -11,12 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import projects.nyinyihtunlwin.zcar.R;
-import projects.nyinyihtunlwin.zcar.adapters.SectionsPagerAdapter;
+import projects.nyinyihtunlwin.zcar.adapters.MoviePagerAdapter;
 
 
 public class MoviesFragment extends Fragment {
 
-    private SectionsPagerAdapter mSectionsPagerAdapter;
+    private MoviePagerAdapter mSectionsPagerAdapter;
 
     private ViewPager mViewPager;
 
@@ -29,7 +28,7 @@ public class MoviesFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_movies, container, false);
 
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
+        mSectionsPagerAdapter = new MoviePagerAdapter(getChildFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) view.findViewById(R.id.vp_movies);

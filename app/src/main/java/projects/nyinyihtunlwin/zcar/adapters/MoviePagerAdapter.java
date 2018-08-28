@@ -10,15 +10,15 @@ import projects.nyinyihtunlwin.zcar.fragments.movies.NestedMovieFragment;
  * Created by Nyi Nyi Htun Lwin on 11/7/2017.
  */
 
-public class SectionsPagerAdapter extends FragmentPagerAdapter {
+public class MoviePagerAdapter extends FragmentPagerAdapter {
 
-    public SectionsPagerAdapter(FragmentManager fm) {
+    public MoviePagerAdapter(FragmentManager fm) {
         super(fm);
     }
 
     @Override
     public Fragment getItem(int position) {
-        return new NestedMovieFragment().newInstance(position);
+        return NestedMovieFragment.newInstance(position);
     }
 
     @Override
