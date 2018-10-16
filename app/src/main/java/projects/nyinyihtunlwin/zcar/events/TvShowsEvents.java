@@ -84,4 +84,16 @@ public class TvShowsEvents {
         }
     }
 
+    public static class TvShowSimilarDataLoadedEvent {
+        private List<TvShowVO> tvShows;
+
+        public TvShowSimilarDataLoadedEvent(List<TvShowVO> tvShows) {
+            this.tvShows = tvShows;
+        }
+
+        public List<TvShowVO> getTvShows() {
+            return tvShows;
+        }
+    }
+
 }

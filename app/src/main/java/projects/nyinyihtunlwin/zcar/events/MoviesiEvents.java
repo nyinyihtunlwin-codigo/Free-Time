@@ -141,4 +141,16 @@ public class MoviesiEvents {
             return movieCasts;
         }
     }
+
+    public static class MovieSimilarDataLoadedEvent {
+        private List<MovieVO> movies;
+
+        public MovieSimilarDataLoadedEvent(List<MovieVO> movies) {
+            this.movies = movies;
+        }
+
+        public List<MovieVO> getMovies() {
+            return movies;
+        }
+    }
 }

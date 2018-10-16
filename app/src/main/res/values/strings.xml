@@ -154,5 +154,7 @@
     <string name="Developed_by">Developed by</string>
     <string name="me">Nyi Nyi Htun Lwin</string>
     <string name="contact">Contact me via</string>
+    <string name="similar_movies">Similar Movies</string>
+    <string name="similar_tvshows">Similar TV Shows</string>
 
 </resources>

@@ -46,9 +46,9 @@
                     android:layout_marginBottom="80dp"
                     android:layout_toEndOf="@id/iv_movie_logo"
                     android:background="@android:drawable/screen_background_dark_transparent"
-                    android:paddingBottom="@dimen/margin_small"
                     android:paddingStart="@dimen/margin_medium"
                     android:paddingTop="@dimen/margin_small"
+                    android:paddingBottom="@dimen/margin_small"
                     android:textColor="@color/white"
                     android:textSize="@dimen/text_regular_2x" />
 
@@ -57,8 +57,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="@dimen/margin_medium"
                     android:layout_marginStart="@dimen/margin_medium"
+                    android:layout_marginBottom="@dimen/margin_medium"
                     android:layout_toEndOf="@id/iv_movie_logo"
                     android:textColor="@color/accent"
                     android:textSize="@dimen/text_regular" />
@@ -67,10 +67,10 @@
                     android:id="@+id/tv_rate"
                     android:layout_width="54dp"
                     android:layout_height="54dp"
-                    android:layout_alignParentBottom="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginBottom="@dimen/margin_medium"
+                    android:layout_alignParentBottom="true"
                     android:layout_marginEnd="@dimen/margin_medium"
+                    android:layout_marginBottom="@dimen/margin_medium"
                     android:background="@drawable/bg_round_accent_border_circle"
                     android:gravity="center"
                     android:textColor="@color/white" />
@@ -102,8 +102,8 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:foreground="@drawable/bg_ripple_white"
-                        android:paddingEnd="@dimen/margin_medium"
                         android:paddingStart="@dimen/margin_medium"
+                        android:paddingEnd="@dimen/margin_medium"
                         android:src="@drawable/ic_share_24dp"
                         android:visibility="gone" />
 
@@ -115,8 +115,8 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:foreground="@drawable/bg_ripple_white"
-                        android:paddingEnd="@dimen/margin_medium"
                         android:paddingStart="@dimen/margin_medium"
+                        android:paddingEnd="@dimen/margin_medium"
                         android:src="@drawable/ic_favorite_border_white_24dp"
                         android:visibility="gone" />
 
@@ -127,16 +127,16 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:foreground="@drawable/bg_ripple_white"
-                        android:paddingEnd="@dimen/margin_medium"
                         android:paddingStart="@dimen/margin_medium"
+                        android:paddingEnd="@dimen/margin_medium"
                         android:src="@drawable/ic_arrow_back_24dp" />
 
                     <TextView
                         android:id="@+id/tv_title_movie_name"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_toEndOf="@id/iv_back"
                         android:layout_toStartOf="@id/iv_favorite"
+                        android:layout_toEndOf="@id/iv_back"
                         android:gravity="center_vertical"
                         android:singleLine="true"
                         android:text="@string/movie_name"
@@ -181,9 +181,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tv_overview_title"
-                android:layout_marginEnd="@dimen/margin_medium"
                 android:layout_marginStart="@dimen/margin_medium"
                 android:layout_marginTop="@dimen/margin_medium_2"
+                android:layout_marginEnd="@dimen/margin_medium"
                 android:lineSpacingMultiplier="1.3"
                 android:textColor="@color/icons"
                 android:textSize="@dimen/text_regular" />
@@ -281,8 +281,28 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tv_casts"
-                android:layout_marginBottom="@dimen/margin_medium_2"
-                android:layout_marginTop="@dimen/margin_medium" />
+                android:layout_marginTop="@dimen/margin_medium"
+                android:layout_marginBottom="@dimen/margin_medium_2" />
+
+            <TextView
+                android:id="@+id/tv_similar_movies"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rv_movie_casts"
+                android:layout_marginStart="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_medium_2"
+                android:text="@string/similar_movies"
+                android:textColor="@color/accent"
+                android:textSize="@dimen/text_regular_2x"
+                android:visibility="gone" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_movie_similar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_similar_movies"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:layout_marginBottom="@dimen/margin_medium_2" />
         </RelativeLayout>
 
     </android.support.v4.widget.NestedScrollView>

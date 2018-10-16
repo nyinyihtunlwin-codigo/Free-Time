@@ -6,6 +6,8 @@ import projects.nyinyihtunlwin.zcar.network.responses.SearchResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.GetMovieCreditsResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.GetMovieReviewsResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.GetMovieTrailersResponse;
+import projects.nyinyihtunlwin.zcar.network.responses.movies.GetSimilarMoviesResponse;
+import projects.nyinyihtunlwin.zcar.network.responses.movies.GetSimilarTvShowsResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.MovieGenresResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.NowShowingMoviesResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.PopularMoviesResponse;
@@ -55,6 +57,10 @@ public interface MovieAPI {
     @GET("movie/{id}/credits")
     Call<GetMovieCreditsResponse> loadMovieCredits(@Path("id") Integer movieId, @Query("api_key") String apiKey);
 
+    @GET("movie/{id}/similar")
+    Call<GetSimilarMoviesResponse> loadSimilarMovies(@Path("id") Integer movieId, @Query("api_key") String apiKey, @Query("page") Integer page);
+
+
     // TV Shows
     @GET("tv/airing_today")
     Call<TvAiringTodayResponse> loadTvAiringToday(@Query("api_key") String apiKey, @Query("page") Integer page);
@@ -80,6 +86,8 @@ public interface MovieAPI {
     @GET("/tv/{tv_id}/reviews")
     Call<GetMovieReviewsResponse> loadTvShowReviews(@Path("tv_id") Integer movieId, @Query("api_key") String apiKey);
 
+    @GET("tv/{id}/similar")
+    Call<GetSimilarTvShowsResponse> loadSimilarTVShows(@Path("id") Integer tvShowId, @Query("api_key") String apiKey, @Query("page") Integer page);
 
     // Search Movies and TV Shows
     @GET("search/multi")

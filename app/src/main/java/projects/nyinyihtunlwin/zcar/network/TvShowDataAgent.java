@@ -24,4 +24,6 @@ public interface TvShowDataAgent {
 
     void loadTvShowCredits(int movieId, String apiKey);
 
+    void loadSimilarTvShows(int movieId, String apiKey);
+
 }

@@ -70,6 +70,10 @@ public class MovieModel {
         MovieDataAgentImpl.getObjectInstance().loadMovieCredits(Integer.parseInt(movieId), AppConstants.API_KEY);
     }
 
+    public void startLoadingSimilarMovies(String movieId) {
+        MovieDataAgentImpl.getObjectInstance().loadSimilarMovies(Integer.parseInt(movieId), AppConstants.API_KEY);
+    }
+
     public void startLoadingMovieGenres(Context context) {
         MovieDataAgentImpl.getObjectInstance().loadMovieGenres(AppConstants.API_KEY, context);
     }

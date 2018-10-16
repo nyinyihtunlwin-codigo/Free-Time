@@ -3,6 +3,7 @@ package projects.nyinyihtunlwin.zcar.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Movie;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -37,12 +38,15 @@ import butterknife.ButterKnife;
 import projects.nyinyihtunlwin.zcar.R;
 import projects.nyinyihtunlwin.zcar.adapters.CastAdapter;
 import projects.nyinyihtunlwin.zcar.adapters.GenreAdapter;
+import projects.nyinyihtunlwin.zcar.adapters.MovieAdapter;
+import projects.nyinyihtunlwin.zcar.adapters.SimilarMovieAdapter;
 import projects.nyinyihtunlwin.zcar.adapters.TrailersAdapter;
 import projects.nyinyihtunlwin.zcar.data.models.MovieModel;
 import projects.nyinyihtunlwin.zcar.data.vo.GenreVO;
 import projects.nyinyihtunlwin.zcar.data.vo.movies.MovieVO;
 import projects.nyinyihtunlwin.zcar.data.vo.ReviewVO;
 import projects.nyinyihtunlwin.zcar.delegates.MovieDetailsDelegate;
+import projects.nyinyihtunlwin.zcar.delegates.MovieItemDelegate;
 import projects.nyinyihtunlwin.zcar.events.MovieDetailsEvent;
 import projects.nyinyihtunlwin.zcar.events.MoviesiEvents;
 import projects.nyinyihtunlwin.zcar.persistence.MovieContract;
@@ -114,6 +118,12 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsDe
     @BindView(R.id.iv_share)
     ImageView ivShare;
 
+    @BindView(R.id.tv_similar_movies)
+    TextView tvSimilarMovies;
+
+    @BindView(R.id.rv_movie_similar)
+    RecyclerView rvSimilarMovies;
+
     private String currentMovieId;
     private List<Integer> currentGenreIds;
 
@@ -121,6 +131,7 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsDe
     private GenreAdapter mGenreAdapter;
     private TrailersAdapter mTrailersAdapter;
     private CastAdapter mCastAdapter;
+    private SimilarMovieAdapter mSimilarMoviesAdapter;
 
     private String movieTagline, imdbId, homepage;
 
@@ -163,6 +174,16 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsDe
         rvMovieCasts.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         rvMovieCasts.setHasFixedSize(true);
 
+        mSimilarMoviesAdapter = new SimilarMovieAdapter(getApplicationContext(), new MovieItemDelegate() {
+            @Override
+            public void onClickMovie(String movieId) {
+                startActivity(MovieDetailsActivity.newIntent(getApplicationContext(), movieId));
+            }
+        });
+        rvSimilarMovies.setAdapter(mSimilarMoviesAdapter);
+        rvSimilarMovies.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        rvSimilarMovies.setHasFixedSize(true);
+
         ivBack.setOnClickListener(this);
         ivShare.setOnClickListener(this);
 
@@ -196,6 +217,7 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsDe
             MovieModel.getInstance().startLoadingMovieTrailers(currentMovieId);
             MovieModel.getInstance().startLoadingMovieReviews(currentMovieId);
             MovieModel.getInstance().startLoadingMovieCredits(currentMovieId);
+            MovieModel.getInstance().startLoadingSimilarMovies(currentMovieId);
         } else {
             showSnackBar("No internet connection.");
             loadingView.setVisibility(View.GONE);
@@ -338,6 +360,13 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsDe
         loadingView.setVisibility(View.GONE);
         tvCasts.setVisibility(View.VISIBLE);
         mCastAdapter.setNewData(event.getMovieCasts());
+    }
+
+    @Subscribe
+    public void onSimilarMoviesDataLoaded(MoviesiEvents.MovieSimilarDataLoadedEvent event) {
+        loadingView.setVisibility(View.GONE);
+        tvSimilarMovies.setVisibility(View.VISIBLE);
+        mSimilarMoviesAdapter.setNewData(event.getMovies());
     }
 
     @Subscribe

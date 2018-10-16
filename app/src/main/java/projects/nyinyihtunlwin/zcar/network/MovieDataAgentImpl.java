@@ -18,6 +18,7 @@ import projects.nyinyihtunlwin.zcar.network.responses.SearchResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.GetMovieCreditsResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.GetMovieReviewsResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.GetMovieTrailersResponse;
+import projects.nyinyihtunlwin.zcar.network.responses.movies.GetSimilarMoviesResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.MovieGenresResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.NowShowingMoviesResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.PopularMoviesResponse;
@@ -226,6 +227,28 @@ public class MovieDataAgentImpl implements MovieDataAgent {
 
             @Override
             public void onFailure(Call<GetMovieCreditsResponse> call, Throwable t) {
+                MovieDetailsEvent.ErrorInvokingAPIEvent errorEvent
+                        = new MovieDetailsEvent.ErrorInvokingAPIEvent("Can't load data. Try again.");
+                EventBus.getDefault().post(errorEvent);
+            }
+        });
+    }
+
+    @Override
+    public void loadSimilarMovies(int movieId, String apiKey) {
+        Call<GetSimilarMoviesResponse> loadSimilarMoviesResponse = movieAPI.loadSimilarMovies(movieId, apiKey, 1);
+        loadSimilarMoviesResponse.enqueue(new MovieCallback<GetSimilarMoviesResponse>() {
+            @Override
+            public void onResponse(Call<GetSimilarMoviesResponse> call, Response<GetSimilarMoviesResponse> response) {
+                GetSimilarMoviesResponse getSimilarMoviesResponse = response.body();
+                if (getSimilarMoviesResponse != null
+                        && getSimilarMoviesResponse.getMovies().size() > 0) {
+                    EventBus.getDefault().post(new MoviesiEvents.MovieSimilarDataLoadedEvent(getSimilarMoviesResponse.getMovies()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetSimilarMoviesResponse> call, Throwable t) {
                 MovieDetailsEvent.ErrorInvokingAPIEvent errorEvent
                         = new MovieDetailsEvent.ErrorInvokingAPIEvent("Can't load data. Try again.");
                 EventBus.getDefault().post(errorEvent);

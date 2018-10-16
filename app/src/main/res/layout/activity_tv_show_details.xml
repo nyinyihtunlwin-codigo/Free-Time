@@ -338,6 +338,26 @@
                 android:layout_below="@id/tv_casts"
                 android:layout_marginBottom="@dimen/margin_medium_2"
                 android:layout_marginTop="@dimen/margin_medium" />
+
+            <TextView
+                android:id="@+id/tv_similar_movies"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rv_movie_casts"
+                android:layout_marginStart="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_medium_2"
+                android:text="@string/similar_tvshows"
+                android:textColor="@color/accent"
+                android:textSize="@dimen/text_regular_2x"
+                android:visibility="gone" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_movie_similar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_similar_movies"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:layout_marginBottom="@dimen/margin_medium_2" />
         </RelativeLayout>
 
     </android.support.v4.widget.NestedScrollView>

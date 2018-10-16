@@ -37,12 +37,14 @@ import butterknife.ButterKnife;
 import projects.nyinyihtunlwin.zcar.R;
 import projects.nyinyihtunlwin.zcar.adapters.CastAdapter;
 import projects.nyinyihtunlwin.zcar.adapters.GenreAdapter;
+import projects.nyinyihtunlwin.zcar.adapters.SimilarTvShowAdapter;
 import projects.nyinyihtunlwin.zcar.adapters.TrailersAdapter;
 import projects.nyinyihtunlwin.zcar.data.models.TvShowModel;
 import projects.nyinyihtunlwin.zcar.data.vo.GenreVO;
 import projects.nyinyihtunlwin.zcar.data.vo.ReviewVO;
 import projects.nyinyihtunlwin.zcar.data.vo.tvshows.TvShowVO;
 import projects.nyinyihtunlwin.zcar.delegates.MovieDetailsDelegate;
+import projects.nyinyihtunlwin.zcar.delegates.MovieItemDelegate;
 import projects.nyinyihtunlwin.zcar.events.MovieDetailsEvent;
 import projects.nyinyihtunlwin.zcar.events.MoviesiEvents;
 import projects.nyinyihtunlwin.zcar.events.TvShowDetailsEvent;
@@ -134,6 +136,12 @@ public class TvShowDetailsActivity extends BaseActivity implements MovieDetailsD
     @BindView(R.id.tv_episode)
     TextView tvEpisode;
 
+    @BindView(R.id.tv_similar_movies)
+    TextView tvSimilarTvShows;
+
+    @BindView(R.id.rv_movie_similar)
+    RecyclerView rvSimilarTvShows;
+
     private String currentMovieId;
     private List<Integer> currentGenreIds;
 
@@ -141,6 +149,7 @@ public class TvShowDetailsActivity extends BaseActivity implements MovieDetailsD
     private GenreAdapter mGenreAdapter;
     private TrailersAdapter mTrailersAdapter;
     private CastAdapter mCastAdapter;
+    private SimilarTvShowAdapter mSimilarTvShowAdapter;
 
     private Snackbar mSnackbar;
 
@@ -181,6 +190,16 @@ public class TvShowDetailsActivity extends BaseActivity implements MovieDetailsD
         rvMovieCasts.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         rvMovieCasts.setHasFixedSize(true);
 
+        mSimilarTvShowAdapter = new SimilarTvShowAdapter(getApplicationContext(), new MovieItemDelegate() {
+            @Override
+            public void onClickMovie(String movieId) {
+                startActivity(TvShowDetailsActivity.newIntent(getApplicationContext(), movieId));
+            }
+        });
+        rvSimilarTvShows.setAdapter(mSimilarTvShowAdapter);
+        rvSimilarTvShows.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        rvSimilarTvShows.setHasFixedSize(true);
+
         ivBack.setOnClickListener(this);
         ivShare.setOnClickListener(this);
 
@@ -214,6 +233,7 @@ public class TvShowDetailsActivity extends BaseActivity implements MovieDetailsD
             TvShowModel.getInstance().startLoadingTvShowReviews(currentMovieId);
             TvShowModel.getInstance().startLoadingTvShowCredits(currentMovieId);
             TvShowModel.getInstance().startLoadingTvShowDetails(currentMovieId);
+            TvShowModel.getInstance().startLoadingSimilarTvShows(currentMovieId);
         } else {
             showSnackBar("No internet connection.");
             loadingView.setVisibility(View.GONE);
@@ -354,6 +374,14 @@ public class TvShowDetailsActivity extends BaseActivity implements MovieDetailsD
     public void onMovieCastsDataLoaded(MoviesiEvents.MovieCreditsDataLoadedEvent event) {
         tvCasts.setVisibility(View.VISIBLE);
         mCastAdapter.setNewData(event.getMovieCasts());
+        loadingView.setVisibility(View.GONE);
+        hideSnackBar();
+    }
+
+    @Subscribe
+    public void onSimilarTvShowsDataLoaded(TvShowsEvents.TvShowSimilarDataLoadedEvent event) {
+        tvSimilarTvShows.setVisibility(View.VISIBLE);
+        mSimilarTvShowAdapter.setNewData(event.getTvShows());
         loadingView.setVisibility(View.GONE);
         hideSnackBar();
     }

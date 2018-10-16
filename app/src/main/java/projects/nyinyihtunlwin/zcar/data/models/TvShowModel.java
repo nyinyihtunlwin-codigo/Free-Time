@@ -66,6 +66,10 @@ public class TvShowModel {
         TvShowDataAgentImpl.getObjectInstance().loadTvShowCredits(Integer.parseInt(movieId), AppConstants.API_KEY);
     }
 
+    public void startLoadingSimilarTvShows(String movieId) {
+        TvShowDataAgentImpl.getObjectInstance().loadSimilarTvShows(Integer.parseInt(movieId), AppConstants.API_KEY);
+    }
+
 
     public void startLoadingTvShows(Context context, String showType) {
         switch (showType) {
