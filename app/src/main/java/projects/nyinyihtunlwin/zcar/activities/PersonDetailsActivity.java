@@ -213,18 +213,22 @@ public class PersonDetailsActivity extends BaseActivity implements View.OnClickL
 
     @Subscribe
     public void onMovieCreditsOfPersonLoaded(PersonDetailsEvent.PersonMovieCreditDataLoadedEvent event) {
-        loadingView.setVisibility(View.GONE);
-        tvMovieCast.setVisibility(View.VISIBLE);
-        rvMovieCast.setVisibility(View.VISIBLE);
-        mSimilarMoviesAdapter.setNewData(event.getMovieList());
+        if (event.getMovieList() != null && event.getMovieList().size() > 0) {
+            loadingView.setVisibility(View.GONE);
+            tvMovieCast.setVisibility(View.VISIBLE);
+            rvMovieCast.setVisibility(View.VISIBLE);
+            mSimilarMoviesAdapter.setNewData(event.getMovieList());
+        }
     }
 
     @Subscribe
     public void onTvShowCreditsOfPersonLoaded(PersonDetailsEvent.PersonTVShowCreditDataLoadedEvent event) {
-        loadingView.setVisibility(View.GONE);
-        tvTvShowCast.setVisibility(View.VISIBLE);
-        rvTvCast.setVisibility(View.VISIBLE);
-        mSimilarTvShowAdapter.setNewData(event.getTvShowList());
+        if (event.getTvShowList() != null && event.getTvShowList().size() > 0) {
+            loadingView.setVisibility(View.GONE);
+            tvTvShowCast.setVisibility(View.VISIBLE);
+            rvTvCast.setVisibility(View.VISIBLE);
+            mSimilarTvShowAdapter.setNewData(event.getTvShowList());
+        }
     }
 
     @Override
