@@ -6,4 +6,5 @@ package projects.nyinyihtunlwin.zcar.delegates;
 
 public interface MovieDetailsDelegate {
     void onClickTriler(String trailerKey);
+    void onClickCast(Integer castId);
 }

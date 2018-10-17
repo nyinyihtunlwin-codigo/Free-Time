@@ -15,7 +15,6 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -45,7 +44,6 @@ import projects.nyinyihtunlwin.zcar.data.vo.ReviewVO;
 import projects.nyinyihtunlwin.zcar.data.vo.tvshows.TvShowVO;
 import projects.nyinyihtunlwin.zcar.delegates.MovieDetailsDelegate;
 import projects.nyinyihtunlwin.zcar.delegates.MovieItemDelegate;
-import projects.nyinyihtunlwin.zcar.events.MovieDetailsEvent;
 import projects.nyinyihtunlwin.zcar.events.MoviesiEvents;
 import projects.nyinyihtunlwin.zcar.events.TvShowDetailsEvent;
 import projects.nyinyihtunlwin.zcar.events.TvShowsEvents;
@@ -185,7 +183,7 @@ public class TvShowDetailsActivity extends BaseActivity implements MovieDetailsD
         rvTrailers.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         rvTrailers.setHasFixedSize(true);
 
-        mCastAdapter = new CastAdapter(getApplicationContext());
+        mCastAdapter = new CastAdapter(getApplicationContext(), this);
         rvMovieCasts.setAdapter(mCastAdapter);
         rvMovieCasts.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         rvMovieCasts.setHasFixedSize(true);
@@ -427,6 +425,11 @@ public class TvShowDetailsActivity extends BaseActivity implements MovieDetailsD
     public void onClickTriler(String trailerKey) {
         Intent youtubeIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(AppConstants.YOUTUBE_WATCH_BASE_URL + trailerKey));
         startActivity(youtubeIntent);
+    }
+
+    @Override
+    public void onClickCast(Integer castId) {
+        startActivity(PersonDetailsActivity.newIntent(getApplicationContext(),castId));
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

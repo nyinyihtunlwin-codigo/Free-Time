@@ -1,5 +1,6 @@
 package projects.nyinyihtunlwin.zcar.network;
 
+import projects.nyinyihtunlwin.zcar.network.responses.PersonDetailsResponse;
 import projects.nyinyihtunlwin.zcar.data.vo.movies.MovieVO;
 import projects.nyinyihtunlwin.zcar.data.vo.tvshows.TvShowVO;
 import projects.nyinyihtunlwin.zcar.network.responses.SearchResponse;
@@ -92,5 +93,9 @@ public interface MovieAPI {
     // Search Movies and TV Shows
     @GET("search/multi")
     Call<SearchResponse> search(@Query("api_key") String apiKey, @Query("page") Integer page, @Query("query") String query);
+
+    // Person
+    @GET("person/{id}")
+    Call<PersonDetailsResponse> loadPersonDetails(@Path("id") Integer personId, @Query("api_key") String apiKey);
 
 }

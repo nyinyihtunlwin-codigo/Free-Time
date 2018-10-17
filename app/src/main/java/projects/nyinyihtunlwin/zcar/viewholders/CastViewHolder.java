@@ -13,6 +13,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import projects.nyinyihtunlwin.zcar.R;
 import projects.nyinyihtunlwin.zcar.data.vo.CastVO;
+import projects.nyinyihtunlwin.zcar.delegates.MovieDetailsDelegate;
 import projects.nyinyihtunlwin.zcar.utils.AppConstants;
 
 /**
@@ -27,13 +28,18 @@ public class CastViewHolder extends BaseViewHolder<CastVO> {
     @BindView(R.id.tv_cast_name)
     TextView tvCastName;
 
-    public CastViewHolder(View itemView) {
+    private MovieDetailsDelegate mMovieDetailsDelegate;
+    private CastVO mData;
+
+    public CastViewHolder(View itemView, MovieDetailsDelegate movieDetailsDelegate) {
         super(itemView);
-        ButterKnife.bind(this,itemView);
+        ButterKnife.bind(this, itemView);
+        this.mMovieDetailsDelegate = movieDetailsDelegate;
     }
 
     @Override
-    public void setData(CastVO mData) {
+    public void setData(CastVO data) {
+        this.mData = data;
         tvCastName.setText(mData.getName());
         RequestOptions requestOptions = new RequestOptions()
                 .placeholder(R.drawable.movie_placeholder)
@@ -44,6 +50,8 @@ public class CastViewHolder extends BaseViewHolder<CastVO> {
 
     @Override
     public void onClick(View view) {
-
+        if (mData.getId() != null) {
+            mMovieDetailsDelegate.onClickCast(mData.getId());
+        }
     }
 }

@@ -3,13 +3,8 @@ package projects.nyinyihtunlwin.zcar.network;
 import android.content.Context;
 import android.util.Log;
 
-import com.google.gson.Gson;
-
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.concurrent.TimeUnit;
-
-import okhttp3.OkHttpClient;
 import projects.nyinyihtunlwin.zcar.data.vo.tvshows.TvShowVO;
 import projects.nyinyihtunlwin.zcar.events.MovieDetailsEvent;
 import projects.nyinyihtunlwin.zcar.events.MoviesiEvents;
@@ -26,35 +21,14 @@ import projects.nyinyihtunlwin.zcar.network.responses.tvshows.TvTopRatedResponse
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by Dell on 2/22/2018.
  */
 
-public class TvShowDataAgentImpl implements TvShowDataAgent {
+public class TvShowDataAgentImpl extends BaseDataAgentImpl implements TvShowDataAgent {
 
     private static TvShowDataAgentImpl objectInstance;
-
-    private MovieAPI movieAPI;
-
-    private TvShowDataAgentImpl() {
-        OkHttpClient okHttpClient = new OkHttpClient
-                .Builder()
-                .connectTimeout(60, TimeUnit.SECONDS)
-                .writeTimeout(60, TimeUnit.SECONDS)
-                .readTimeout(60, TimeUnit.SECONDS)
-                .build();
-        // time 60 sec is optimal.
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://api.themoviedb.org/3/")
-                .addConverterFactory(GsonConverterFactory.create(new Gson()))
-                .client(okHttpClient)
-                .build();
-
-        movieAPI = retrofit.create(MovieAPI.class);
-    }
 
     public static TvShowDataAgentImpl getObjectInstance() {
         if (objectInstance == null) {

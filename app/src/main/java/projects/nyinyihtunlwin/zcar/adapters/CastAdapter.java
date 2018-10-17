@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 
 import projects.nyinyihtunlwin.zcar.R;
 import projects.nyinyihtunlwin.zcar.data.vo.CastVO;
+import projects.nyinyihtunlwin.zcar.delegates.MovieDetailsDelegate;
 import projects.nyinyihtunlwin.zcar.viewholders.CastViewHolder;
 
 /**
@@ -13,13 +14,17 @@ import projects.nyinyihtunlwin.zcar.viewholders.CastViewHolder;
  */
 
 public class CastAdapter extends BaseRecyclerAdapter<CastViewHolder, CastVO> {
-    public CastAdapter(Context context) {
+
+    private MovieDetailsDelegate mMovieDetailsDelegate;
+
+    public CastAdapter(Context context, MovieDetailsDelegate movieDetailsDelegate) {
         super(context);
+        this.mMovieDetailsDelegate=movieDetailsDelegate;
     }
 
     @Override
     public CastViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mLayoutInflater.inflate(R.layout.view_item_cast, parent, false);
-        return new CastViewHolder(view);
+        return new CastViewHolder(view,mMovieDetailsDelegate);
     }
 }

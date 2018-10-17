@@ -156,5 +156,9 @@
     <string name="contact">Contact me via</string>
     <string name="similar_movies">Similar Movies</string>
     <string name="similar_tvshows">Similar TV Shows</string>
+    <string name="biography">Biography</string>
+    <string name="movie_cast">Movie Cast</string>
+    <string name="person_details">Details</string>
+    <string name="no_data">...</string>
 
 </resources>

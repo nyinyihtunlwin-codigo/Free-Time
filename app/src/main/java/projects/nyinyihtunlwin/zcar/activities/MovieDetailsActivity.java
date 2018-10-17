@@ -3,7 +3,6 @@ package projects.nyinyihtunlwin.zcar.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Movie;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -38,13 +37,12 @@ import butterknife.ButterKnife;
 import projects.nyinyihtunlwin.zcar.R;
 import projects.nyinyihtunlwin.zcar.adapters.CastAdapter;
 import projects.nyinyihtunlwin.zcar.adapters.GenreAdapter;
-import projects.nyinyihtunlwin.zcar.adapters.MovieAdapter;
 import projects.nyinyihtunlwin.zcar.adapters.SimilarMovieAdapter;
 import projects.nyinyihtunlwin.zcar.adapters.TrailersAdapter;
 import projects.nyinyihtunlwin.zcar.data.models.MovieModel;
 import projects.nyinyihtunlwin.zcar.data.vo.GenreVO;
-import projects.nyinyihtunlwin.zcar.data.vo.movies.MovieVO;
 import projects.nyinyihtunlwin.zcar.data.vo.ReviewVO;
+import projects.nyinyihtunlwin.zcar.data.vo.movies.MovieVO;
 import projects.nyinyihtunlwin.zcar.delegates.MovieDetailsDelegate;
 import projects.nyinyihtunlwin.zcar.delegates.MovieItemDelegate;
 import projects.nyinyihtunlwin.zcar.events.MovieDetailsEvent;
@@ -169,7 +167,7 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsDe
         rvTrailers.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         rvTrailers.setHasFixedSize(true);
 
-        mCastAdapter = new CastAdapter(getApplicationContext());
+        mCastAdapter = new CastAdapter(getApplicationContext(), this);
         rvMovieCasts.setAdapter(mCastAdapter);
         rvMovieCasts.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         rvMovieCasts.setHasFixedSize(true);
@@ -411,6 +409,11 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsDe
     public void onClickTriler(String trailerKey) {
         Intent youtubeIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(AppConstants.YOUTUBE_WATCH_BASE_URL + trailerKey));
         startActivity(youtubeIntent);
+    }
+
+    @Override
+    public void onClickCast(Integer castId) {
+        startActivity(PersonDetailsActivity.newIntent(getApplicationContext(),castId));
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
