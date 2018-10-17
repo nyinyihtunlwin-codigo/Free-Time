@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -29,7 +30,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import projects.nyinyihtunlwin.zcar.R;
+import projects.nyinyihtunlwin.zcar.adapters.SimilarMovieAdapter;
+import projects.nyinyihtunlwin.zcar.adapters.SimilarTvShowAdapter;
 import projects.nyinyihtunlwin.zcar.data.models.PersonModel;
+import projects.nyinyihtunlwin.zcar.delegates.MovieItemDelegate;
 import projects.nyinyihtunlwin.zcar.events.MovieDetailsEvent;
 import projects.nyinyihtunlwin.zcar.events.PersonDetailsEvent;
 import projects.nyinyihtunlwin.zcar.network.responses.PersonDetailsResponse;
@@ -82,6 +86,8 @@ public class PersonDetailsActivity extends BaseActivity implements View.OnClickL
     private Integer currentPersonId;
 
     private Snackbar mSnackbar;
+    private SimilarMovieAdapter mSimilarMoviesAdapter;
+    private SimilarTvShowAdapter mSimilarTvShowAdapter;
 
     public static Intent newIntent(Context context, int personId) {
         Intent intent = new Intent(context, PersonDetailsActivity.class);
@@ -104,6 +110,26 @@ public class PersonDetailsActivity extends BaseActivity implements View.OnClickL
 
         ivBack.setOnClickListener(this);
         ivShare.setOnClickListener(this);
+
+        mSimilarMoviesAdapter = new SimilarMovieAdapter(getApplicationContext(), new MovieItemDelegate() {
+            @Override
+            public void onClickMovie(String movieId) {
+                startActivity(MovieDetailsActivity.newIntent(getApplicationContext(), movieId));
+            }
+        });
+        rvMovieCast.setAdapter(mSimilarMoviesAdapter);
+        rvMovieCast.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        rvMovieCast.setHasFixedSize(true);
+
+        mSimilarTvShowAdapter = new SimilarTvShowAdapter(getApplicationContext(), new MovieItemDelegate() {
+            @Override
+            public void onClickMovie(String movieId) {
+                startActivity(MovieDetailsActivity.newIntent(getApplicationContext(), movieId));
+            }
+        });
+        rvTvCast.setAdapter(mSimilarTvShowAdapter);
+        rvTvCast.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        rvTvCast.setHasFixedSize(true);
 
         final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar_layout);
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar_layout);
@@ -130,6 +156,8 @@ public class PersonDetailsActivity extends BaseActivity implements View.OnClickL
     private void loadDetails() {
         if (AppUtils.getObjInstance().hasConnection()) {
             PersonModel.getInstance().startLoadingPersonDetails(currentPersonId);
+            PersonModel.getInstance().startLoadingMovieCreditsOfPerson(currentPersonId);
+            PersonModel.getInstance().startLoadingTVShowCreditsOfPerson(currentPersonId);
         } else {
             showSnackBar("No internet connection.");
             loadingView.setVisibility(View.GONE);
@@ -181,6 +209,22 @@ public class PersonDetailsActivity extends BaseActivity implements View.OnClickL
     public void onMovieDetailsLoaded(PersonDetailsEvent.PersonDetailsDataLoadedEvent event) {
         loadingView.setVisibility(View.GONE);
         bindData(event.getPersonDetails());
+    }
+
+    @Subscribe
+    public void onMovieCreditsOfPersonLoaded(PersonDetailsEvent.PersonMovieCreditDataLoadedEvent event) {
+        loadingView.setVisibility(View.GONE);
+        tvMovieCast.setVisibility(View.VISIBLE);
+        rvMovieCast.setVisibility(View.VISIBLE);
+        mSimilarMoviesAdapter.setNewData(event.getMovieList());
+    }
+
+    @Subscribe
+    public void onTvShowCreditsOfPersonLoaded(PersonDetailsEvent.PersonTVShowCreditDataLoadedEvent event) {
+        loadingView.setVisibility(View.GONE);
+        tvTvShowCast.setVisibility(View.VISIBLE);
+        rvTvCast.setVisibility(View.VISIBLE);
+        mSimilarTvShowAdapter.setNewData(event.getTvShowList());
     }
 
     @Override

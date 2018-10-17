@@ -20,4 +20,11 @@ public class PersonModel {
         PersonDataAgentImpl.getObjectInstance().loadPersonDetails(personId, AppConstants.API_KEY);
     }
 
+    public void startLoadingMovieCreditsOfPerson(Integer currentPersonId) {
+        PersonDataAgentImpl.getObjectInstance().loadMovieCredits(currentPersonId, AppConstants.API_KEY);
+    }
+
+    public void startLoadingTVShowCreditsOfPerson(Integer currentPersonId) {
+        PersonDataAgentImpl.getObjectInstance().loadTVShowCredits(currentPersonId, AppConstants.API_KEY);
+    }
 }

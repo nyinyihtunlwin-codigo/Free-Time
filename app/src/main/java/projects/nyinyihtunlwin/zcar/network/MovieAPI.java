@@ -9,9 +9,11 @@ import projects.nyinyihtunlwin.zcar.network.responses.movies.GetMovieReviewsResp
 import projects.nyinyihtunlwin.zcar.network.responses.movies.GetMovieTrailersResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.GetSimilarMoviesResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.GetSimilarTvShowsResponse;
+import projects.nyinyihtunlwin.zcar.network.responses.movies.MovieCreditOfPersonResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.MovieGenresResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.NowShowingMoviesResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.PopularMoviesResponse;
+import projects.nyinyihtunlwin.zcar.network.responses.movies.TVCreditOfPersonResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.TopRatedMoviesResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.movies.UpcomingMoviesResponse;
 import projects.nyinyihtunlwin.zcar.network.responses.tvshows.TvAiringTodayResponse;
@@ -98,4 +100,9 @@ public interface MovieAPI {
     @GET("person/{id}")
     Call<PersonDetailsResponse> loadPersonDetails(@Path("id") Integer personId, @Query("api_key") String apiKey);
 
+    @GET("person/{id}/movie_credits")
+    Call<MovieCreditOfPersonResponse> loadMovieCreditsOfPerson(@Path("id") Integer personId, @Query("api_key") String apiKey);
+
+    @GET("person/{id}/tv_credits")
+    Call<TVCreditOfPersonResponse> loadTVCreditsOfPerson(@Path("id") Integer personId, @Query("api_key") String apiKey);
 }

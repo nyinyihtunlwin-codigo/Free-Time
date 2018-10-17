@@ -6,4 +6,6 @@ package projects.nyinyihtunlwin.zcar.network;
 
 public interface PersonDataAgent {
     void loadPersonDetails(int personId, String apiKey);
+    void loadMovieCredits(int personId,String apiKey);
+    void loadTVShowCredits(int personId,String apiKey);
 }

@@ -413,7 +413,7 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsDe
 
     @Override
     public void onClickCast(Integer castId) {
-        startActivity(PersonDetailsActivity.newIntent(getApplicationContext(),castId));
+        startActivity(PersonDetailsActivity.newIntent(getApplicationContext(), castId));
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

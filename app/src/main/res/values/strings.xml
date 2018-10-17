@@ -160,5 +160,6 @@
     <string name="movie_cast">Movie Cast</string>
     <string name="person_details">Details</string>
     <string name="no_data">...</string>
+    <string name="tvshow_cast">TV Show Cast</string>
 
 </resources>

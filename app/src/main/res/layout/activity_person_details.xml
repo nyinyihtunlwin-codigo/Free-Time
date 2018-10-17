@@ -234,7 +234,7 @@
                 android:layout_below="@id/rv_movie_cast"
                 android:layout_marginStart="@dimen/margin_medium"
                 android:layout_marginTop="@dimen/margin_medium_2"
-                android:text="@string/movie_cast"
+                android:text="@string/tvshow_cast"
                 android:textColor="@color/accent"
                 android:textSize="@dimen/text_regular_2x"
                 android:visibility="gone" />
