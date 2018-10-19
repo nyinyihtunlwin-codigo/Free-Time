@@ -21,7 +21,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -307,11 +306,9 @@ public class TvShowDetailsActivity extends BaseActivity implements MovieDetailsD
         tvReleasedDate.setText(movieVO.getFirstAirDate());
         tvRate.setText(movieVO.getVoteAverage() + "/10");
         tvOverview.setText(movieVO.getOverview());
-        RequestOptions requestOptions = new RequestOptions()
-                .placeholder(R.drawable.movie_placeholder)
-                .centerCrop();
-        Glide.with(getApplicationContext()).load(AppConstants.IMAGE_LOADING_BASE_URL + movieVO.getBackdropPath()).apply(requestOptions).into(ivMovieBack);
-        Glide.with(getApplicationContext()).load(AppConstants.IMAGE_LOADING_BASE_URL + movieVO.getPosterPath()).apply(requestOptions).into(ivMovieLogo);
+
+        Glide.with(getApplicationContext()).load(AppConstants.IMAGE_LOADING_BASE_URL + movieVO.getBackdropPath()).apply(AppConstants.requestOptions).into(ivMovieBack);
+        Glide.with(getApplicationContext()).load(AppConstants.IMAGE_LOADING_BASE_URL + movieVO.getPosterPath()).apply(AppConstants.requestOptions).into(ivMovieLogo);
 
     }
 
@@ -429,7 +426,7 @@ public class TvShowDetailsActivity extends BaseActivity implements MovieDetailsD
 
     @Override
     public void onClickCast(Integer castId) {
-        startActivity(PersonDetailsActivity.newIntent(getApplicationContext(),castId));
+        startActivity(PersonDetailsActivity.newIntent(getApplicationContext(), castId));
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

@@ -5,9 +5,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-
-import java.util.concurrent.TimeoutException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,10 +38,7 @@ public class CastViewHolder extends BaseViewHolder<CastVO> {
     public void setData(CastVO data) {
         this.mData = data;
         tvCastName.setText(mData.getName());
-        RequestOptions requestOptions = new RequestOptions()
-                .placeholder(R.drawable.movie_placeholder)
-                .centerCrop();
-        Glide.with(itemView.getRootView().getContext()).load(AppConstants.IMAGE_LOADING_BASE_URL + mData.getProfilePath()).apply(requestOptions).into(ivCast);
+        Glide.with(itemView.getRootView().getContext()).load(AppConstants.IMAGE_LOADING_BASE_URL + mData.getProfilePath()).apply(AppConstants.requestOptions).into(ivCast);
 
     }
 

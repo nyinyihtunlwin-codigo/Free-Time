@@ -5,7 +5,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,10 +38,7 @@ public class SearchResultViewHolder extends BaseViewHolder<SearchResultVO> {
     public void setData(SearchResultVO mData) {
         this.mData = mData;
         tvType.setText(getType(mData.getMediaType()));
-        RequestOptions requestOptions = new RequestOptions()
-                .placeholder(R.drawable.movie_placeholder)
-                .centerCrop();
-        Glide.with(itemView.getRootView().getContext()).load(AppConstants.IMAGE_LOADING_BASE_URL + mData.getPosterPath()).apply(requestOptions).into(ivMovie);
+        Glide.with(itemView.getRootView().getContext()).load(AppConstants.IMAGE_LOADING_BASE_URL + mData.getPosterPath()).apply(AppConstants.requestOptions).into(ivMovie);
     }
 
     @Override

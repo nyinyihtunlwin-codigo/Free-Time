@@ -1,10 +1,21 @@
 package projects.nyinyihtunlwin.zcar.utils;
 
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
+
+import projects.nyinyihtunlwin.zcar.R;
+
 /**
  * Created by Nyi Nyi Htun Lwin on 12/6/2017.
  */
 
 public class AppConstants {
+
+    public static final RequestOptions requestOptions = new RequestOptions()
+            .placeholder(R.drawable.movie_placeholder)
+            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+            .centerCrop();
+
     public static final String API_KEY = "6eb6146f403f23477c11206ed0c76288";
     public static final String IMAGE_LOADING_BASE_URL = "https://image.tmdb.org/t/p/original";
     public static final String IMAGE_TRAILERS_BASE_URL = "http://img.youtube.com/vi/";
@@ -40,7 +51,7 @@ public class AppConstants {
     public static final int TYPE_START_LOADING_DATA = 00;
     public static final int TYPE_lOAD_MORE_DATA = 11;
 
-    public static final String TYPE_SEARCH_MOVIE="movie";
-    public static final String TYPE_SEARCH_TV_SHOW="tv";
-    public static final String TYPE_SEARCH_PERSON="person";
+    public static final String TYPE_SEARCH_MOVIE = "movie";
+    public static final String TYPE_SEARCH_TV_SHOW = "tv";
+    public static final String TYPE_SEARCH_PERSON = "person";
 }

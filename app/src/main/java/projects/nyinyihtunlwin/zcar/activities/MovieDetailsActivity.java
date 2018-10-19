@@ -22,7 +22,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -304,11 +303,9 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsDe
         tvReleasedDate.setText(movieVO.getReleasedDate());
         tvRate.setText(movieVO.getVoteAverage() + "/10");
         tvOverview.setText(movieVO.getOverview());
-        RequestOptions requestOptions = new RequestOptions()
-                .placeholder(R.drawable.movie_placeholder)
-                .centerCrop();
-        Glide.with(getApplicationContext()).load(AppConstants.IMAGE_LOADING_BASE_URL + movieVO.getBackDropPath()).apply(requestOptions).into(ivMovieBack);
-        Glide.with(getApplicationContext()).load(AppConstants.IMAGE_LOADING_BASE_URL + movieVO.getPosterPath()).apply(requestOptions).into(ivMovieLogo);
+
+        Glide.with(getApplicationContext()).load(AppConstants.IMAGE_LOADING_BASE_URL + movieVO.getBackDropPath()).apply(AppConstants.requestOptions).into(ivMovieBack);
+        Glide.with(getApplicationContext()).load(AppConstants.IMAGE_LOADING_BASE_URL + movieVO.getPosterPath()).apply(AppConstants.requestOptions).into(ivMovieLogo);
 
     }
 

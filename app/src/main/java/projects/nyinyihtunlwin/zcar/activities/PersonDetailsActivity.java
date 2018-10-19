@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -180,10 +179,8 @@ public class PersonDetailsActivity extends BaseActivity implements View.OnClickL
         tvBirthplace.setText(response.getPlaceOfBirth());
         tvBiography.setText(response.getBiography());
         setAge(response.getDateOfBirth());
-        RequestOptions requestOptions = new RequestOptions()
-                .placeholder(R.drawable.movie_placeholder)
-                .centerCrop();
-        Glide.with(getApplicationContext()).load(AppConstants.IMAGE_LOADING_BASE_URL + response.getProfilePath()).apply(requestOptions).into(ivProfile);
+
+        Glide.with(getApplicationContext()).load(AppConstants.IMAGE_LOADING_BASE_URL + response.getProfilePath()).apply(AppConstants.requestOptions).into(ivProfile);
     }
 
     private void setAge(String dateOfBirthString) {

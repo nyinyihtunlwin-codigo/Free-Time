@@ -9,7 +9,6 @@ import projects.nyinyihtunlwin.zcar.dagger.AppComponent;
 import projects.nyinyihtunlwin.zcar.dagger.AppModule;
 import projects.nyinyihtunlwin.zcar.dagger.DaggerAppComponent;
 import projects.nyinyihtunlwin.zcar.data.models.MovieModel;
-import projects.nyinyihtunlwin.zcar.utils.AppConstants;
 import projects.nyinyihtunlwin.zcar.utils.AppUtils;
 import projects.nyinyihtunlwin.zcar.utils.ConfigUtils;
 

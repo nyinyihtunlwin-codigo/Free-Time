@@ -2,7 +2,6 @@ package projects.nyinyihtunlwin.zcar.network;
 
 import org.greenrobot.eventbus.EventBus;
 
-import projects.nyinyihtunlwin.zcar.events.ConnectionEvent;
 import projects.nyinyihtunlwin.zcar.events.MoviesiEvents;
 import projects.nyinyihtunlwin.zcar.network.responses.BaseResponse;
 import retrofit2.Call;

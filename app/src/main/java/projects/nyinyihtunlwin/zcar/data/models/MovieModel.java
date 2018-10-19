@@ -15,7 +15,6 @@ import java.util.List;
 
 import projects.nyinyihtunlwin.zcar.ZCarApp;
 import projects.nyinyihtunlwin.zcar.data.vo.GenreVO;
-import projects.nyinyihtunlwin.zcar.data.vo.SearchResultVO;
 import projects.nyinyihtunlwin.zcar.data.vo.movies.MovieVO;
 import projects.nyinyihtunlwin.zcar.events.ConnectionEvent;
 import projects.nyinyihtunlwin.zcar.events.MoviesiEvents;

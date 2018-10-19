@@ -1,13 +1,10 @@
 package projects.nyinyihtunlwin.zcar.viewholders;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,10 +39,7 @@ public class TrailersViewHolder extends BaseViewHolder<TrailerVO> {
     public void setData(TrailerVO mData) {
         this.mData = mData;
 
-        RequestOptions requestOptions = new RequestOptions()
-                .placeholder(R.drawable.movie_placeholder)
-                .centerCrop();
-        Glide.with(itemView.getRootView().getContext()).load(AppConstants.IMAGE_TRAILERS_BASE_URL + mData.getKey() + AppConstants.IMAGE_TRAILERS_QUALITY).apply(requestOptions).into(ivTrailer);
+        Glide.with(itemView.getRootView().getContext()).load(AppConstants.IMAGE_TRAILERS_BASE_URL + mData.getKey() + AppConstants.IMAGE_TRAILERS_QUALITY).apply(AppConstants.requestOptions).into(ivTrailer);
         if (mData != null) {
             tvTrailerName.setVisibility(View.VISIBLE);
             tvTrailerName.setText(mData.getName());
