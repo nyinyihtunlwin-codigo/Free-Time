@@ -28,13 +28,13 @@
             android:text="@string/tab_tv_on_the_air" />
 
         <android.support.design.widget.TabItem
-            android:id="@+id/tab_most_popular"
+            android:id="@+id/tab_tv_most_popular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/tab_most_popular" />
 
         <android.support.design.widget.TabItem
-            android:id="@+id/tab_top_rated"
+            android:id="@+id/tab__tv_top_rated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/tab_top_rated" />

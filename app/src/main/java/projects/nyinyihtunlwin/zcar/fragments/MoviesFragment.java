@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import butterknife.ButterKnife;
 import projects.nyinyihtunlwin.zcar.R;
 import projects.nyinyihtunlwin.zcar.adapters.MoviePagerAdapter;
 
@@ -27,6 +28,7 @@ public class MoviesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_movies, container, false);
+        ButterKnife.bind(this, view);
 
         mSectionsPagerAdapter = new MoviePagerAdapter(getChildFragmentManager());
 

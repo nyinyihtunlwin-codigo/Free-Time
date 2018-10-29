@@ -149,6 +149,7 @@ public class SearchActivity extends BaseActivity implements SearchView, SearchRe
                 intent = TvShowDetailsActivity.newIntent(getApplicationContext(), movieId);
                 break;
             case AppConstants.TYPE_SEARCH_PERSON:
+                intent = PersonDetailsActivity.newIntent(getApplicationContext(), Integer.parseInt(movieId));
                 break;
         }
         startActivity(intent);

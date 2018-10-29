@@ -40,9 +40,9 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
         View view = inflater.inflate(R.layout.fragment_about, container, false);
         ButterKnife.bind(this, view);
 
-        if (getActivity() != null) {
-            tvAppName.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), "code_heavy.ttf"));
-        }
+   /*     if (getActivity() != null) {
+            tvAppName.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), "roboto_bold.ttf"));
+        }*/
 
         btnFacebook.setOnClickListener(this);
         btnLinkedIn.setOnClickListener(this);
@@ -55,7 +55,7 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_facebook:
-                open("https://www.facebook.com/nyinyi.htunlwin");
+                open("fb://profile/100002954864451");
                 break;
             case R.id.iv_linkedin:
                 open("https://www.linkedin.com/in/nyinyi-htunlwin-1b2999112/");

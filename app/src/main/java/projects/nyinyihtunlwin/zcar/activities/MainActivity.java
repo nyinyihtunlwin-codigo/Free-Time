@@ -77,7 +77,8 @@ public class MainActivity extends BaseActivity implements DrawerMenuItemDelegate
 
         setSupportActionBar(toolbar);
 
-        tvAppTitle.setTypeface(Typeface.createFromAsset(getAssets(), "code_heavy.ttf"));
+      /*  tvAppTitle.setTypeface(Typeface.createFromAsset(getAssets(), "roboto_bold.ttf"));
+        tvCurrentSection.setTypeface(Typeface.createFromAsset(getAssets(), "roboto_bold.ttf"));*/
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -143,7 +144,16 @@ public class MainActivity extends BaseActivity implements DrawerMenuItemDelegate
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if(mCurrentSection!=0){
+                fabSearch.setVisibility(View.VISIBLE);
+                tvCurrentSection.setText("Movies");
+                if (mCurrentSection != 0) {
+                    setFragment(new MoviesFragment());
+                    mCurrentSection = 0;
+                }
+            }else{
+                super.onBackPressed();
+            }
         }
     }
 
