@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/accent</item>
+        <item name="drawerArrowStyle">@style/DrawerIcon</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -58,6 +59,11 @@
         <item name="android:foreground">@drawable/bg_ripple_accent</item>
         <item name="android:textColor">@color/accent</item>
     </style>
+
+    <style name="DrawerIcon" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@color/accent</item>
+    </style>
+
 
     <color name="primary_highlight">#ea5146</color>
 </resources>

@@ -55,7 +55,16 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_facebook:
-                open("fb://profile/100002954864451");
+                Intent intent;
+                try {
+                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://profile/100002954864451"));
+                } catch (Exception e) {
+                    // no Facebook app, revert to browser
+                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://facebook.com/nyinyi.htunlwin"));
+                }
+                if (getActivity() != null) {
+                    getActivity().startActivity(intent);
+                }
                 break;
             case R.id.iv_linkedin:
                 open("https://www.linkedin.com/in/nyinyi-htunlwin-1b2999112/");
@@ -68,6 +77,8 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
 
     public void open(String url) {
         Intent viewIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        startActivity(viewIntent);
+        if (getActivity() != null) {
+            getActivity().startActivity(viewIntent);
+        }
     }
 }
