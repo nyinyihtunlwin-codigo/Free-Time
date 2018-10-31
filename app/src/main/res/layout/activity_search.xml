@@ -102,7 +102,7 @@
                 android:text="Search Movies and TV Shows"
                 android:textColor="@color/accent" />
 
-            <projects.nyinyihtunlwin.zcar.components.SmartRecyclerView
+            <projects.nyinyihtunlwin.freetime.components.SmartRecyclerView
                 android:id="@+id/rv_result"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />

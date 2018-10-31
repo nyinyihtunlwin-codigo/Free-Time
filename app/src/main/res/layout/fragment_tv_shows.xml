@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/screen_back"
-    tools:context="projects.nyinyihtunlwin.zcar.fragments.TVShowsFragment">
+    tools:context="projects.nyinyihtunlwin.freetime.fragments.TVShowsFragment">
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tabs"
