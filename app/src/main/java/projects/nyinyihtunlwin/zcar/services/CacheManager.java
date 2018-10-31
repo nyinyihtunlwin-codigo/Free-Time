@@ -26,6 +26,6 @@ public class CacheManager extends IntentService {
         //   SQLiteDatabase db = mDbHelper.getWritableDatabase();
         //   int rowDeleted;
         //  rowDeleted = db.delete(MovieContract.MovieEntry.TABLE_NAME, null, null);
-        //  Log.e(ZCarApp.LOG_TAG, String.valueOf(rowDeleted));
+        //  Log.e(FreeTimeApp.LOG_TAG, String.valueOf(rowDeleted));
     }
 }

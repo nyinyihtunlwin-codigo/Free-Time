@@ -24,8 +24,8 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import projects.nyinyihtunlwin.zcar.FreeTimeApp;
 import projects.nyinyihtunlwin.zcar.R;
-import projects.nyinyihtunlwin.zcar.ZCarApp;
 import projects.nyinyihtunlwin.zcar.activities.MovieDetailsActivity;
 import projects.nyinyihtunlwin.zcar.adapters.MovieAdapter;
 import projects.nyinyihtunlwin.zcar.components.EmptyViewPod;
@@ -89,8 +89,8 @@ public class NestedMovieFragment extends BaseFragment implements MovieItemDelega
             Log.e("Screen ID", mScreenId + "");
         }
         if (getActivity() != null) {
-            ZCarApp zCarApp = (ZCarApp) getActivity().getApplicationContext();
-            zCarApp.getAppComponent().inject(this);
+            FreeTimeApp freeTimeApp = (FreeTimeApp) getActivity().getApplicationContext();
+            freeTimeApp.getAppComponent().inject(this);
         }
 
         mPresenter = new MoviePresenter(mContext, mScreenId);
@@ -142,7 +142,9 @@ public class NestedMovieFragment extends BaseFragment implements MovieItemDelega
                         movieLoaderId = AppConstants.MOVIE_TOP_RATED_LOADER_ID;
                         break;
                 }
-                Objects.requireNonNull(getActivity()).getSupportLoaderManager().initLoader(movieLoaderId, null, NestedMovieFragment.this);
+                if (getActivity() != null) {
+                    getActivity().getSupportLoaderManager().initLoader(movieLoaderId, null, NestedMovieFragment.this);
+                }
             }
         }, 1000);
 

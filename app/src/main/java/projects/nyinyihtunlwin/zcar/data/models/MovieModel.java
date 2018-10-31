@@ -13,7 +13,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
-import projects.nyinyihtunlwin.zcar.ZCarApp;
+import projects.nyinyihtunlwin.zcar.FreeTimeApp;
 import projects.nyinyihtunlwin.zcar.data.vo.GenreVO;
 import projects.nyinyihtunlwin.zcar.data.vo.movies.MovieVO;
 import projects.nyinyihtunlwin.zcar.events.ConnectionEvent;
@@ -114,12 +114,12 @@ public class MovieModel {
                     List<String> toDeleteMoviesIds = new ArrayList<>();
                     for (cursor.moveToPosition(20); !cursor.isAfterLast(); cursor.moveToNext()) {
                         String col21 = cursor.getString(cursor.getColumnIndex(MovieContract.MovieInScreenEntry.COLUMN_MOVIE_ID));
-                        Log.e(ZCarApp.LOG_TAG, col21 + "YOH");
+                        Log.e(FreeTimeApp.LOG_TAG, col21 + "YOH");
                         toDeleteMoviesIds.add(col21);
                     }
                     String[] movieIdsToDelete = toDeleteMoviesIds.toArray(new String[0]);
                     String args = TextUtils.join(", ", movieIdsToDelete);
-                    Log.e(ZCarApp.LOG_TAG, args);
+                    Log.e(FreeTimeApp.LOG_TAG, args);
                     MovieDBHelper dbHelper = new MovieDBHelper(context);
                     SQLiteDatabase db = dbHelper.getWritableDatabase();
                     db.execSQL(String.format("DELETE FROM " + MovieContract.MovieInScreenEntry.TABLE_NAME +
@@ -147,14 +147,14 @@ public class MovieModel {
     @Subscribe
     public void onMovieGenresLoaded(MoviesiEvents.MovieGenresDataLoadedEvent event) {
         mMovieGenres.addAll(event.getGenres());
-        Log.e(ZCarApp.LOG_TAG, String.valueOf(mMovieGenres.size()));
+        Log.e(FreeTimeApp.LOG_TAG, String.valueOf(mMovieGenres.size()));
         ContentValues[] genreCVs = new ContentValues[event.getGenres().size()];
         for (int index = 0; index < genreCVs.length; index++) {
             GenreVO genreVO = event.getGenres().get(index);
             genreCVs[index] = genreVO.parseToContentValues();
         }
         int insertedRowCount = event.getContext().getContentResolver().bulkInsert(MovieContract.GenreEntry.CONTENT_URI, genreCVs);
-        Log.d(ZCarApp.LOG_TAG, "Inserted genres : " + insertedRowCount);
+        Log.d(FreeTimeApp.LOG_TAG, "Inserted genres : " + insertedRowCount);
     }
 
     @Subscribe
@@ -202,7 +202,7 @@ public class MovieModel {
         int deletedRows = event.getContext().getContentResolver().delete(MovieContract.MovieInScreenEntry.CONTENT_URI,
                 MovieContract.MovieInScreenEntry.COLUMN_SCREEN + "=?",
                 new String[]{screenName});
-        Log.e(ZCarApp.LOG_TAG, "Deleted Recent Movies : " + String.valueOf(deletedRows));
+        Log.e(FreeTimeApp.LOG_TAG, "Deleted Recent Movies : " + String.valueOf(deletedRows));
     }
 
     private void saveDataForOfflineMode(MoviesiEvents.MoviesDataLoadedEvent event, String screenName) {
@@ -230,14 +230,14 @@ public class MovieModel {
 
         int insertedMovieGenre = event.getContext().getContentResolver().bulkInsert(MovieContract.MovieGenreEntry.CONTENT_URI,
                 genreCVList.toArray(new ContentValues[0]));
-        Log.d(ZCarApp.LOG_TAG, "Inserted Genres In Movies :" + insertedMovieGenre);
+        Log.d(FreeTimeApp.LOG_TAG, "Inserted Genres In Movies :" + insertedMovieGenre);
 
         int insertedMovieInScreen = event.getContext().getContentResolver().bulkInsert(MovieContract.MovieInScreenEntry.CONTENT_URI,
                 movieInScreenCVList.toArray(new ContentValues[0]));
-        Log.d(ZCarApp.LOG_TAG, "Inserted Movies In Screen :" + insertedMovieInScreen);
+        Log.d(FreeTimeApp.LOG_TAG, "Inserted Movies In Screen :" + insertedMovieInScreen);
 
         int insertedRowCount = event.getContext().getContentResolver().bulkInsert(MovieContract.MovieEntry.CONTENT_URI, movieCVS);
-        Log.d(ZCarApp.LOG_TAG, "Inserted row : " + insertedRowCount);
+        Log.d(FreeTimeApp.LOG_TAG, "Inserted row : " + insertedRowCount);
 
     }
 

@@ -1,6 +1,9 @@
 package projects.nyinyihtunlwin.zcar.fragments;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,15 +60,12 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_facebook:
-                Intent intent;
-                try {
-                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://profile/100002954864451"));
-                } catch (Exception e) {
-                    // no Facebook app, revert to browser
-                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://facebook.com/nyinyi.htunlwin"));
-                }
                 if (getActivity() != null) {
-                    getActivity().startActivity(intent);
+                    if (isAppInstalled(getActivity(), "com.facebook.katana")) {
+                        open("fb://profile/100002954864451");
+                    } else {
+                        open("https://facebook.com/nyinyi.htunlwin");
+                    }
                 }
                 break;
             case R.id.iv_linkedin:
@@ -72,6 +74,15 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
             case R.id.iv_github:
                 open("https://github.com/nyinyihtunlwin");
                 break;
+        }
+    }
+
+    public static boolean isAppInstalled(Context context, String packageName) {
+        try {
+            context.getPackageManager().getApplicationInfo(packageName, 0);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
         }
     }
 

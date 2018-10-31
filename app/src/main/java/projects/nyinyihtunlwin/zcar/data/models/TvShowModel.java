@@ -13,7 +13,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
-import projects.nyinyihtunlwin.zcar.ZCarApp;
+import projects.nyinyihtunlwin.zcar.FreeTimeApp;
 import projects.nyinyihtunlwin.zcar.data.vo.tvshows.TvShowVO;
 import projects.nyinyihtunlwin.zcar.events.ConnectionEvent;
 import projects.nyinyihtunlwin.zcar.events.TvShowsEvents;
@@ -141,7 +141,7 @@ public class TvShowModel {
         int deletedRows = event.getContext().getContentResolver().delete(MovieContract.TvShowInScreenEntry.CONTENT_URI,
                 MovieContract.TvShowInScreenEntry.COLUMN_SCREEN + "=?",
                 new String[]{screenName});
-        Log.e(ZCarApp.LOG_TAG, "Deleted Recent TvShows : " + String.valueOf(deletedRows));
+        Log.e(FreeTimeApp.LOG_TAG, "Deleted Recent TvShows : " + String.valueOf(deletedRows));
     }
 
 
@@ -170,14 +170,14 @@ public class TvShowModel {
 
         int insertedTvShowGenre = event.getContext().getContentResolver().bulkInsert(MovieContract.TvShowGenreEntry.CONTENT_URI,
                 genreCVList.toArray(new ContentValues[0]));
-        Log.d(ZCarApp.LOG_TAG, "Inserted Genres In Tv Shows :" + insertedTvShowGenre);
+        Log.d(FreeTimeApp.LOG_TAG, "Inserted Genres In Tv Shows :" + insertedTvShowGenre);
 
         int insertedTvShowInScreen = event.getContext().getContentResolver().bulkInsert(MovieContract.TvShowInScreenEntry.CONTENT_URI,
                 tvShowInScreenCVList.toArray(new ContentValues[0]));
-        Log.d(ZCarApp.LOG_TAG, "Inserted Tv Shows In Screen :" + insertedTvShowInScreen);
+        Log.d(FreeTimeApp.LOG_TAG, "Inserted Tv Shows In Screen :" + insertedTvShowInScreen);
 
         int insertedRowCount = event.getContext().getContentResolver().bulkInsert(MovieContract.TvShowsEntry.CONTENT_URI, tvShowCVS);
-        Log.d(ZCarApp.LOG_TAG, "Inserted row : " + insertedRowCount);
+        Log.d(FreeTimeApp.LOG_TAG, "Inserted row : " + insertedRowCount);
 
     }
 
@@ -201,12 +201,12 @@ public class TvShowModel {
                     List<String> toDeleteMoviesIds = new ArrayList<>();
                     for (cursor.moveToPosition(20); !cursor.isAfterLast(); cursor.moveToNext()) {
                         String col21 = cursor.getString(cursor.getColumnIndex(MovieContract.TvShowInScreenEntry.COLUMN_TV_SHOWS_ID));
-                        Log.e(ZCarApp.LOG_TAG, col21 + "YOH");
+                        Log.e(FreeTimeApp.LOG_TAG, col21 + "YOH");
                         toDeleteMoviesIds.add(col21);
                     }
                     String[] movieIdsToDelete = toDeleteMoviesIds.toArray(new String[0]);
                     String args = TextUtils.join(", ", movieIdsToDelete);
-                    Log.e(ZCarApp.LOG_TAG, args);
+                    Log.e(FreeTimeApp.LOG_TAG, args);
                     MovieDBHelper dbHelper = new MovieDBHelper(context);
                     SQLiteDatabase db = dbHelper.getWritableDatabase();
                     db.execSQL(String.format("DELETE FROM " + MovieContract.TvShowInScreenEntry.TABLE_NAME +

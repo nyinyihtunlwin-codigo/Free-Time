@@ -6,14 +6,14 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import projects.nyinyihtunlwin.zcar.ZCarApp;
+import projects.nyinyihtunlwin.zcar.FreeTimeApp;
 
 @Module
 public class AppModule {
 
-    private ZCarApp mApp;
+    private FreeTimeApp mApp;
 
-    public AppModule(ZCarApp app) {
+    public AppModule(FreeTimeApp app) {
         mApp = app;
     }
 

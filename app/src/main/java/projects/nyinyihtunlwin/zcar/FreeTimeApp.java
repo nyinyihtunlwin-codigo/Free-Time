@@ -16,7 +16,7 @@ import projects.nyinyihtunlwin.zcar.utils.ConfigUtils;
  * Created by Nyi Nyi Htun Lwin on 12/9/2017.
  */
 
-public class ZCarApp extends Application {
+public class FreeTimeApp extends Application {
     public static final String LOG_TAG = "Z-CAR";
 
     private AppComponent mAppComponent;

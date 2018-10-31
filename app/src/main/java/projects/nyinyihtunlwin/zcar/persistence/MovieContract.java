@@ -5,11 +5,11 @@ import android.content.ContentUris;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-import projects.nyinyihtunlwin.zcar.ZCarApp;
+import projects.nyinyihtunlwin.zcar.FreeTimeApp;
 
 
 public class MovieContract {
-    public static final String CONTENT_AUTHORITY = ZCarApp.class.getPackage().getName();
+    public static final String CONTENT_AUTHORITY = FreeTimeApp.class.getPackage().getName();
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
     public static final String PATH_MOVIES = "movies";

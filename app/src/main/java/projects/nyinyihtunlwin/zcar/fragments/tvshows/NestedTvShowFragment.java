@@ -23,8 +23,8 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import projects.nyinyihtunlwin.zcar.FreeTimeApp;
 import projects.nyinyihtunlwin.zcar.R;
-import projects.nyinyihtunlwin.zcar.ZCarApp;
 import projects.nyinyihtunlwin.zcar.activities.TvShowDetailsActivity;
 import projects.nyinyihtunlwin.zcar.adapters.TvShowAdapter;
 import projects.nyinyihtunlwin.zcar.components.EmptyViewPod;
@@ -91,8 +91,8 @@ public class NestedTvShowFragment extends BaseFragment implements MovieItemDeleg
             Log.e("Screen ID", mScreenId + "");
         }
         if (getActivity() != null) {
-            ZCarApp zCarApp = (ZCarApp) getActivity().getApplicationContext();
-            zCarApp.getAppComponent().inject(this);
+            FreeTimeApp freeTimeApp = (FreeTimeApp) getActivity().getApplicationContext();
+            freeTimeApp.getAppComponent().inject(this);
         }
 
         mPresenter = new TvShowPresenter(mContext, mScreenId);
@@ -144,7 +144,9 @@ public class NestedTvShowFragment extends BaseFragment implements MovieItemDeleg
                         tvShowLoaderId = AppConstants.TV_SHOWS_TOP_RATED_LOADER_ID;
                         break;
                 }
-                getActivity().getSupportLoaderManager().initLoader(tvShowLoaderId, null, NestedTvShowFragment.this);
+                if (getActivity() != null) {
+                    getActivity().getSupportLoaderManager().initLoader(tvShowLoaderId, null, NestedTvShowFragment.this);
+                }
             }
         }, 1000);
 
@@ -195,7 +197,9 @@ public class NestedTvShowFragment extends BaseFragment implements MovieItemDeleg
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mPresenter.onDataLoaded(getActivity().getApplicationContext(), data);
+        if (getActivity() != null) {
+            mPresenter.onDataLoaded(getActivity().getApplicationContext(), data);
+        }
         swipeRefreshLayout.setRefreshing(false);
     }
 
