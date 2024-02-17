@@ -5,7 +5,6 @@
     android:layout_height="wrap_content"
     android:layout_marginEnd="2dp"
     android:layout_marginStart="2dp"
-    android:layout_marginTop="@dimen/margin_medium"
     card_view:cardBackgroundColor="@color/screen_back"
     card_view:cardCornerRadius="@dimen/card_radius_small"
     card_view:cardElevation="@dimen/card_elevation">
@@ -20,6 +19,7 @@
             android:layout_height="@dimen/movie_icon_height"
             android:layout_centerHorizontal="true"
             android:scaleType="centerCrop"
+            android:layout_marginTop="@dimen/margin_medium_2"
             android:src="@drawable/movie_placeholder" />
 
         <ImageView

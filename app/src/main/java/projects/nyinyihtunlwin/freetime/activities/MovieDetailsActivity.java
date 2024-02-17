@@ -29,6 +29,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -302,7 +303,7 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsDe
         tvTitleMovieName.setText(movieVO.getTitle());
         tvMovieName.setText(movieVO.getOriginalTitle());
         tvReleasedDate.setText(movieVO.getReleasedDate());
-        tvRate.setText(movieVO.getVoteAverage() + "/10");
+        tvRate.setText(String.format("%.1f", movieVO.getVoteAverage()) + "/10");
         tvOverview.setText(movieVO.getOverview());
 
         Glide.with(getApplicationContext()).load(AppConstants.IMAGE_LOADING_BASE_URL + movieVO.getBackDropPath()).apply(AppConstants.requestOptions).into(ivMovieBack);
@@ -369,8 +370,8 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsDe
     public void onMovieReviewsDataLoaded(MoviesiEvents.MovieReviewsDataLoadedEvent event) {
         hideSnackBar();
         loadingView.setVisibility(View.GONE);
-        tvReviews.setVisibility(View.VISIBLE);
-        for (ReviewVO reviewVO : event.getReviews()) {
+        if (!event.getReviews().isEmpty()) {
+            tvReviews.setVisibility(View.VISIBLE);
             LinearLayout linearlayout = new LinearLayout(this);
             linearlayout.setOrientation(LinearLayout.VERTICAL);
             LinearLayout.LayoutParams layoutParamsParent = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -381,13 +382,16 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsDe
             TextView tvContent = new TextView(this);
             TextView tvAuthor = new TextView(this);
             tvContent.setTextSize(14);
-            tvAuthor.setTextSize(18);
-            tvAuthor.setTypeface(Typeface.createFromAsset(getAssets(), "berylium_rg_it.ttf"));
-            tvContent.setTextColor(getResources().getColor(R.color.icons));
-            tvAuthor.setTextColor(getResources().getColor(R.color.icons));
+            tvAuthor.setTextSize(14);
+            tvAuthor.setTypeface(null,Typeface.ITALIC);
 
-            tvContent.setText(reviewVO.getContent());
-            tvAuthor.setText("Written by " + reviewVO.getAuthor());
+            tvContent.setLineSpacing(1.3f,1.3f);
+            tvContent.setTextColor(getResources().getColor(R.color.icons));
+            tvAuthor.setTextColor(getResources().getColor(R.color.light_brown));
+
+            tvContent.setText(event.getReviews().get(0).getContent());
+            tvAuthor.setText("Written by " + event.getReviews().get(0).getAuthor());
+            tvAuthor.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_END);
 
             tvContent.setLayoutParams(layoutParamsViews);
             tvAuthor.setLayoutParams(layoutParamsViews);

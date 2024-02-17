@@ -305,7 +305,7 @@ public class TvShowDetailsActivity extends BaseActivity implements MovieDetailsD
         tvTitleMovieName.setText(movieVO.getName());
         tvMovieName.setText(movieVO.getOriginalName());
         tvReleasedDate.setText(movieVO.getFirstAirDate());
-        tvRate.setText(movieVO.getVoteAverage() + "/10");
+        tvRate.setText(String.format("%.1f",movieVO.getVoteAverage()) + "/10");
         tvOverview.setText(movieVO.getOverview());
 
         Glide.with(getApplicationContext()).load(AppConstants.IMAGE_LOADING_BASE_URL + movieVO.getBackdropPath()).apply(AppConstants.requestOptions).into(ivMovieBack);
@@ -385,8 +385,8 @@ public class TvShowDetailsActivity extends BaseActivity implements MovieDetailsD
     @Subscribe
     public void onMovieReviewsDataLoaded(MoviesiEvents.MovieReviewsDataLoadedEvent event) {
         loadingView.setVisibility(View.GONE);
-        tvReviews.setVisibility(View.VISIBLE);
-        for (ReviewVO reviewVO : event.getReviews()) {
+        if (!event.getReviews().isEmpty()) {
+            tvReviews.setVisibility(View.VISIBLE);
             LinearLayout linearlayout = new LinearLayout(this);
             linearlayout.setOrientation(LinearLayout.VERTICAL);
             LinearLayout.LayoutParams layoutParamsParent = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -397,13 +397,16 @@ public class TvShowDetailsActivity extends BaseActivity implements MovieDetailsD
             TextView tvContent = new TextView(this);
             TextView tvAuthor = new TextView(this);
             tvContent.setTextSize(14);
-            tvAuthor.setTextSize(18);
-            tvAuthor.setTypeface(Typeface.createFromAsset(getAssets(), "berylium_rg_it.ttf"));
-            tvContent.setTextColor(getResources().getColor(R.color.icons));
-            tvAuthor.setTextColor(getResources().getColor(R.color.icons));
+            tvAuthor.setTextSize(14);
+            tvAuthor.setTypeface(null,Typeface.ITALIC);
 
-            tvContent.setText(reviewVO.getContent());
-            tvAuthor.setText("Written by " + reviewVO.getAuthor());
+            tvContent.setLineSpacing(1.3f,1.3f);
+            tvContent.setTextColor(getResources().getColor(R.color.icons));
+            tvAuthor.setTextColor(getResources().getColor(R.color.light_brown));
+
+            tvContent.setText(event.getReviews().get(0).getContent());
+            tvAuthor.setText("Written by " + event.getReviews().get(0).getAuthor());
+            tvAuthor.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_END);
 
             tvContent.setLayoutParams(layoutParamsViews);
             tvAuthor.setLayoutParams(layoutParamsViews);

@@ -11,6 +11,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme">
         <activity
             android:name="projects.nyinyihtunlwin.freetime.activities.MainActivity"
@@ -34,7 +35,7 @@
             android:name="projects.nyinyihtunlwin.freetime.activities.MovieDetailsActivity"
             android:label="@string/movie_name"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name="projects.nyinyihtunlwin.freetime.activities.PersonDetailsActivity"
@@ -47,20 +48,16 @@
             android:name="projects.nyinyihtunlwin.freetime.activities.TvShowDetailsActivity"
             android:label="@string/movie_name"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name="projects.nyinyihtunlwin.freetime.activities.SearchActivity"
             android:label="@string/search"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <service
             android:name="projects.nyinyihtunlwin.freetime.services.CacheManager"
             android:exported="false" />
-
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="eff833c2330484af83a1fe4372f334ffa3466d04" />
 
     </application>
 

@@ -14,7 +14,7 @@ import projects.nyinyihtunlwin.freetime.utils.ConfigUtils;
  */
 
 public class FreeTimeApp extends Application {
-    public static final String LOG_TAG = "Z-CAR";
+    public static final String LOG_TAG = "FreeTime";
 
     private AppComponent mAppComponent;
 

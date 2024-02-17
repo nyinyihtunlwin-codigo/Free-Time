@@ -142,7 +142,6 @@
                         android:layout_height="match_parent"
                         android:clickable="true"
                         android:focusable="true"
-                        android:foreground="@drawable/bg_ripple_white"
                         android:paddingStart="@dimen/margin_medium"
                         android:paddingEnd="@dimen/margin_medium"
                         android:src="@drawable/ic_arrow_back_24dp" />
