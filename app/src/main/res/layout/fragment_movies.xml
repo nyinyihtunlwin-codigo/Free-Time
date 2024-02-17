@@ -6,7 +6,7 @@
     android:background="@color/screen_back"
     tools:context="projects.nyinyihtunlwin.freetime.fragments.MoviesFragment">
 
-    <android.support.design.widget.TabLayout
+    <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabs"
         style="@style/MyCustomTabLayout"
         android:layout_width="match_parent"
@@ -14,32 +14,32 @@
         android:background="@color/tab_color"
         app:tabMode="scrollable">
 
-        <android.support.design.widget.TabItem
+        <com.google.android.material.tabs.TabItem
             android:id="@+id/tab_now_on_cinema"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/tab_now_on_cinema" />
 
-        <android.support.design.widget.TabItem
+        <com.google.android.material.tabs.TabItem
             android:id="@+id/tab_upcoming"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/tab_upcoming" />
 
-        <android.support.design.widget.TabItem
+        <com.google.android.material.tabs.TabItem
             android:id="@+id/tab_most_popular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/tab_most_popular" />
 
-        <android.support.design.widget.TabItem
+        <com.google.android.material.tabs.TabItem
             android:id="@+id/tab_top_rated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/tab_top_rated" />
-    </android.support.design.widget.TabLayout>
+    </com.google.android.material.tabs.TabLayout>
 
-    <android.support.v4.view.ViewPager
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/vp_movies"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

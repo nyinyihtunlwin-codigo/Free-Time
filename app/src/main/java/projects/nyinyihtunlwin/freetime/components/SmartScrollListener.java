@@ -1,7 +1,8 @@
 package projects.nyinyihtunlwin.freetime.components;
 
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by Nyi Nyi Htun Lwin on 11/26/2017.

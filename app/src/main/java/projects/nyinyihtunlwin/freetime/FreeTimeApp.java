@@ -2,9 +2,6 @@ package projects.nyinyihtunlwin.freetime;
 
 import android.app.Application;
 
-import com.crashlytics.android.Crashlytics;
-
-import io.fabric.sdk.android.Fabric;
 import projects.nyinyihtunlwin.freetime.dagger.AppComponent;
 import projects.nyinyihtunlwin.freetime.dagger.AppModule;
 import projects.nyinyihtunlwin.freetime.dagger.DaggerAppComponent;
@@ -24,8 +21,6 @@ public class FreeTimeApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Fabric.with(this, new Crashlytics());
-
         mAppComponent = initDagger(); //daggar init
         mAppComponent.inject(this);//register consumer
 

@@ -7,7 +7,7 @@
     android:background="@color/screen_back"
     tools:context="projects.nyinyihtunlwin.freetime.fragments.TVShowsFragment">
 
-    <android.support.design.widget.TabLayout
+    <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabs"
         style="@style/MyCustomTabLayout"
         android:layout_width="match_parent"
@@ -15,32 +15,32 @@
         android:background="@color/tab_color"
         app:tabMode="scrollable">
 
-        <android.support.design.widget.TabItem
+        <com.google.android.material.tabs.TabItem
             android:id="@+id/tab_tv_ariring_today"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/tab_tv_airing_today" />
 
-        <android.support.design.widget.TabItem
+        <com.google.android.material.tabs.TabItem
             android:id="@+id/tab_tv_on_the_air"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/tab_tv_on_the_air" />
 
-        <android.support.design.widget.TabItem
+        <com.google.android.material.tabs.TabItem
             android:id="@+id/tab_tv_most_popular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/tab_most_popular" />
 
-        <android.support.design.widget.TabItem
+        <com.google.android.material.tabs.TabItem
             android:id="@+id/tab__tv_top_rated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/tab_top_rated" />
-    </android.support.design.widget.TabLayout>
+    </com.google.android.material.tabs.TabLayout>
 
-    <android.support.v4.view.ViewPager
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/vp_tv_show"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

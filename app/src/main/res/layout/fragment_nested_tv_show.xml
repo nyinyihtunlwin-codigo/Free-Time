@@ -5,7 +5,7 @@
     android:background="@color/screen_back"
     tools:context="projects.nyinyihtunlwin.freetime.fragments.tvshows.TvAiringTodayFragment">
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -20,5 +20,5 @@
             layout="@layout/view_pod_empty"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </FrameLayout>

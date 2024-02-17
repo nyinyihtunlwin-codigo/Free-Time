@@ -6,16 +6,18 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -153,7 +155,7 @@ public class NestedMovieFragment extends BaseFragment implements MovieItemDelega
     private void showLoadMore() {
         Snackbar snackbar = Snackbar.make(rvMovie, "loading movies...", Snackbar.LENGTH_LONG);
         View view = snackbar.getView();
-        TextView textView = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
+        TextView textView = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
         textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         textView.setTextColor(getResources().getColor(R.color.accent));
         snackbar.show();

@@ -2,7 +2,7 @@ package projects.nyinyihtunlwin.freetime.services;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import projects.nyinyihtunlwin.freetime.persistence.MovieDBHelper;
 
