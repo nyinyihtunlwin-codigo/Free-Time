@@ -47,12 +47,12 @@
     <string name="movie_genre_palceholder">Romance</string>
     <string name="drawer_open">Drawer Opened</string>
     <string name="drawer_close">Drawer Closed</string>
-    <string name="version">Version 1.0</string>
+    <string name="version">Version 1.1</string>
     <string name="cast_name">Dakota Johnson Dakota Johnson Dakota</string>
     <string name="cast">Cast</string>
     <string name="casts">Casts</string>
     <string name="search">Search</string>
-    <string name="hint_search">Enter movie and tv shows</string>
+    <string name="hint_search">Enter keywords</string>
     <string name="title_activity_about">AboutActivity</string>
     <string name="about">About</string>
     <string name="moves_and_tvshows"><![CDATA[Movies & TV Shows]]></string>
@@ -62,9 +62,9 @@
     <string name="similar_movies">Similar Movies</string>
     <string name="similar_tvshows">Similar TV Shows</string>
     <string name="biography">Biography</string>
-    <string name="movie_cast">Movie Cast</string>
+    <string name="movie_cast">Movies Cast</string>
     <string name="person_details">Details</string>
     <string name="no_data">...</string>
-    <string name="tvshow_cast">TV Show Cast</string>
+    <string name="tvshow_cast">TV Shows Cast</string>
 
 </resources>

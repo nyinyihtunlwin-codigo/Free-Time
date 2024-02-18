@@ -361,7 +361,7 @@
                 android:layout_below="@id/tv_similar_movies"
                 android:layout_marginTop="@dimen/margin_medium"
                 android:layout_marginBottom="@dimen/margin_medium_2"
-                android:paddingHorizontal="@dimen/margin_medium_2"
+                android:paddingHorizontal="@dimen/margin_card_medium_2"
                 android:clipToPadding="false"/>
         </RelativeLayout>
 

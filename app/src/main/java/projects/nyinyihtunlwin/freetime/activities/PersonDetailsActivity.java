@@ -59,6 +59,9 @@ public class PersonDetailsActivity extends BaseActivity implements View.OnClickL
     @BindView(R.id.tv_title_name)
     TextView tvTitleName;
 
+    @BindView(R.id.lb_biography)
+    TextView lbBiography;
+
     @BindView(R.id.tv_biography)
     TextView tvBiography;
 
@@ -178,9 +181,15 @@ public class PersonDetailsActivity extends BaseActivity implements View.OnClickL
         tvName.setText(response.getName());
         tvTitleName.setText(response.getName());
         tvBirthplace.setText(response.getPlaceOfBirth());
-        tvBiography.setText(response.getBiography());
+        if (response.getBiography().isEmpty()) {
+            lbBiography.setVisibility(View.GONE);
+            tvBiography.setVisibility(View.GONE);
+        } else {
+            tvBiography.setText(response.getBiography());
+            lbBiography.setVisibility(View.VISIBLE);
+            tvBiography.setVisibility(View.VISIBLE);
+        }
         setAge(response.getDateOfBirth());
-
         Glide.with(getApplicationContext()).load(AppConstants.IMAGE_LOADING_BASE_URL + response.getProfilePath()).apply(AppConstants.requestOptions).into(ivProfile);
     }
 
