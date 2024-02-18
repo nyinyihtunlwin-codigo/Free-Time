@@ -13,16 +13,12 @@ This app is to show information of movies and TV shows, such as overviews, revie
 	7. Firebase
 
 
-![alt text](https://github.com/nyinyihtunlwin/Free-Time/blob/master/app/screenshots/Screenshot_2018-10-31-12-13-19.png)
+![alt text](https://github.com/nyinyihtunlwin/Free-Time/blob/master/app/screenshots/img_1.png)
 
-![alt text](https://github.com/nyinyihtunlwin/Free-Time/blob/master/app/screenshots/Screenshot_2018-10-31-12-14-39.png)
+![alt text](https://github.com/nyinyihtunlwin/Free-Time/blob/master/app/screenshots/img_2.png)
 
-![alt text](https://github.com/nyinyihtunlwin/Free-Time/blob/master/app/screenshots/Screenshot_2018-10-31-12-15-08.png)
+![alt text](https://github.com/nyinyihtunlwin/Free-Time/blob/master/app/screenshots/img_3.png)
 
-![alt text](https://github.com/nyinyihtunlwin/Free-Time/blob/master/app/screenshots/Screenshot_2018-10-31-12-20-48.png)
+![alt text](https://github.com/nyinyihtunlwin/Free-Time/blob/master/app/screenshots/img_4.png)
 
-![alt text](https://github.com/nyinyihtunlwin/Free-Time/blob/master/app/screenshots/Screenshot_2018-10-31-13-08-50.png)
-
-![alt text](https://github.com/nyinyihtunlwin/Free-Time/blob/master/app/screenshots/Screenshot_2018-10-31-13-10-19.png)
-
-![alt text](https://github.com/nyinyihtunlwin/Free-Time/blob/master/app/screenshots/Screenshot_2018-10-31-12-14-50.png)
+![alt text](https://github.com/nyinyihtunlwin/Free-Time/blob/master/app/screenshots/img_5.png)
