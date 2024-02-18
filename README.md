@@ -10,8 +10,7 @@ This app is to show information of movies and TV shows, such as overviews, revie
 	4. GreenDAO EventBus
 	5. Butterknife
 	6. Material Design for UI
-	7. Git (Version Control System)
-	8. Fabric (Crash Reporting System)
+	7. Firebase
 
 
 ![alt text](https://github.com/nyinyihtunlwin/Free-Time/blob/master/app/screenshots/Screenshot_2018-10-31-12-13-19.png)
