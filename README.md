@@ -13,12 +13,4 @@ This app is to show information of movies and TV shows, such as overviews, revie
 	7. Firebase
 
 
-![alt text](https://github.com/nyinyihtunlwin/Free-Time/blob/master/app/screenshots/img_1.png)
-
-![alt text](https://github.com/nyinyihtunlwin/Free-Time/blob/master/app/screenshots/img_2.png)
-
-![alt text](https://github.com/nyinyihtunlwin/Free-Time/blob/master/app/screenshots/img_3.png)
-
-![alt text](https://github.com/nyinyihtunlwin/Free-Time/blob/master/app/screenshots/img_4.png)
-
-![alt text](https://github.com/nyinyihtunlwin/Free-Time/blob/master/app/screenshots/img_5.png)
+![alt text](https://github.com/nyinyihtunlwin/Free-Time/blob/master/app/screenshots/img_app_screens.png)
