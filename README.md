@@ -5,7 +5,7 @@ Movies & TV Shows
 An app to explore and track movies, series, seasons, episodes, and actors on your device.
 Find the latest, top rated, upcoming entertainment package in one place with Free Time app.
 
-### Used Technologies :
+### Used Technologies
 
 	1. MVP (Model, View, Presenter) Architecture
 	2. Retrofit2 for Rest API
@@ -15,7 +15,7 @@ Find the latest, top rated, upcoming entertainment package in one place with Fre
 	6. Material Design for UI
 	7. Firebase
 
-### Features:
+### Features
 
 	- Movies
 	- TV Shows
