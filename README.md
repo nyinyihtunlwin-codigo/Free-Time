@@ -22,5 +22,5 @@ Find the latest, top rated, upcoming entertainment package in one place with Fre
 	- Search Movies & TV Shows
 	- Offline Support
 
-### [Download on Google Play Store](https://play.google.com/store/apps/details?id=projects.nyinyihtunlwin.freetime)
 ![alt text](https://github.com/nyinyihtunlwin/Free-Time/blob/master/app/screenshots/img_app_screens.png)
+### [Download on Google Play Store](https://play.google.com/store/apps/details?id=projects.nyinyihtunlwin.freetime)
