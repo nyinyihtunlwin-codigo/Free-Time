@@ -1,4 +1,4 @@
-# Free Time
+![alt text](https://github.com/nyinyihtunlwin/Free-Time/blob/master/app/screenshots/ic_launcher.png)# Free Time
 
 Movies & TV Shows
 
