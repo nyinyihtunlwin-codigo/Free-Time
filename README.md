@@ -2,8 +2,8 @@
 
 Movies & TV Shows
 
-This app is to show information of movies and TV shows, such as overviews, reviews, cast list,
-trailers, ratings, etc.
+An app to explore and track movies, series, seasons, episodes, and actors on your device.
+Find the latest, top rated, upcoming entertainment package in one place with Free Time app.
 
 ### Used Technologies :
 
@@ -23,5 +23,4 @@ trailers, ratings, etc.
 	- Offline Support
 
 ### [Download on Google Play Store](https://play.google.com/store/apps/details?id=projects.nyinyihtunlwin.freetime)
-
 ![alt text](https://github.com/nyinyihtunlwin/Free-Time/blob/master/app/screenshots/img_app_screens.png)
