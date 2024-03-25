@@ -1,9 +1,12 @@
 # Free Time
+
 Movies & TV Shows
 
-This app is to show information of movies and TV shows, such as overviews, reviews, cast list, trailers, ratings, etc. 
+This app is to show information of movies and TV shows, such as overviews, reviews, cast list,
+trailers, ratings, etc.
 
 ### Used Technologies :
+
 	1. MVP (Model, View, Presenter) Architecture
 	2. Retrofit2 for Rest API
 	3. SQLite for data persistence
@@ -12,5 +15,13 @@ This app is to show information of movies and TV shows, such as overviews, revie
 	6. Material Design for UI
 	7. Firebase
 
+### Features:
+
+	- Movies
+	- TV Shows
+	- Search Movies & TV Shows
+	- Offline Support
+
+### [Download on Google Play Store](https://play.google.com/store/apps/details?id=projects.nyinyihtunlwin.freetime)
 
 ![alt text](https://github.com/nyinyihtunlwin/Free-Time/blob/master/app/screenshots/img_app_screens.png)
